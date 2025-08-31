@@ -1,0 +1,144 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@font-face {
+  font-family: "Noto Serif";
+  src: url("/path/to/noto-serif.woff2") format("woff2"),
+    url("/path/to/noto-serif.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@theme {
+  --color-gray-900: #202225;
+  --color-gray-800: #2f3136;
+  --color-gray-700: #36393f;
+  --color-gray-600: #4f545c;
+  --color-gray-400: #d4d7dc;
+  --color-gray-300: #e3e5e8;
+  --color-gray-200: #ebedef;
+  --color-gray-100: #f2f3f5;
+  --color-primary: #5865f2;
+
+  --color-custom-blue: #4A90E2;
+  --color-custom-orange: #F5A623;
+  --color-custom-green: #7ED321;
+  --color-custom-background: #F7F9FC;
+
+  --color-custom-hover-blue: #357ABD;
+  --color-custom-hover-blue2: #DDECFF;
+  --color-custom-hover-orange: #DB8C12;
+
+  --animate-slide-shake: slide-shake 1s ease-in-out infinite;
+
+  @keyframes slide-shake {
+    0%,
+    100% {
+      transform: rotate(0deg) translateX(0);
+    }
+    25% {
+      transform: rotate(10deg) translateX(-3px);
+    }
+    50% {
+      transform: rotate(0deg) translateX(3px);
+    }
+    75% {
+      transform: rotate(-10deg) translateX(-3px);
+    }
+  }
+
+  --animate-slide-profile: slide-profile 1s ease-in-out infinite;
+
+  @keyframes slide-profile {
+    100% {
+      transform: rotate(-10deg);
+    }
+    25% {
+      transform: rotate(10deg);
+    }
+    50% {
+      transform: rotate(-10deg);
+    }
+    75% {
+      transform: rotate(10deg);
+    }
+  }
+
+  --animate-slide-down: slide-down 1s ease-out;
+
+  @keyframes slide-down {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  --animate-slide-up: slide-up 1s ease-out;
+
+  @keyframes slide-up {
+    from {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(-100%);
+      opacity: 1;
+    }
+  }
+  --animate-fade-in-scale: fade-in-scale 1s ease-out;
+
+  @keyframes fade-in-scale {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  --animate-fade-in: fade-in 1s ease-out;
+
+  --font-weight-bold: 700;
+
+  --animate-marquee: marquee 15s linear infinite;
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  --animate-pulseScale: pulseScale 1s ease-out;
+
+  @keyframes pulseScale {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+}
+.MuiDrawer-paper {
+  margin-top: 100px;
+}
+
+.ck-content ul,
+.ck-content ol {
+  padding-left: 1.5rem; /* hoặc 2rem nếu muốn rộng hơn */
+}
