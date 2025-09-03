@@ -21,8 +21,8 @@ export const  ROUTE_PATH = {
     LECTURER_STATISTICS: "/lecturer/statistics",
 
     LECTURER_COURSES: "/giang-vien/khoa-hoc",
-    LECTURER_CREATE_COURSE: "/lecturer/courses/create",
-    LECTURER_COURSE_DETAIL: "/lecturer/courses/:courseId",
+    LECTURER_CREATE_COURSE: "/giang-vien/khoa-hoc/tao-khoa-hoc",
+    LECTURER_COURSE_DETAIL: "/giang-vien/khoa-hoc/:courseId",
 
     LECTURER_LESSON_DETAIL: "/lecturer/courses/:courseId/lessons/:lessonId",
 

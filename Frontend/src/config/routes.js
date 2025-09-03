@@ -35,7 +35,7 @@ const ManageQuestionBankDetailPage = React.lazy(() => import("../pages/ManageQue
 //Courses
 const ManageCoursesListPage = React.lazy(() => import("../pages/lecturer/ManageCoursesListPage"));
 const ManageCourseCreatePage = React.lazy(() => import("../pages/lecturer/ManageCourseCreatePage"));
-const ManageCourseDetailPage = React.lazy(() => import("../pages/ManageCourseDetailPage"));
+const ManageCourseDetailPage = React.lazy(() => import("../pages/lecturer/ManageCourseDetailPage"));
 
 const ManageLessonDetailPage = React.lazy(() => import("../pages/ManageLessonDetailPage"));
 
