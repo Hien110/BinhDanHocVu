@@ -14,27 +14,33 @@ function CourseCard({ course }) {
     }
     if (user.role === "lecturer") {
       // Redirect to the course detail page
-      window.location.href = `${ROUTE_PATH.LECTURER_COURSE_DETAIL.replace(":courseId", courseId)}`;
+      window.location.href = `${ROUTE_PATH.LECTURER_COURSE_DETAIL.replace(
+        ":courseId",
+        courseId
+      )}`;
     } else if (user.role === "student") {
-      window.location.href = `${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(":courseId", courseId)}`;
+      window.location.href = `${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
+        ":courseId",
+        courseId
+      )}`;
     }
   };
   return (
-    <div
-      className="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col"
-    >
+    <div className="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col">
       {/* Thumbnail */}
-      {course.thumbnail ? (
-        <img
-          src={course.thumbnail}
-          alt={course.title}
-          className="w-full h-48 p-4 object-cover group-hover:scale-105 transition-transform duration-500"
-        />
-      ) : (
-        <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
-          Không có ảnh
-        </div>
-      )}
+      <div className="p-2">
+        {course.thumbnail ? (
+          <img
+            src={course.thumbnail}
+            alt={course.title}
+            className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500 rounded-xl"
+          />
+        ) : (
+          <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
+            Không có ảnh
+          </div>
+        )}
+      </div>
 
       {/* Nội dung */}
       <div className="p-4 flex flex-col flex-grow">
@@ -53,7 +59,7 @@ function CourseCard({ course }) {
           onClick={() => {
             handleDetail(course._id);
           }}
-          className="cursor-pointer mt-auto w-full py-2 rounded-lg bg-white text-red-500 border border-red-500 font-medium text-sm shadow-md transition-colors duration-500 ease-in-out hover:bg-red-100"
+          className="cursor-pointer mt-auto w-full py-2 rounded-lg bg-white text-custom-blue border border-custom-blue font-medium text-sm shadow-md transition-colors duration-500 ease-in-out hover:bg-custom-hover-blue2"
         >
           Xem chi tiết
         </button>

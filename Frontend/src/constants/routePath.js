@@ -20,7 +20,7 @@ export const  ROUTE_PATH = {
     // Lecturer routes
     LECTURER_STATISTICS: "/lecturer/statistics",
 
-    LECTURER_COURSES: "/lecturer/courses",
+    LECTURER_COURSES: "/giang-vien/khoa-hoc",
     LECTURER_CREATE_COURSE: "/lecturer/courses/create",
     LECTURER_COURSE_DETAIL: "/lecturer/courses/:courseId",
 
@@ -50,5 +50,13 @@ export const  ROUTE_PATH = {
     STUDENT_LESSON_DETAIL: "/student/courses/:courseId/lessons/:lessonId",
 
     STUDENT_QUIZ_TEST: "/student/quiz/:quizId/test",
-    STUDENT_QUIZ_RESULT: "/student/quiz/:quizResultId/result"
+    STUDENT_QUIZ_RESULT: "/student/quiz/:quizResultId/result",
+
+    // Admin routes
+    ADMIN_STATISTICS: "/quan-li/thong-ke",
+    ADMIN_LECTURER_MANAGEMENT: "/quan-li/giang-vien",
+    ADMIN_STUDENT_MANAGEMENT: "/quan-li/hoc-sinh",
+    ADMIN_NEWS_MANAGEMENT: "/quan-li/tin-tuc",
+    ADMIN_SETTINGS: "/quan-li/cai-dat"
+
 }

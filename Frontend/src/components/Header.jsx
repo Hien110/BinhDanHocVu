@@ -104,27 +104,46 @@ const Header = () => {
                     </div>
                   </MenuItem>
                 </div>
-                <div className="py-1">
-                  <MenuItem>
-                    <Link
-                      to={ROUTE_PATH.USER_PROFILE}
-                      state={{ user: userData }}
-                      className="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      <AssignmentIndOutlinedIcon className="inline mr-2 group-hover:animate-slide-profile" />
-                      <span>Hồ sơ cá nhân</span>
-                    </Link>
-                  </MenuItem>
-                </div>
-                {userData.role === "admin" && (
+
+                {userData.role !== "admin" && (
+                  <div className="py-1">
+                    <MenuItem>
+                      <Link
+                        to={ROUTE_PATH.USER_PROFILE}
+                        state={{ user: userData }}
+                        className="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <AssignmentIndOutlinedIcon className="inline mr-2 group-hover:animate-slide-profile" />
+                        <span>Hồ sơ cá nhân</span>
+                      </Link>
+                    </MenuItem>
+                  </div>
+                )}
+
+                {userData.role == "lecturer" && (
                   <div className="py-1">
                     <MenuItem>
                       <Link
                         to={ROUTE_PATH.LECTURER_STATISTICS}
+                        state={{ user: userData }}
+                        className="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <BookOutlinedIcon className="inline mr-2 group-hover:animate-slide-profile" />
+                        <span>Quản lý giảng dạy</span>
+                      </Link>
+                    </MenuItem>
+                  </div>
+                )}
+
+                {userData.role === "admin" && (
+                  <div className="py-1">
+                    <MenuItem>
+                      <Link
+                        to={ROUTE_PATH.ADMIN_STATISTICS}
                         className="group block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
                         <BookOutlinedIcon className="inline mr-2 group-hover:animate-slide-profile" />
-                        Quản lí hệ thống
+                        Quản lý hệ thống
                       </Link>
                     </MenuItem>
                   </div>

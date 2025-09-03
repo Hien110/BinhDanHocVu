@@ -1,14 +1,17 @@
 const { get } = require("mongoose");
 const Course = require("../models/Course");
+const generateOtp = require("../../utils/generateOTP");
 
 const CourseController = {
     // Tạo khóa học
     createCourse: async (req, res) => {
         try {
             const userId = req.user.userId; // Lấy ID người dùng từ token
+            const code = generateOtp();
             const newCourse = new Course({
                 ...req.body,
                 instructor: userId, // Gán người tạo khóa học
+                code
             });
             await newCourse.save();
             res.status(201).json({ data: newCourse, message: "Khóa học đã được tạo thành công" });
