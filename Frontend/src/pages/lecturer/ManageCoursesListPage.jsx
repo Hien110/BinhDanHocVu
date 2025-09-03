@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import courseService from "../services/courseService";
-import { ROUTE_PATH } from "../constants/routePath";
+import courseService from "../../services/courseService";
+import { ROUTE_PATH } from "../../constants/routePath";
 
 
-import CourseCard from "../components/CourseCard"; // Giả sử bạn có một component CourseCard để hiển thị thông tin khóa học
+import CourseCard from "../../components/CourseCard"; // Giả sử bạn có một component CourseCard để hiển thị thông tin khóa học
 
 function ManageCoursesListPage() {
   const [courses, setCourses] = useState([]);
@@ -40,7 +40,7 @@ function ManageCoursesListPage() {
       </div>
       <div className="fixed bottom-4 right-4 max-w-[250px] px-4 py-1 ">
         <button
-          className="w-full py-3 px-4 rounded-xl text-white font-semibold bg-gradient-to-r from-red-500 to-red-400 transition-colors duration-500 ease-in-out hover:from-red-600 hover:to-red-500 cursor-pointer shadow-md"
+          className="w-full py-3 px-4 rounded-xl text-white font-semibold bg-custom-blue transition-colors duration-500 ease-in-out hover:bg-custom-hover-blue cursor-pointer shadow-md"
           onClick={() =>
             (window.location.href = ROUTE_PATH.LECTURER_CREATE_COURSE)
           }

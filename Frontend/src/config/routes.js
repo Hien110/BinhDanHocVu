@@ -4,6 +4,7 @@ import { ROUTE_PATH } from "../constants/routePath";
 
 import studentLayout from "../layouts/student-layout";
 import lecturerLayout from "../layouts/lecturer-layout";
+import adminLayout from "../layouts/admin-layout";
 
 // Authentication pages
 const LoginPage = React.lazy(() => import("../pages/LoginPage"));
@@ -32,8 +33,8 @@ const ManageQuestionBankPage = React.lazy(() => import("../pages/ManageQuestionB
 const ManageQuestionBankDetailPage = React.lazy(() => import("../pages/ManageQuestionBankDetailPage"));
 
 //Courses
-const ManageCoursesListPage = React.lazy(() => import("../pages/ManageCoursesListPage"));
-const ManageCourseCreatePage = React.lazy(() => import("../pages/ManageCourseCreatePage"));
+const ManageCoursesListPage = React.lazy(() => import("../pages/lecturer/ManageCoursesListPage"));
+const ManageCourseCreatePage = React.lazy(() => import("../pages/lecturer/ManageCourseCreatePage"));
 const ManageCourseDetailPage = React.lazy(() => import("../pages/ManageCourseDetailPage"));
 
 const ManageLessonDetailPage = React.lazy(() => import("../pages/ManageLessonDetailPage"));
@@ -57,6 +58,13 @@ const LessonDetailPage = React.lazy(() => import("../pages/LessonDetailPage"));
 
 const TestQuizPage = React.lazy(() => import("../pages/TestQuizPage"));
 const TestQuizResultPage = React.lazy(() => import("../pages/TestQuizResultPage"));
+
+// Admin pages
+const AdminStatisticsPage = React.lazy(() => import("../pages/Admin/AdminStatisticsPage"));
+const AdminLecturerManagementPage = React.lazy(() => import("../pages/Admin/AdminManageLecturerPage"));
+const AdminStudentManagementPage = React.lazy(() => import("../pages/Admin/AdminManageStudentPage"));
+const AdminNewsManagementPage = React.lazy(() => import("../pages/Admin/AdminManageNewsPage"));
+const AdminSettingPage = React.lazy(() => import("../pages/Admin/AdminSettingPage"));
 
 const AppRoutes = [
 
@@ -110,7 +118,15 @@ const AppRoutes = [
   { path: ROUTE_PATH.STUDENT_LESSON_DETAIL, page: LessonDetailPage, layout: studentLayout },
 
   { path: ROUTE_PATH.STUDENT_QUIZ_TEST, page: TestQuizPage },
-  { path: ROUTE_PATH.STUDENT_QUIZ_RESULT, page: TestQuizResultPage, layout: studentLayout }
+  { path: ROUTE_PATH.STUDENT_QUIZ_RESULT, page: TestQuizResultPage, layout: studentLayout },
+
+  //Admin routes
+  { path: ROUTE_PATH.ADMIN_STATISTICS, page: AdminStatisticsPage, layout: adminLayout },
+  { path: ROUTE_PATH.ADMIN_LECTURER_MANAGEMENT, page: AdminLecturerManagementPage, layout: adminLayout },
+  { path: ROUTE_PATH.ADMIN_STUDENT_MANAGEMENT, page: AdminStudentManagementPage, layout: adminLayout },
+  { path: ROUTE_PATH.ADMIN_NEWS_MANAGEMENT, page: AdminNewsManagementPage, layout: adminLayout },
+  { path: ROUTE_PATH.ADMIN_SETTINGS, page: AdminSettingPage, layout: adminLayout },
+
 ];
 
 export default AppRoutes;

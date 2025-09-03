@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
-import SidebarLecturer from "../components/SidebarLecturer";
+import SidebarAdmin from "../components/SidebarAdmin";
 
 import { Button } from "../components/ui/button"; // Thêm dòng này
 
@@ -40,11 +40,11 @@ function AdminLayout({ children }) {
   return (
     <div>
       <Header />
-      <SidebarLecturer className="z-40">
+      <SidebarAdmin className="z-40">
         <div className="p-6 pt-25">
           {children}
         </div>
-        </SidebarLecturer>
+      </SidebarAdmin>
       <ScrollToTopButton />
     </div>
   );

@@ -28,12 +28,10 @@ const drawerWidth = 240;
 
 const navItems = [
   { label: "Thống kê", icon: <DashboardIcon />, path: ROUTE_PATH.LECTURER_STATISTICS },
-  { label: "Quản lý sinh viên", icon: <PeopleIcon />, path: ROUTE_PATH.LECTURER_STUDENTS },
   { label: "Quản lý môn học", icon: <BookIcon />, path: ROUTE_PATH.LECTURER_COURSES },
   { label: "Ngân hàng câu hỏi", icon: <QuizIcon />, path: ROUTE_PATH.LECTURER_QUESTION_BANK },
   { label: "Quản lý bài kiểm tra", icon: <HelpCenterIcon />, path: ROUTE_PATH.LECTURER_QUIZ },
   { label: "Quản lý kết quả kiểm tra", icon: <ReceiptIcon />, path: ROUTE_PATH.LECTURER_QUIZ_RESULT },
-  { label: "Tin tức", icon: <NewspaperIcon />, path: ROUTE_PATH.LECTURER_NEWS },
 ];
 
 // // Theme font Noto Serif
@@ -73,7 +71,7 @@ export default function SidebarLecturer({ children }) {
           >
             <Avatar
               src={user.avatar || "/default-avatar.png"}
-              alt={user.name}
+              alt={user.fullName}
               sx={{
                 width: 64,
                 height: 64,
@@ -82,14 +80,14 @@ export default function SidebarLecturer({ children }) {
               }}
             />
             <Typography variant="subtitle1" fontWeight={600}>
-              {user.name || "Giảng viên"}
+              {user.fullName || "Giảng viên"}
             </Typography>
             <Typography
               variant="body2"
               color="text.secondary"
               sx={{ fontStyle: "italic" }}
             >
-              {user.role === "lecturer" ? "Giảng viên" : "Người dùng"}
+              Giảng viên
             </Typography>
           </Box>
 
@@ -118,10 +116,10 @@ export default function SidebarLecturer({ children }) {
                     component={Link}
                     to={item.path}
                     sx={{
-                      backgroundColor: isActive ? yellow[100] : "transparent",
-                      color: isActive ? yellow[700] : "inherit",
+                      backgroundColor: isActive ? "#FEE8C4" : "transparent",
+                      color: isActive ? "#F5A623" : "#454545",
                       "&:hover": {
-                        backgroundColor: yellow[200],
+                        backgroundColor: "#FEE8C4",
                         transform: "translateX(4px)",
                         transition: "all 0.2s ease-in-out",
                       },
@@ -129,7 +127,7 @@ export default function SidebarLecturer({ children }) {
                       margin: "4px 8px",
                     }}
                   >
-                    <ListItemIcon sx={{ color: isActive ? yellow[700] : "inherit" }}>
+                    <ListItemIcon sx={{ color: isActive ? "#F5A623" : "inherit" }}>
                       {item.icon}
                     </ListItemIcon>
                     <ListItemText
