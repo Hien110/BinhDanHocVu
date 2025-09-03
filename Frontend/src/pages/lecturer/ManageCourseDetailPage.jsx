@@ -1,24 +1,28 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import courseService from "../services/courseService";
-import lessonService from "../services/lessonService"; // giả sử bạn có service này
+import courseService from "../../services/courseService";
+import lessonService from "../../services/lessonService"; // giả sử bạn có service này
 import {
   uploadMultipleFilesToCloudinary,
   uploadMultipleImagesToCloudinary,
   uploadToCloudinary,
-} from "../services/uploadCloudinary";
+} from "../../services/uploadCloudinary";
 
-import MyEditor from "../components/MyEditor";
+import MyEditor from "../../components/MyEditor";
 
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
-import CourseDetailCard from "../components/CourseDetailCard";
+import CourseDetailCard from "../../components/CourseDetailCard";
 
-import { ROUTE_PATH } from "../constants/routePath";
+import { ROUTE_PATH } from "../../constants/routePath";
 
 import { toast } from "sonner";
 
 import { motion, AnimatePresence } from "framer-motion";
+
+import { Button } from "@mui/material";
+
+import { ChevronRight } from "lucide-react";
 
 function ManageCourseDetailPage() {
   const { courseId } = useParams();
@@ -259,14 +263,17 @@ function ManageCourseDetailPage() {
   return (
     <div className=" bg-white ">
       {/* Thông tin khóa học */}
+      <h1 className="text-3xl font-bold mb-8 text-gray-800 border-b border-gray-200 pb-2">
+        Danh sách môn học
+      </h1>
       <div className="pb-6 mb-10 border-b border-gray-300 ">
         <CourseDetailCard course={course} />
 
         {/* Chỉnh sửa hoặc xóa môn học */}
-        <div className="flex space-x-4 justify-start">
+        <div className="flex space-x-4 justify-center mt-4">
           <button
             onClick={() => setShowEditModal(true)}
-            className="cursor-pointer text-yellow-600 border border-yellow-600 px-4 py-2 rounded-lg text-sm transition duration-300 hover:bg-yellow-100 font-medium"
+            className="cursor-pointer text-custom-hover-orange border border-yellow-600 px-4 py-2 rounded-lg text-sm transition duration-300 hover:bg-custom-hover-orange2 font-medium"
           >
             Chỉnh sửa
           </button>
@@ -282,6 +289,33 @@ function ManageCourseDetailPage() {
         </div>
       </div>
 
+      {/* Tạo các ô để đi đến các quản lí khác như danh sách bài học, danh sách học viên, ngân hàng câu hỏi */}
+      <div className="flex flex-col gap-4 mt-6 mb-10">
+        <Link className="flex items-center justify-between px-5 py-3 rounded-xl border border-custom-blue text-custom-blue font-semibold shadow-md transition duration-300 hover:bg-custom-hover-blue2 hover:shadow-lg">
+          Danh sách bài học
+          <ChevronRight className="w-5 h-5 text-custom-blue" />
+        </Link>
+
+        <Link className="flex items-center justify-between px-5 py-3 rounded-xl border border-custom-blue text-custom-blue font-semibold shadow-md transition duration-300 hover:bg-custom-hover-blue2 hover:shadow-lg">
+          Danh sách học viên
+          <ChevronRight className="w-5 h-5 text-custom-blue" />
+        </Link>
+
+        <Link className="flex items-center justify-between px-5 py-3 rounded-xl border border-custom-blue text-custom-blue font-semibold shadow-md transition duration-300 hover:bg-custom-hover-blue2 hover:shadow-lg">
+          Ngân hàng câu hỏi
+          <ChevronRight className="w-5 h-5 text-custom-blue" />
+        </Link>
+
+        <Link className="flex items-center justify-between px-5 py-3 rounded-xl border border-custom-blue text-custom-blue font-semibold shadow-md transition duration-300 hover:bg-custom-hover-blue2 hover:shadow-lg">
+          Bài kiểm tra
+          <ChevronRight className="w-5 h-5 text-custom-blue" />
+        </Link>
+
+        <Link className="flex items-center justify-between px-5 py-3 rounded-xl border border-custom-blue text-custom-blue font-semibold shadow-md transition duration-300 hover:bg-custom-hover-blue2 hover:shadow-lg">
+          Kết quả bài kiểm tra
+          <ChevronRight className="w-5 h-5 text-custom-blue" />
+        </Link>
+      </div>
       {/* Danh sách bài học */}
       <section className="mb-12 border-b border-gray-300 pb-6">
         <h2 className="text-2xl font-semibold text-red-700 mb-6 border-b border-gray-300 pb-2">
@@ -290,8 +324,8 @@ function ManageCourseDetailPage() {
 
         {/* Tổng số bài học */}
         <div className="mb-4 text-red-400">
-          <span className="font-bold text-red-400">Tổng số bài học:</span> {lessons.length}{" "}
-          bài học
+          <span className="font-bold text-red-400">Tổng số bài học:</span>{" "}
+          {lessons.length} bài học
         </div>
         {lessons.length === 0 ? (
           <p className="text-gray-500 italic">Chưa có bài học nào</p>
@@ -572,7 +606,7 @@ function ManageCourseDetailPage() {
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="text-xl font-bold text-red-500 mb-4">
+              <h2 className="text-xl font-bold text-custom-blue mb-4">
                 Chỉnh sửa môn học
               </h2>
               <form
@@ -614,7 +648,7 @@ function ManageCourseDetailPage() {
                     Ảnh đại diện <span className="text-red-500">*</span>
                   </label>
                   <div
-                    className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-red-400 transition"
+                    className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-custom-hover-blue transition"
                     onDragOver={handleDragOver}
                     onDrop={handleDrop}
                   >
@@ -627,7 +661,7 @@ function ManageCourseDetailPage() {
                     />
                     <label
                       htmlFor="fileInput"
-                      className="cursor-pointer text-red-600 hover:underline"
+                      className="cursor-pointer text-custom-blue hover:underline"
                     >
                       Chọn hoặc kéo-thả ảnh vào đây
                     </label>
@@ -642,27 +676,69 @@ function ManageCourseDetailPage() {
                   </div>
                 </div>
                 {/* Buttons */}
-                <div className="text-right space-x-2 flex justify-end">
-                  <button
+                <div className="text-right gap-4 flex justify-end">
+                  <Button
                     type="button"
-                    onClick={closeModals}
-                    className="px-4 bg-gray-300 rounded hover:bg-gray-400 transition-colors duration-300 cursor-pointer w-full text-[14px]"
+                    variant="contained"
+                    disableElevation
+                    fullWidth
+                    disabled={loading}
+                    onClick={() => closeModals()}
+                    sx={{
+                      py: "8px",
+                      px: "16px",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      borderRadius: "6px",
+                      textTransform: "none",
+                      color: "white",
+                      bgcolor: "grey.600",
+                      transition:
+                        "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                      "&:hover": {
+                        bgcolor: "grey.700",
+                      },
+                      "&.Mui-disabled": {
+                        color: "white",
+                        bgcolor: "grey.400",
+                        cursor: "not-allowed",
+                        opacity: 1,
+                      },
+                    }}
                   >
                     Hủy
-                  </button>
-
-                  <button
+                  </Button>
+                  <Button
                     type="submit"
-                    disabled={loading}
-                    className={`px-4 py-2 rounded w-full text-[14px] transition-colors duration-300 cursor-pointer
-                    ${
-                      loading
-                        ? "bg-gray-400 text-white cursor-not-allowed"
-                        : "bg-red-600 hover:bg-red-700 text-white"
-                    }`}
+                    variant="contained"
+                    loading={loading} // 👈 Thêm prop này
+                    disableElevation
+                    fullWidth
+                    disabled={loading} // 👈 tránh user bấm khi đang loading
+                    sx={{
+                      py: "8px",
+                      px: "16px",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      borderRadius: "6px",
+                      textTransform: "none",
+                      color: "white",
+                      bgcolor: !loading ? "#4A90E2" : "grey.400",
+                      transition:
+                        "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                      "&:hover": {
+                        bgcolor: !loading ? "#357ABD" : "grey.400",
+                      },
+                      "&.Mui-disabled": {
+                        color: "white",
+                        bgcolor: "grey.400",
+                        cursor: "not-allowed",
+                        opacity: 1,
+                      },
+                    }}
                   >
-                    {loading ? "Đang cập nhật..." : "Cập nhật"}
-                  </button>
+                    {loading ? "Đang xử lý..." : "Tạo khóa học"}
+                  </Button>
                 </div>
               </form>
             </motion.div>
