@@ -61,9 +61,7 @@ const lessonService = {
   // Xóa bài học
   deleteLesson: async (lessonId) => {
     try {
-      console.log(userService.getToken());
-      
-      const response = await axios.put(`${API_URL}/deleted/${lessonId}`, {}, {
+      const response = await axios.delete(`${API_URL}/deleted/${lessonId}`, {
         headers: {
           Authorization: `Bearer ${userService.getToken()}`,
         },

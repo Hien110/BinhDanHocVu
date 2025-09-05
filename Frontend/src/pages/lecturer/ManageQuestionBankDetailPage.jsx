@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import questionBankService from "../services/questionBankService";
+import questionBankService from "../../services/questionBankService";
+import courseService from "../../services/courseService";
 
 import { toast } from "sonner";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { Button } from "@mui/material";
 
 function ManageQuestionBankDetailPage() {
   const { courseId } = useParams();
@@ -24,14 +26,31 @@ function ManageQuestionBankDetailPage() {
   const [editQuestion, setEditQuestion] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [course, setCourse] = useState(null);
 
   const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
 
-  const [showDeleteAllQuestionsModal, setShowDeleteAllQuestionsModal] = useState(false);
+  const [showDeleteAllQuestionsModal, setShowDeleteAllQuestionsModal] =
+    useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  // Lấy course theo courseId
+  const fetchCourse = async () => {
+    try {
+      const result = await courseService.getCourseById(courseId);
+      if (result.success) {
+        setCourse(result.data);
+      } else {
+        toast.error(`Không thể tải khóa học: ${result.message}`);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Lỗi khi tải khóa học.");
+    }
+  };
 
   /** Lấy danh sách câu hỏi */
   const fetchQuestion = async () => {
@@ -53,6 +72,7 @@ function ManageQuestionBankDetailPage() {
 
   useEffect(() => {
     fetchQuestion();
+    fetchCourse();
   }, [courseId]);
 
   /** Thêm đáp án mới */
@@ -284,12 +304,17 @@ function ManageQuestionBankDetailPage() {
     <div className="mx-auto">
       {/* Tiêu đề */}
       <h1 className="text-3xl font-bold mb-4 text-gray-800 border-b border-gray-300 pb-3">
-        Ngân hàng câu hỏi
+        {course?.title}
       </h1>
+      <div className="w-full">
+        <h2 className="text-2xl font-semibold text-custom-blue mb-6 border-b border-gray-300 pb-2">
+          Danh sách ngân hàng câu hỏi
+        </h2>
+      </div>
       {/* Tổng số câu hỏi */}
-      <div className="mb-4 text-red-400">
-        <span className="font-bold">Tổng số câu hỏi:</span> {questionList.length}{" "}
-        câu hỏi
+      <div className="mb-4 text-custom-blue font-medium">
+        <span className="font-bold">Tổng số câu hỏi:</span>{" "}
+        {questionList.length} câu hỏi
       </div>
       {/* Ô tìm kiếm */}
       <div className="mb-6">
@@ -374,7 +399,7 @@ function ManageQuestionBankDetailPage() {
       )}
       {/* Tạo câu hỏi bằng excel */}
       <div className="mt-6">
-        <h2 className="text-2xl font-bold mb-6 text-red-700 border-b border-gray-300 pb-2">
+        <h2 className="text-xl font-bold mb-6 text-custom-blue border-b border-gray-300 pb-2">
           Tạo câu hỏi bằng Excel
         </h2>
         <div>
@@ -384,8 +409,9 @@ function ManageQuestionBankDetailPage() {
             className="border border-gray-300 p-2 rounded-lg file:mr-4 file:py-2 file:px-4
                      file:rounded-full file:border-0
                      file:text-sm file:font-semibold
-                     file:bg-red-50 file:text-red-700
-                     hover:file:bg-red-100"
+                     file:bg-blue-50 file:text-custom-blue
+                     hover:file:bg-custom-hover-blue2
+                     transition-colors duration-300"
             onChange={handleFileChange}
           />
         </div>
@@ -393,14 +419,6 @@ function ManageQuestionBankDetailPage() {
           Chọn file Excel chứa câu hỏi để tải lên
         </p>
         {/*  */}
-        <button
-          onClick={handleUpload}
-          className="cursor-pointer mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300"
-        >
-          Tạo câu hỏi
-        </button>
-
-        {/* File mẫu */}
         <a
           href={`${import.meta.env.BASE_URL}TaoCauHoiMau.xlsx`}
           download
@@ -408,11 +426,19 @@ function ManageQuestionBankDetailPage() {
         >
           Tải về file mẫu
         </a>
+        <button
+          onClick={handleUpload}
+          className="cursor-pointer mt-4 px-4 py-2 bg-custom-blue text-white rounded-lg hover:bg-custom-hover-blue transition-all duration-300"
+        >
+          Tạo câu hỏi
+        </button>
+
+        {/* File mẫu */}
       </div>
       {/* Form tạo câu hỏi */}
       <div className="mt-10">
-        <h2 className="text-2xl font-bold mb-6 text-red-700 border-b border-gray-300 pb-2">
-          Tạo câu hỏi mới
+        <h2 className="text-xl font-bold mb-6 text-custom-blue border-b border-gray-300 pb-2">
+          Tạo câu hỏi thủ công
         </h2>
         <form
           onSubmit={handleSubmit}
@@ -474,7 +500,7 @@ function ManageQuestionBankDetailPage() {
             <button
               type="button"
               onClick={handleAddOption}
-              className="cursor-pointer bg-white text-yellow-600 border border-yellow-600 px-4 py-2 rounded-lg hover:bg-yellow-100 transition-all duration-300"
+              className="cursor-pointer bg-white text-custom-orange border border-custom-orange px-4 py-2 rounded-lg hover:bg-custom-hover-orange2 transition-all duration-300"
             >
               Thêm đáp án
             </button>
@@ -482,7 +508,7 @@ function ManageQuestionBankDetailPage() {
 
           <button
             type="submit"
-            className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-red-500 hover:bg-red-600 shadow-md transition-all duration-300"
+            className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-custom-blue hover:bg-custom-hover-blue shadow-md transition-all duration-300"
           >
             Tạo câu hỏi
           </button>
@@ -504,13 +530,13 @@ function ManageQuestionBankDetailPage() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
             >
-              <h2 className="text-2xl font-bold mb-4 text-red-600">
+              <h2 className="text-xl font-bold mb-4 text-custom-blue">
                 Chỉnh sửa câu hỏi
               </h2>
               {editQuestion && (
                 <form onSubmit={handleSaveEdit} className="space-y-4">
                   <div>
-                    <label className="block font-medium text-gray-700 mb-1">
+                    <label className="block font-medium mb-1">
                       Nội dung câu hỏi
                     </label>
                     <textarea
@@ -526,7 +552,7 @@ function ManageQuestionBankDetailPage() {
                   {editQuestion.options?.map((opt, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center gap-3 border p-2 rounded-lg"
+                      className="flex items-center gap-3 p-2 rounded-lg"
                     >
                       <span className="font-bold">
                         {String.fromCharCode(65 + idx)}.
@@ -534,6 +560,7 @@ function ManageQuestionBankDetailPage() {
                       <input
                         type="text"
                         value={opt.text}
+                        required
                         onChange={(e) =>
                           handleChangeOption(idx, "text", e.target.value)
                         }
@@ -569,27 +596,77 @@ function ManageQuestionBankDetailPage() {
                     <button
                       type="button"
                       onClick={handleAddEditOption}
-                      className="bg-white text-yellow-600 border border-yellow-600 px-4 py-2 rounded-lg hover:bg-yellow-100 transition-all duration-300 cursor-pointer"
+                      className="bg-white text-custom-orange border border-custom-orange px-4 py-2 rounded-lg hover:bg-custom-hover-orange2 transition-all duration-300 cursor-pointer"
                     >
                       Thêm đáp án
                     </button>
                   </div>
 
                   <div className="flex justify-end gap-3 pt-3">
-                    <button
+                    <Button
                       type="button"
+                      variant="contained"
+                      disableElevation
+                      fullWidth
+                      disabled={saving}
                       onClick={handleCloseModal}
-                      className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+                      sx={{
+                        py: "8px",
+                        px: "16px",
+                        fontSize: "0.875rem",
+                        fontWeight: "500",
+                        borderRadius: "6px",
+                        textTransform: "none",
+                        color: "white",
+                        bgcolor: "grey.600",
+                        transition:
+                          "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                        "&:hover": {
+                          bgcolor: "grey.700",
+                        },
+                        "&.Mui-disabled": {
+                          color: "white",
+                          bgcolor: "grey.400",
+                          cursor: "not-allowed",
+                          opacity: 1,
+                        },
+                      }}
                     >
                       Hủy
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       type="submit"
-                      disabled={saving}
-                      className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 disabled:opacity-50"
+                      variant="contained"
+                      loading={saving} // 👈 Thêm prop này
+                      disableElevation
+                      fullWidth
+                      disabled={saving} // 👈 tránh user bấm khi đang loading
+                      sx={{
+                        py: "8px",
+                        px: "16px",
+                        fontSize: "0.875rem",
+                        fontWeight: "500",
+                        borderRadius: "6px",
+                        textTransform: "none",
+                        color: "white",
+                        bgcolor: !saving ? "#4A90E2" : "grey.400",
+                        transition:
+                          "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                        "&:hover": {
+                          bgcolor: !saving ? "#357ABD" : "grey.400",
+                        },
+                        "&.Mui-disabled": {
+                          color: "white",
+                          bgcolor: "grey.400",
+                          cursor: "not-allowed",
+                          opacity: 1,
+                        },
+                      }}
                     >
-                      {saving ? "Đang lưu..." : "Lưu thay đổi"}
-                    </button>
+                      {saving
+                        ? "Đang chỉnh sửa bài học..."
+                        : "Chỉnh sửa bài học"}
+                    </Button>
                   </div>
                 </form>
               )}
@@ -667,7 +744,7 @@ function ManageQuestionBankDetailPage() {
               transition={{ duration: 0.3 }}
             >
               <h2 className="text-xl font-bold text-red-500 mb-4">
-                Xóa câu hỏi
+                Xóa tất cả câu hỏi
               </h2>
               <p className="text-gray-600 mb-4">
                 Bạn có chắc chắn muốn xóa toàn bộ ngân hàng câu hỏi không?

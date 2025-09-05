@@ -30,14 +30,17 @@ const ManageStudentDetailPage = React.lazy(() => import("../pages/ManageStudentD
 
 // Question Bank
 const ManageQuestionBankPage = React.lazy(() => import("../pages/ManageQuestionBankPage"));
-const ManageQuestionBankDetailPage = React.lazy(() => import("../pages/ManageQuestionBankDetailPage"));
+const ManageQuestionBankDetailPage = React.lazy(() => import("../pages/lecturer/ManageQuestionBankDetailPage"));
 
 //Courses
 const ManageCoursesListPage = React.lazy(() => import("../pages/lecturer/ManageCoursesListPage"));
 const ManageCourseCreatePage = React.lazy(() => import("../pages/lecturer/ManageCourseCreatePage"));
 const ManageCourseDetailPage = React.lazy(() => import("../pages/lecturer/ManageCourseDetailPage"));
 
-const ManageLessonDetailPage = React.lazy(() => import("../pages/ManageLessonDetailPage"));
+//Lesson
+const ManageLessonListPage = React.lazy(() => import("../pages/lecturer/ManageLessonListPage"));
+
+const ManageLessonDetailPage = React.lazy(() => import("../pages/lecturer/ManageLessonDetailPage"));
 
 //Quiz
 const ManageQuizPage = React.lazy(() => import("../pages/ManageQuizPage"));
@@ -98,6 +101,8 @@ const AppRoutes = [
   { path: ROUTE_PATH.LECTURER_CREATE_COURSE, page: ManageCourseCreatePage, layout: lecturerLayout  },
   { path: ROUTE_PATH.LECTURER_COURSE_DETAIL, page: ManageCourseDetailPage, layout: lecturerLayout  },
 
+  //Lesson
+  { path: ROUTE_PATH.LECTURER_LESSON_LIST, page: ManageLessonListPage, layout: lecturerLayout  },
   { path: ROUTE_PATH.LECTURER_LESSON_DETAIL, page: ManageLessonDetailPage, layout: lecturerLayout  },
 
   //Quiz

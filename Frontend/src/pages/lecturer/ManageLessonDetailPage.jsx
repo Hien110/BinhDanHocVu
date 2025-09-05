@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
-import LessonDetailCard from '../components/LessonDetailCard'
+import LessonDetailCard from '../../components/LessonDetailCard'
 
 import { useParams } from 'react-router-dom'
 
-import lessonService from '../services/lessonService'
+import lessonService from '../../services/lessonService'
 
 
 

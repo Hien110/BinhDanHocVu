@@ -89,7 +89,7 @@ const QuestionBankController = {
       const questions = await QuestionBank.find({
         course: courseId,
         deleted: false,
-      });
+      }).populate('course');
       res.json({
         data: questions,
         message: "Lấy câu hỏi theo khóa học thành công",
