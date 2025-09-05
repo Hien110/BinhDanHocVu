@@ -16,7 +16,7 @@ router.get('/:courseId/lessons', LessonController.getLessonsByCourse);
 router.get('/:lessonId', LessonController.getLessonById);
 
 // Xóa bài học
-router.put('/deleted/:lessonId', authenticateToken, authorize("lecturer"), LessonController.deleteLesson);
+router.delete('/deleted/:lessonId', authenticateToken, authorize("lecturer"), LessonController.deleteLesson);
 
 // Cập nhật bài học
 router.put('/update/:lessonId', authenticateToken, authorize("lecturer"), LessonController.updateLesson);

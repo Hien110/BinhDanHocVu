@@ -24,22 +24,24 @@ export const  ROUTE_PATH = {
     LECTURER_CREATE_COURSE: "/giang-vien/khoa-hoc/tao-khoa-hoc",
     LECTURER_COURSE_DETAIL: "/giang-vien/khoa-hoc/:courseId",
 
-    LECTURER_LESSON_DETAIL: "/lecturer/courses/:courseId/lessons/:lessonId",
+    LECTURER_LESSON_LIST: "/giang-vien/khoa-hoc/:courseId/lessons",
 
-    LECTURER_STUDENTS: "/lecturer/students",
-    LECTURER_STUDENT_DETAIL: "/lecturer/students/:studentId",
+    LECTURER_LESSON_DETAIL: "/giang-vien/khoa-hoc/:courseId/lessons/:lessonId",
 
-    LECTURER_QUESTION_BANK: "/lecturer/question-bank",
-    LECTURER_QUESTION_BANK_DETAIL: "/lecturer/question-bank/:courseId",
+    LECTURER_STUDENTS: "/giang-vien/khoa-hoc/:courseId/sinh-vien",
+    LECTURER_STUDENT_DETAIL: "/giang-vien/khoa-hoc/:courseId/sinh-vien/:studentId",
 
-    LECTURER_QUIZ: "/lecturer/quiz",
-    LECTURER_QUIZ_LIST: "/lecturer/quiz/:courseId/list",
-    LECTURER_QUIZ_CREATE: "/lecturer/quiz/:courseId/create",
-    LECTURER_QUIZ_DETAIL: "/lecturer/quiz/:courseId/:quizId",
+    LECTURER_QUESTION_BANK: "/giang-vien/question-bank",
+    LECTURER_QUESTION_BANK_DETAIL: "/giang-vien/ngan-hang-cau-hoi/:courseId",
 
-    LECTURER_QUIZ_RESULT: "/lecturer/result-quiz",
-    LECTURER_QUIZ_RESULT_LIST: "/lecturer/result-quiz/:courseId/list",
-    LECTURER_QUIZ_RESULT_DETAIL: "/lecturer/result-quiz/:courseId/:quizId",
+    LECTURER_QUIZ: "/giang-vien/bai-kiem-tra",
+    LECTURER_QUIZ_LIST: "/giang-vien/bai-kiem-tra/:courseId/list",
+    LECTURER_QUIZ_CREATE: "/giang-vien/bai-kiem-tra/:courseId/create",
+    LECTURER_QUIZ_DETAIL: "/giang-vien/bai-kiem-tra/:courseId/:quizId",
+
+    LECTURER_QUIZ_RESULT: "/giang-vien/result-bai-kiem-tra",
+    LECTURER_QUIZ_RESULT_LIST: "/giang-vien/result-bai-kiem-tra/:courseId/list",
+    LECTURER_QUIZ_RESULT_DETAIL: "/giang-vien/result-bai-kiem-tra/:courseId/:quizId",
 
     LECTURER_NEWS: "/lecturer/news",
 
