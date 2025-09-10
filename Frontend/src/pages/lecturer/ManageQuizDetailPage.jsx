@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import QuizService from "../services/quizService";
-import questionBankService from "../services/questionBankService";
+import QuizService from "../../services/quizService";
+import questionBankService from "../../services/questionBankService";
 import { toast } from "sonner";
-import { ROUTE_PATH } from "../constants/routePath";
+import { ROUTE_PATH } from "../../constants/routePath";
+import { Button } from "@mui/material";
 
 function ManageQuizDetailPage() {
   const { courseId, quizId } = useParams();
@@ -14,6 +15,7 @@ function ManageQuizDetailPage() {
   const [attempts, setAttempts] = useState(1);
   const [duration, setDuration] = useState(1);
   const [randomCount, setRandomCount] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   let totalQuestions = 0;
   useEffect(() => {
@@ -63,24 +65,26 @@ function ManageQuizDetailPage() {
 
   // Thêm câu hỏi
   const handleAddQuestion = (q) => {
-    setQuizQuestions((prev) => [
-      ...prev,
-      { _id: `temp-${Date.now()}`, ...q },
-    ]);
+    setQuizQuestions((prev) => [...prev, { _id: `temp-${Date.now()}`, ...q }]);
   };
 
   // Lưu quiz
   const handleSaveQuiz = async () => {
-
-    if ( quizDetail.typeQuiz === "random" && randomCount > questionBankList.length) {
-        toast.error("Số câu hỏi ngẫu nhiên không được lớn hơn số câu hỏi trong ngân hàng");
-        return;
+    setLoading(true);
+    if (
+      quizDetail.typeQuiz === "random" &&
+      randomCount > questionBankList.length
+    ) {
+      toast.error(
+        "Số câu hỏi ngẫu nhiên không được lớn hơn số câu hỏi trong ngân hàng"
+      );
+      return;
     }
 
-    if (quizDetail.typeQuiz === "manual" || quizDetail.typeQuiz === "excel"){
-        totalQuestions = quizQuestions.length;
+    if (quizDetail.typeQuiz === "manual" || quizDetail.typeQuiz === "excel") {
+      totalQuestions = quizQuestions.length;
     } else {
-        totalQuestions = randomCount;
+      totalQuestions = randomCount;
     }
     try {
       const payload = {
@@ -100,6 +104,8 @@ function ManageQuizDetailPage() {
       }
     } catch (error) {
       toast.error("Lỗi khi lưu bài kiểm tra: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -155,15 +161,13 @@ function ManageQuizDetailPage() {
             <div className="flex justify-between items-start mb-3">
               <p className="font-semibold text-lg text-gray-800">
                 Câu hỏi {index + 1}:{" "}
-                <span className="font-normal">
-                  {item?.question}
-                </span>
+                <span className="font-normal">{item?.question}</span>
               </p>
               <button
                 onClick={() => handleRemoveQuestion(item._id)}
-                className="text-sm border border-red-500 text-red-500 px-2 py-1 rounded-lg hover:bg-red-100 transition-all duration-300 cursor-pointer"
+                className="cursor-pointer px-3 py-1 text-sm bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
               >
-                Xóa
+                🗑 Xóa
               </button>
             </div>
             <ul className="space-y-2 pl-5">
@@ -237,25 +241,75 @@ function ManageQuizDetailPage() {
 
       {/* Nút lưu quiz */}
 
-      <div className="flex space-x-4 mt-4">
-        <button
-          type="button"
-          className="w-full py-3 rounded-xl text-white font-semibold bg-gray-600 transition-colors duration-500 ease-in-out hover:bg-gray-500 cursor-pointer shadow-md"
-          onClick={() =>
-            (window.location.href = ROUTE_PATH.LECTURER_QUIZ_LIST.replace(
-              ":courseId",
-              courseId
-            ))
-          }
-        >
-          Quay lại
-        </button>
-        <button
-          onClick={handleSaveQuiz}
-          className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-red-500 hover:bg-red-600 shadow-md transition-all duration-300"
-        >
-          Lưu lại chỉnh sửa
-        </button>
+      <div className="flex gap-4 mt-4">
+        <Button
+            type="button"
+            variant="contained"
+            disableElevation
+            fullWidth
+            disabled={loading}
+            onClick={() =>
+              (window.location.href = ROUTE_PATH.LECTURER_QUIZ_LIST.replace(
+                ":courseId",
+                courseId
+              ))
+            }
+            sx={{
+              py: "8px",
+              px: "16px",
+              fontSize: "0.875rem",
+              fontWeight: "500",
+              borderRadius: "6px",
+              textTransform: "none",
+              color: "white",
+              bgcolor: "grey.600",
+              transition:
+                "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+              "&:hover": {
+                bgcolor: "grey.700",
+              },
+              "&.Mui-disabled": {
+                color: "white",
+                bgcolor: "grey.400",
+                cursor: "not-allowed",
+                opacity: 1,
+              },
+            }}
+          >
+            Quay lại
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            loading={loading} // 👈 Thêm prop này
+            disableElevation
+            fullWidth
+            onClick={handleSaveQuiz}
+            disabled={loading} // 👈 tránh user bấm khi đang loading
+            sx={{
+              py: "8px",
+              px: "16px",
+              fontSize: "0.875rem",
+              fontWeight: "500",
+              borderRadius: "6px",
+              textTransform: "none",
+              color: "white",
+              bgcolor: !loading ? "#4A90E2" : "grey.400",
+              transition:
+                "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+              "&:hover": {
+                bgcolor: !loading ? "#357ABD" : "grey.400",
+              },
+              "&.Mui-disabled": {
+                color: "white",
+                bgcolor: "grey.400",
+                cursor: "not-allowed",
+                opacity: 1,
+              },
+            }}
+          >
+            {loading ? "Đang lưu bài kiểm tra..." : "Lưu bài kiểm tra"}
+          </Button>
       </div>
     </div>
   );

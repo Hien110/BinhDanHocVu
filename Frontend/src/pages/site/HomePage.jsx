@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import courseService from "../services/courseService";
-import CourseCard from "../components/CourseCard";
+import courseService from "../../services/courseService";
+import CourseCard from "../../components/CourseCard";
 
 import { motion } from "framer-motion";
 

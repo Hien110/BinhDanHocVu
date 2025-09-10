@@ -176,7 +176,7 @@ function ManageCourseDetailPage() {
             }}
             className="cursor-pointer text-red-600 border border-red-600 px-4 py-2 rounded-lg text-sm transition duration-300 hover:bg-red-100 font-medium"
           >
-            Xóa bài học
+            Xóa khóa học
           </button>
         </div>
       </div>
@@ -197,14 +197,29 @@ function ManageCourseDetailPage() {
         </Link>
 
         <Link
-          to={ROUTE_PATH.LECTURER_QUESTION_BANK_DETAIL.replace(":courseId", courseId)}
+          to={ROUTE_PATH.LECTURER_QUESTION_BANK_DETAIL.replace(
+            ":courseId",
+            courseId
+          ).replace(
+            ":courseName",
+            course.title.replace(/\s+/g, "-").toLowerCase()
+          )}
           className="flex items-center justify-between px-5 py-3 rounded-xl border border-custom-blue text-custom-blue font-semibold shadow-md transition duration-300 hover:bg-custom-hover-blue2 hover:shadow-lg"
         >
           Ngân hàng câu hỏi
           <ChevronRight className="w-5 h-5 text-custom-blue" />
         </Link>
 
-        <Link className="flex items-center justify-between px-5 py-3 rounded-xl border border-custom-blue text-custom-blue font-semibold shadow-md transition duration-300 hover:bg-custom-hover-blue2 hover:shadow-lg">
+        <Link
+          to={ROUTE_PATH.LECTURER_QUIZ_LIST.replace(
+            ":courseId",
+            courseId
+          ).replace(
+            ":courseName",
+            course.title.replace(/\s+/g, "-").toLowerCase()
+          )}
+          className="flex items-center justify-between px-5 py-3 rounded-xl border border-custom-blue text-custom-blue font-semibold shadow-md transition duration-300 hover:bg-custom-hover-blue2 hover:shadow-lg"
+        >
           Bài kiểm tra
           <ChevronRight className="w-5 h-5 text-custom-blue" />
         </Link>

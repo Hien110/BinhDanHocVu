@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react";
 
-import { ROUTE_PATH } from "../constants/routePath";
+import { useNavigate } from "react-router-dom";
+
+import { ROUTE_PATH } from "../../constants/routePath";
 
 import { useParams } from "react-router-dom";
 
-import QuizService from "../services/quizService";
+import QuizService from "../../services/quizService";
+import courseService from "../../services/courseService";
 
+/* eslint-disable no-unused-vars */
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
 function ManageQuizListPage() {
   const { courseId } = useParams();
+  const navigate = useNavigate();
 
   const [quizzes, setQuizzes] = useState([]);
+  const [course, setCourse] = useState(null);
   const [Loading, setLoading] = useState(true);
 
   const [showModalDelete, setShowModalDelete] = useState(false);
@@ -21,6 +27,13 @@ function ManageQuizListPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
+    const fetchCourse = async () => {
+      const res = await courseService.getCourseById(courseId);
+      if (res.success) {
+        setCourse(res.data);
+      }
+    };
+
     const fetchQuizzes = async () => {
       try {
         setLoading(true);
@@ -36,7 +49,7 @@ function ManageQuizListPage() {
         setLoading(false);
       }
     };
-
+    fetchCourse();
     fetchQuizzes();
   }, [courseId]);
 
@@ -74,11 +87,14 @@ function ManageQuizListPage() {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8 text-gray-800 border-b border-gray-200 pb-2">
-        Quản lý bài kiểm tra
+        {course ? course.title : "Khóa học không tồn tại"}
       </h1>
-      <div className="mb-4 text-red-400">
-        <span className="font-bold">Tổng số bài kiểm tra:</span> {quizzes.length}{" "}
-        bài kiểm tra
+      <h2 className="text-2xl font-semibold text-custom-blue mb-6 border-b border-gray-300 pb-2">
+        Danh sách bài kiểm tra
+      </h2>
+      <div className="mb-4 text-custom-blue">
+        <span className="font-bold">Tổng số bài kiểm tra:</span>{" "}
+        {quizzes.length} bài kiểm tra
       </div>
       <div className="mb-6">
         <input
@@ -98,31 +114,25 @@ function ManageQuizListPage() {
           {filteredQuizzes.map((quiz) => (
             <div
               key={quiz._id}
-              className="w-full flex justify-between items-center bg-white p-4 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-200"
+              className="w-full flex justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200"
             >
               <div>
                 {/* Tiêu đề */}
-                <h2 className="text-xl font-semibold mb-2 text-yellow-600 max-w-xs truncate">
+                <h2 className="text-xl font-semibold mb-2 text-custom-orange max-w-xs truncate">
                   {quiz.title}
                 </h2>
-
                 {/* Số câu hỏi */}
-                <p className="text-gray-600">
-                  <span className="font-medium">Số câu hỏi:</span>{" "}
-                  {quiz.totalQuestions}
-                </p>
-              </div>
-              {/* Loại Quiz (canh giữa) */}
-              <div className="">
                 <span className="font-medium text-gray-600">Loại đề:</span>{" "}
                 {quiz.typeQuiz === "manual" && "Thủ công"}
                 {quiz.typeQuiz === "excel" && "Excel"}
                 {quiz.typeQuiz === "random" && "Tự động"}
-                {/* Ngày tạo */}
-                {/* <p className="text-gray-600">
-                  <span className="font-medium">Ngày tạo:</span>{" "}
-                  {new Date(quiz.createdAt).toLocaleDateString("vi-VN")}
-                </p> */}
+              </div>
+              {/* Loại Quiz (canh giữa) */}
+              <div className="">
+                <p className="">
+                  <span className="font-medium text-gray-600">Số câu hỏi:</span>{" "}
+                  {quiz.totalQuestions} câu  
+                </p>
                 {/* Thời gian làm bài */}
                 <p className="">
                   <span className="font-medium text-gray-600">
@@ -130,18 +140,26 @@ function ManageQuizListPage() {
                   </span>{" "}
                   {quiz.timeLimit} phút
                 </p>
+                {/* Ngày tạo */}
+                <p className="">
+                  <span className="font-medium text-gray-600">Ngày tạo:</span>{" "}
+                  {new Date(quiz.createdAt).toLocaleDateString("vi-VN")}
+                </p>
               </div>
 
               {/* Nút hành động */}
               <div className="">
                 <button
-                  className="cursor-pointer text-yellow-600 border border-yellow-600 px-3 py-1 text-sm rounded-lg hover:bg-yellow-100 font-medium transition duration-300"
+                  className="cursor-pointer text-custom-orange border border-custom-orange px-3 py-1 text-sm rounded-lg hover:bg-custom-hover-orange2 font-medium transition duration-300"
                   onClick={() => {
                     window.location.href =
                       ROUTE_PATH.LECTURER_QUIZ_DETAIL.replace(
                         ":courseId",
                         courseId
-                      ).replace(":quizId", quiz._id);
+                      ).replace(":quizId", quiz._id).replace(
+                        ":courseName",
+                        course.title.replace(/\s+/g, "-").toLowerCase()
+                      );
                   }}
                 >
                   Xem chi tiết
@@ -218,15 +236,14 @@ function ManageQuizListPage() {
 
       <div className="fixed bottom-4 right-4 max-w-[250px] px-4 py-1 ">
         <button
-          className="w-full py-3 px-4 rounded-xl text-white font-semibold bg-gradient-to-r from-red-500 to-red-400 transition-colors duration-500 ease-in-out hover:from-red-600 hover:to-red-500 cursor-pointer shadow-md"
+          className="w-full py-3 px-4 rounded-xl text-white font-semibold bg-custom-blue transition-colors duration-500 ease-in-out hover:bg-custom-hover-blue cursor-pointer shadow-md"
           onClick={() =>
-            (window.location.href = ROUTE_PATH.LECTURER_QUIZ_CREATE.replace(
-              ":courseId",
-              courseId
-            ))
+            navigate(
+              ROUTE_PATH.LECTURER_QUIZ_CREATE.replace(":courseId", courseId),
+              { state: { nameCourse: course?.title } }
+            )
           }
         >
-          <span className="text-lg mr-2">+</span>
           Tạo bài kiểm tra
         </button>
       </div>
