@@ -126,6 +126,24 @@ const courseService = {
       };
     }
   },
+
+  // Lấy 3 khóa học theo mỗi môn học
+  getTop3CoursesBySubject: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/subject/top3`);
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message || "Lỗi khi lấy khóa học theo môn học",
+      };
+    }
+  },
 };
 
 export default courseService;

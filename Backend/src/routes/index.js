@@ -5,6 +5,7 @@ const lessonRoutes = require("./lesson.routes");
 const questionBankRoutes = require("./question-bank.routes");
 const quizRoutes = require("./quiz.routes");
 const quizResultRoutes = require("./quiz-result.routes");
+const classRoomRoutes = require("./classroom.routes");
 
 function route(app) {
     app.use("/api/users", userRoutes);
@@ -14,6 +15,7 @@ function route(app) {
     app.use("/api/lessons", lessonRoutes);
     app.use("/api/quizzes", quizRoutes);
     app.use("/api/quiz-results", quizResultRoutes);
+    app.use("/api/classrooms", classRoomRoutes);
 }
 
 

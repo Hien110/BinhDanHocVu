@@ -23,4 +23,7 @@ router.put("/update/:courseId", authenticateToken, authorize("lecturer"), Course
 // Lấy toàn bộ khóa học
 router.get("/", CourseController.getAllCourses);
 
+// Lấy 3 khóa học theo mỗi môn học
+router.get("/subject/top3", CourseController.getTop3CoursesBySubject);
+
 module.exports = router;
