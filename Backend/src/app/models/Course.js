@@ -6,7 +6,6 @@ const courseSchema = new mongoose.Schema({
   thumbnail: { type: String },
   code: { type: String, required: true },
   instructor: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  students: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   subject: { type: String, required: true },
   deleted: { type: Boolean, default: false }
 }, { timestamps: true });

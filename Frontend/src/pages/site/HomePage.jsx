@@ -1,24 +1,38 @@
 import React, { useEffect, useState } from "react";
 
 import courseService from "../../services/courseService";
-import CourseCard from "../../components/CourseCard";
 
+import { ROUTE_PATH } from "../../constants/routePath";
+
+// eslint-disable no-unused-vars
 import { motion } from "framer-motion";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Link } from "react-router-dom";
 
 function HomePage() {
-  const [course, setCourse] = useState(null);
+  const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    const fetchCourse = async () => {
-      const response = await courseService.getAllCourses();
-      setCourse(response.data);
+    const fetchCourses = async () => {
+      const response = await courseService.getTop3CoursesBySubject();
+      setCourses(response.data);
     };
 
-    fetchCourse();
+    fetchCourses();
   }, []);
 
+  const subjectMapping = {
+    Math: "Toán học",
+    Literature: "Ngữ văn",
+    English: "Tiếng Anh",
+    CivicEducation: "Giáo dục công dân",
+    HistoryAndGeography: "Lịch sử và Địa Lý",
+    NaturalSciences: "Khoa học tự nhiên",
+    Technology: "Công nghệ",
+    InformationTechnology: "Tin học",
+    Other: "Khác",
+  };
   return (
     <div className="min-h-screen bg-white">
       {/* Banner hình ảnh */}
@@ -83,107 +97,69 @@ function HomePage() {
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
         Các khóa học phổ biến
       </h2>
-      <section class="py-8 bg-white">
-        <div class="container mx-auto px-4">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-bold text-gray-800">Học vụ số</h2>
-            <a href="#" class="text-custom-blue font-medium hover:underline">
-              Xem tất cả
-              <ArrowForwardIcon className="inline-block ml-1" />
-            </a>
-          </div>
+      <section className="py-8 bg-white">
+        <div className="container mx-auto px-4">
+          {Object.keys(courses).map((subject) => (
+            <div key={subject} className="mb-8">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {subjectMapping[subject] || subject}{" "}
+                  {/* Nếu không tìm thấy thì hiển thị key */}
+                </h2>
+                <a
+                  href="#"
+                  className="text-custom-blue font-medium hover:underline"
+                >
+                  Xem tất cả
+                  <ArrowForwardIcon className="inline-block ml-1" />
+                </a>
+              </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-white rounded-xl shadow-md overflow-hidden course-card transition duration-300">
-              <img
-                src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80"
-                alt="Toán học"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-6">
-                <div class="flex justify-between items-start mb-2"></div>
-                <h3 class="text-xl font-bold text-gray-800 mb-3">
-                  Toán nâng cao lớp 10
-                </h3>
-                <p class="text-gray-600 mb-4 line-clamp-2">
-                  Khóa học giúp học sinh nắm vững kiến thức toán nâng cao, chuẩn
-                  bị cho các kỳ thi học sinh giỏi.
-                </p>
-                <div className="mb-4">
-                  <span class="text-gray-500">Giáo viên: </span>
-                  <span class="font-medium text-gray-800">Nguyễn Văn A</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <a
-                    href="#"
-                    class="text-custom-blue font-medium border border-custom-blue hover:bg-blue-50 cursor-pointer rounded-lg px-2 py-1"
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {courses[subject].map((course) => (
+                  <div
+                    key={course._id}
+                    className="bg-white rounded-xl shadow-md overflow-hidden course-card transition duration-300"
                   >
-                    Xem chi tiết
-                  </a>
-                </div>
+                    <img
+                      src={course.thumbnail}
+                      alt={course.title}
+                      className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500 rounded-xl"
+                    />
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-gray-800 mb-3">
+                        {course.title}
+                      </h3>
+                      <p className="text-gray-600 mb-4 line-clamp-2">
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: course.description,
+                          }}
+                        />
+                      </p>
+                      <div className="mb-4">
+                        <span className="text-gray-500">Giáo viên: </span>
+                        <span className="font-medium text-gray-800">
+                          {course.instructor.fullName}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center w-full">
+                        <Link
+                          to={`${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
+                            ":courseId",
+                            course._id
+                          )}`}
+                          className="w-full text-center text-custom-blue font-medium border border-custom-blue hover:bg-blue-50 cursor-pointer rounded-lg px-2 py-1"
+                        >
+                          Xem chi tiết khóa học
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-
-            <div class="bg-white rounded-xl shadow-md overflow-hidden course-card transition duration-300">
-              <img
-                src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80"
-                alt="Vật lý"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-6">
-                <div class="flex justify-between items-start mb-2"></div>
-                <h3 class="text-xl font-bold text-gray-800 mb-3">
-                  Vật lý đại cương
-                </h3>
-                <p class="text-gray-600 mb-4 line-clamp-2">
-                  Khóa học cung cấp kiến thức nền tảng về vật lý, phù hợp với
-                  học sinh THPT và sinh viên năm nhất.
-                </p>
-                <div className="mb-4">
-                  <span class="text-gray-500">Giáo viên: </span>
-                  <span class="font-medium text-gray-800">Nguyễn Văn A</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <a
-                    href="#"
-                    class="text-custom-blue font-medium border border-custom-blue hover:bg-blue-50 cursor-pointer rounded-lg px-2 py-1"
-                  >
-                    Xem chi tiết
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-md overflow-hidden course-card transition duration-300">
-              <img
-                src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80"
-                alt="Tiếng Anh"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-6">
-                <div class="flex justify-between items-start mb-2"></div>
-                <h3 class="text-xl font-bold text-gray-800 mb-3">
-                  Tiếng Anh giao tiếp cơ bản
-                </h3>
-                <p class="text-gray-600 mb-4 line-clamp-2">
-                  Khóa học giúp bạn tự tin giao tiếp tiếng Anh trong các tình
-                  huống hàng ngày chỉ sau 3 tháng.
-                </p>
-                <div className="mb-4">
-                  <span class="text-gray-500">Giáo viên: </span>
-                  <span class="font-medium text-gray-800">Nguyễn Văn A</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <a
-                    href="#"
-                    class="text-custom-blue font-medium border border-custom-blue hover:bg-blue-50 cursor-pointer rounded-lg px-2 py-1"
-                  >
-                    Xem chi tiết
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
@@ -291,170 +267,6 @@ function HomePage() {
         </div>
       </section>
 
-      <section class="py-8 bg-white">
-        <div class="container mx-auto px-4">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-bold text-gray-800">Vật lý</h2>
-            <a href="#" class="text-custom-blue font-medium hover:underline">
-              Xem tất cả
-              <ArrowForwardIcon className="inline-block ml-1" />
-            </a>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-white rounded-xl shadow-md overflow-hidden course-card transition duration-300">
-              <img
-                src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80"
-                alt="Toán học"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-6">
-                <div class="flex justify-between items-start mb-2"></div>
-                <h3 class="text-xl font-bold text-gray-800 mb-3">
-                  Toán nâng cao lớp 10
-                </h3>
-                <p class="text-gray-600 mb-4 line-clamp-2">
-                  Khóa học giúp học sinh nắm vững kiến thức toán nâng cao, chuẩn
-                  bị cho các kỳ thi học sinh giỏi.
-                </p>
-                <div className="mb-4">
-                  <span class="text-gray-500">Giáo viên: </span>
-                  <span class="font-medium text-gray-800">Nguyễn Văn A</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <a
-                    href="#"
-                    class="text-custom-blue font-medium border border-custom-blue hover:bg-blue-50 cursor-pointer rounded-lg px-2 py-1"
-                  >
-                    Xem chi tiết
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-md overflow-hidden course-card transition duration-300">
-              <img
-                src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80"
-                alt="Vật lý"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-6">
-                <div class="flex justify-between items-start mb-2"></div>
-                <h3 class="text-xl font-bold text-gray-800 mb-3">
-                  Vật lý đại cương
-                </h3>
-                <p class="text-gray-600 mb-4 line-clamp-2">
-                  Khóa học cung cấp kiến thức nền tảng về vật lý, phù hợp với
-                  học sinh THPT và sinh viên năm nhất.
-                </p>
-                <div className="mb-4">
-                  <span class="text-gray-500">Giáo viên: </span>
-                  <span class="font-medium text-gray-800">Nguyễn Văn A</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <a
-                    href="#"
-                    class="text-custom-blue font-medium border border-custom-blue hover:bg-blue-50 cursor-pointer rounded-lg px-2 py-1"
-                  >
-                    Xem chi tiết
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-md overflow-hidden course-card transition duration-300">
-              <img
-                src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80"
-                alt="Tiếng Anh"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-6">
-                <div class="flex justify-between items-start mb-2"></div>
-                <h3 class="text-xl font-bold text-gray-800 mb-3">
-                  Tiếng Anh giao tiếp cơ bản
-                </h3>
-                <p class="text-gray-600 mb-4 line-clamp-2">
-                  Khóa học giúp bạn tự tin giao tiếp tiếng Anh trong các tình
-                  huống hàng ngày chỉ sau 3 tháng.
-                </p>
-                <div className="mb-4">
-                  <span class="text-gray-500">Giáo viên: </span>
-                  <span class="font-medium text-gray-800">Nguyễn Văn A</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <a
-                    href="#"
-                    class="text-custom-blue font-medium border border-custom-blue hover:bg-blue-50 cursor-pointer rounded-lg px-2 py-1"
-                  >
-                    Xem chi tiết
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-            Cách thức hoạt động
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-6 shadow-sm rounded-lg hover:shadow-md transition">
-              <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i className="fas fa-search text-custom-blue text-2xl"></i>
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">
-                1. Tìm kiếm khóa học
-              </h3>
-              <p className="text-gray-600">
-                Khám phá hàng trăm khóa học miễn phí ở nhiều lĩnh vực khác nhau
-                phù hợp với nhu cầu của bạn.
-              </p>
-            </div>
-
-            <div className="text-center p-6 shadow-sm rounded-lg hover:shadow-md transition">
-              <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i className="fas fa-user-plus text-emerald-600 text-2xl"></i>
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">
-                2. Đăng ký học
-              </h3>
-              <p className="text-gray-600">
-                Đăng ký chỉ với vài cú nhấp chuột, không cần thanh toán, hoàn
-                toàn miễn phí.
-              </p>
-            </div>
-
-            <div className="text-center p-6 shadow-sm rounded-lg hover:shadow-md transition">
-              <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i className="fas fa-graduation-cap text-amber-600 text-2xl"></i>
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">
-                3. Bắt đầu học tập
-              </h3>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="py-16 bg-blue-100  ">
-        <div className=" text-center">
-          <h2 className="text-2xl font-bold mb-6">
-            Sẵn sàng bắt đầu hành trình học tập?
-          </h2>
-          <p className="text-lg mb-8 max-w-2xl mx-auto">
-            Tham gia ngay cùng các bạn học sinh đang học tập miễn phí trên Bình
-            Dân Học Vụ
-          </p>
-          <a
-            href="#"
-            className="inline-block px-8 py-3 bg-white text-custom-blue font-bold rounded-lg hover:bg-gray-100 transition"
-          >
-            Đăng ký ngay
-          </a>
-        </div>
-      </section>
     </div>
   );
 }
