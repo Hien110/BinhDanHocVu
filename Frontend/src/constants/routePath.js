@@ -32,15 +32,15 @@ export const  ROUTE_PATH = {
     LECTURER_STUDENT_DETAIL: "/giang-vien/khoa-hoc/:courseId/sinh-vien/:studentId",
 
     LECTURER_QUESTION_BANK: "/giang-vien/question-bank",
-    LECTURER_QUESTION_BANK_DETAIL: "/giang-vien/ngan-hang-cau-hoi/:courseId",
+    LECTURER_QUESTION_BANK_DETAIL: "/giang-vien/khoa-hoc/:courseName/ngan-hang-cau-hoi/:courseId",
 
     LECTURER_QUIZ: "/giang-vien/bai-kiem-tra",
-    LECTURER_QUIZ_LIST: "/giang-vien/bai-kiem-tra/:courseId/list",
-    LECTURER_QUIZ_CREATE: "/giang-vien/bai-kiem-tra/:courseId/create",
-    LECTURER_QUIZ_DETAIL: "/giang-vien/bai-kiem-tra/:courseId/:quizId",
+    LECTURER_QUIZ_LIST: "/giang-vien/khoa-hoc/:courseName/bai-kiem-tra/:courseId/danh-sach-bai-kiem-tra",
+    LECTURER_QUIZ_CREATE: "/giang-vien/khoa-hoc/:courseName/bai-kiem-tra/:courseId/tao-bai-kiem-tra",
+    LECTURER_QUIZ_DETAIL: "/giang-vien/khoa-hoc/:courseName/bai-kiem-tra/:courseId/:quizId",
 
     LECTURER_QUIZ_RESULT: "/giang-vien/result-bai-kiem-tra",
-    LECTURER_QUIZ_RESULT_LIST: "/giang-vien/result-bai-kiem-tra/:courseId/list",
+    LECTURER_QUIZ_RESULT_LIST: "/giang-vien/result-bai-kiem-tra/:courseId/danh-sach",
     LECTURER_QUIZ_RESULT_DETAIL: "/giang-vien/result-bai-kiem-tra/:courseId/:quizId",
 
     LECTURER_NEWS: "/lecturer/news",

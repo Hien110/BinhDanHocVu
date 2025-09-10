@@ -29,17 +29,8 @@ const drawerWidth = 240;
 const navItems = [
   { label: "Thống kê", icon: <DashboardIcon />, path: ROUTE_PATH.LECTURER_STATISTICS },
   { label: "Quản lý môn học", icon: <BookIcon />, path: ROUTE_PATH.LECTURER_COURSES },
-  { label: "Ngân hàng câu hỏi", icon: <QuizIcon />, path: ROUTE_PATH.LECTURER_QUESTION_BANK },
-  { label: "Quản lý bài kiểm tra", icon: <HelpCenterIcon />, path: ROUTE_PATH.LECTURER_QUIZ },
-  { label: "Quản lý kết quả kiểm tra", icon: <ReceiptIcon />, path: ROUTE_PATH.LECTURER_QUIZ_RESULT },
 ];
 
-// // Theme font Noto Serif
-// const lecturerTheme = createTheme({
-//   typography: {
-//     fontFamily: "'Noto Serif', serif",
-//   },
-// });
 
 export default function SidebarLecturer({ children }) {
   const location = useLocation();

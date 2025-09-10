@@ -14,7 +14,7 @@ const ForgotPassword = React.lazy(() => import("../pages/ForgotPassword"));
 const AuthCallbackPage = React.lazy(() => import("../pages/AuthCallbackPage"));
 
 // Site pages
-const HomePage = React.lazy(() => import("../pages/HomePage"));
+const HomePage = React.lazy(() => import("../pages/site/HomePage"));
 const CoursePage = React.lazy(() => import("../pages/CoursePage"));
 const TestQuizListPage = React.lazy(() => import("../pages/TestQuizListPage"));
 const NewsPage = React.lazy(() => import("../pages/NewsPage"));
@@ -44,9 +44,9 @@ const ManageLessonDetailPage = React.lazy(() => import("../pages/lecturer/Manage
 
 //Quiz
 const ManageQuizPage = React.lazy(() => import("../pages/ManageQuizPage"));
-const ManageQuizListPage = React.lazy(() => import("../pages/ManageQuizListPage"));
-const ManageQuizCreatePage = React.lazy(() => import("../pages/ManageQuizCreatePage"));
-const ManageQuizDetailPage = React.lazy(() => import("../pages/ManageQuizDetailPage"));
+const ManageQuizListPage = React.lazy(() => import("../pages/lecturer/ManageQuizListPage"));
+const ManageQuizCreatePage = React.lazy(() => import("../pages/lecturer/ManageQuizCreatePage"));
+const ManageQuizDetailPage = React.lazy(() => import("../pages/lecturer/ManageQuizDetailPage"));
 
 const ManageQuizResultPage = React.lazy(() => import("../pages/ManageQuizResultPage"));
 const ManageQuizResultCoursePage = React.lazy(() => import("../pages/ManageQuizResultCoursePage"));

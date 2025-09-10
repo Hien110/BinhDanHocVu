@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import questionBankService from "../services/questionBankService";
-import QuizService from "../services/quizService";
+import questionBankService from "../../services/questionBankService";
+import QuizService from "../../services/quizService";
 
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-import { ROUTE_PATH } from "../constants/routePath"; // import đường dẫn
+import { ROUTE_PATH } from "../../constants/routePath"; // import đường dẫn
+import { Button } from "@mui/material";
 
 function ManageQuizCreatePage() {
+  const courseName = useLocation().state?.nameCourse || "Khóa học";
+
   const { courseId } = useParams();
   const [title, setTitle] = useState("");
   const [timeLimit, setTimeLimit] = useState(1);
@@ -100,8 +103,6 @@ function ManageQuizCreatePage() {
       totalQuestions = randomCount;
     }
 
-    
-
     const newQuiz = {
       course: courseId,
       title,
@@ -117,10 +118,15 @@ function ManageQuizCreatePage() {
       const response = await QuizService.createQuiz(courseId, newQuiz);
       if (response.success) {
         // Reset form
-        toast.success("Tạo bài kiểm tra thành công! Đang quay về trang danh sách bài kiểm tra ...");
+        toast.success(
+          "Tạo bài kiểm tra thành công! Đang quay về trang danh sách bài kiểm tra ..."
+        );
         // chờ 3s sau đó chuyển hướng
         setTimeout(() => {
-          window.location.href = ROUTE_PATH.LECTURER_QUIZ_LIST.replace(":courseId", courseId);
+          window.location.href = ROUTE_PATH.LECTURER_QUIZ_LIST.replace(
+            ":courseId",
+            courseId
+          );
         }, 3000);
       } else {
         toast.error(response.message || "Lỗi khi tạo quiz");
@@ -133,11 +139,13 @@ function ManageQuizCreatePage() {
   };
 
   return (
-    <div className="mx-auto bg-white p-6">
+    <div className="bg-white">
       <h1 className="text-3xl font-bold mb-8 text-gray-800 border-b pb-3">
-        Tạo bài kiểm tra
+        {courseName}
       </h1>
-
+      <h2 className="text-2xl font-semibold text-custom-blue mb-6 border-b border-gray-300 pb-2">
+        Tạo bài kiểm tra
+      </h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Tiêu đề */}
         <div>
@@ -148,40 +156,41 @@ function ManageQuizCreatePage() {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 transition"
+            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-blue transition"
             placeholder="Nhập tiêu đề bài kiểm tra..."
             required
           />
         </div>
 
-        {/* Giới hạn thời gian */}
-        <div>
-          <label className="block mb-2 font-semibold text-gray-700">
-            Giới hạn thời gian (phút)
-          </label>
-          <input
-            type="number"
-            value={timeLimit}
-            onChange={(e) => setTimeLimit(Number(e.target.value))}
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-            min={1}
-          />
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Giới hạn thời gian */}
+          <div>
+            <label className="block mb-2 font-semibold text-gray-700">
+              Giới hạn thời gian (phút)
+            </label>
+            <input
+              type="number"
+              value={timeLimit}
+              onChange={(e) => setTimeLimit(Number(e.target.value))}
+              className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-blue transition"
+              min={1}
+            />
+          </div>
 
-        {/* Số lần làm */}
-        <div>
-          <label className="block mb-2 font-semibold text-gray-700">
-            Số lần làm
-          </label>
-          <input
-            type="number"
-            value={attempts}
-            onChange={(e) => setAttempts(Number(e.target.value))}
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-            min={1}
-          />
+          {/* Số lần làm */}
+          <div>
+            <label className="block mb-2 font-semibold text-gray-700">
+              Số lần làm
+            </label>
+            <input
+              type="number"
+              value={attempts}
+              onChange={(e) => setAttempts(Number(e.target.value))}
+              className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-blue transition"
+              min={1}
+            />
+          </div>
         </div>
-
         {/* Chọn nguồn câu hỏi */}
         <div>
           <label className="block mb-2 font-semibold text-gray-700">
@@ -190,20 +199,20 @@ function ManageQuizCreatePage() {
           <select
             value={questionSource}
             onChange={(e) => setQuestionSource(e.target.value)}
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 transition"
+            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-blue transition"
           >
-            <option value="manual">Chọn thủ công từ QuestionBank</option>
+            <option value="manual">Chọn thủ công từ ngân hàng câu hỏi</option>
             <option value="excel">Tải từ file Excel</option>
-            <option value="random">Chọn ngẫu nhiên từ QuestionBank</option>
+            <option value="random">Chọn ngẫu nhiên từ ngân hàng câu hỏi</option>
           </select>
         </div>
 
         {/* Chọn câu hỏi thủ công */}
         {questionSource === "manual" && questionBank.length > 0 && (
-          <div className="bg-gray-50 p-4 rounded-lg border">
+          <div className="p-4 rounded-lg border border-custom-hover-blue2">
             <div className="flex justify-between items-center mb-3">
               <label className="font-semibold">Chọn câu hỏi</label>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-custom-blue">
                 Đã chọn: {selectedQuestions.length}/{questionBank.length}
               </span>
             </div>
@@ -237,17 +246,13 @@ function ManageQuizCreatePage() {
                 className="border border-gray-300 p-2 rounded-lg file:mr-4 file:py-2 file:px-4
                      file:rounded-full file:border-0
                      file:text-sm file:font-semibold
-                     file:bg-red-50 file:text-red-700
-                     hover:file:bg-red-100"
+                     file:bg-blue-50 file:text-custom-blue
+                     hover:file:bg-blue-100"
                 onChange={handleExcelUpload}
               />
             </div>
             <p className="text-sm text-gray-500 mt-2">
               Chọn file Excel chứa câu hỏi để tải lên
-            </p>
-            {/* warning */}
-            <p className="text-sm text-red-500 mt-2">
-              Sau khi tải lên, câu hỏi sẽ được cập nhập vào ngân hàng câu hỏi
             </p>
 
             {/* File mẫu */}
@@ -258,6 +263,10 @@ function ManageQuizCreatePage() {
             >
               Tải về file mẫu
             </a>
+            {/* warning */}
+            <p className="text-sm text-red-500 mt-2">
+              Sau khi tải lên, câu hỏi sẽ được cập nhập vào ngân hàng câu hỏi
+            </p>
           </div>
         )}
 
@@ -272,7 +281,7 @@ function ManageQuizCreatePage() {
                 type="number"
                 value={randomCount}
                 onChange={(e) => setRandomCount(Number(e.target.value))}
-                className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 transition"
+                className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-blue transition"
                 min={1}
               />
               <p className="text-sm text-red-500">
@@ -283,20 +292,74 @@ function ManageQuizCreatePage() {
         )}
 
         {/* Nút submit */}
-        <div className="flex space-x-4">
-          <button
+        <div className="flex space-x-4 gap-4 md:gap-6">
+          <Button
             type="button"
-            className="w-full py-3 rounded-xl text-white font-semibold bg-gray-600 transition-colors duration-500 ease-in-out hover:bg-gray-500 cursor-pointer shadow-md"
-            onClick={() => (window.location.href = ROUTE_PATH.LECTURER_QUIZ_LIST.replace(":courseId", courseId))}
+            variant="contained"
+            disableElevation
+            fullWidth
+            disabled={loading}
+            onClick={() =>
+              (window.location.href = ROUTE_PATH.LECTURER_QUIZ_LIST.replace(
+                ":courseId",
+                courseId
+              ))
+            }
+            sx={{
+              py: "8px",
+              px: "16px",
+              fontSize: "0.875rem",
+              fontWeight: "500",
+              borderRadius: "6px",
+              textTransform: "none",
+              color: "white",
+              bgcolor: "grey.600",
+              transition:
+                "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+              "&:hover": {
+                bgcolor: "grey.700",
+              },
+              "&.Mui-disabled": {
+                color: "white",
+                bgcolor: "grey.400",
+                cursor: "not-allowed",
+                opacity: 1,
+              },
+            }}
           >
             Quay lại
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
-            className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-red-500 hover:bg-red-600 shadow-md transition-all duration-300"
+            variant="contained"
+            loading={loading} // 👈 Thêm prop này
+            disableElevation
+            fullWidth
+            disabled={loading} // 👈 tránh user bấm khi đang loading
+            sx={{
+              py: "8px",
+              px: "16px",
+              fontSize: "0.875rem",
+              fontWeight: "500",
+              borderRadius: "6px",
+              textTransform: "none",
+              color: "white",
+              bgcolor: !loading ? "#4A90E2" : "grey.400",
+              transition:
+                "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+              "&:hover": {
+                bgcolor: !loading ? "#357ABD" : "grey.400",
+              },
+              "&.Mui-disabled": {
+                color: "white",
+                bgcolor: "grey.400",
+                cursor: "not-allowed",
+                opacity: 1,
+              },
+            }}
           >
-            {loading ? "Đang tạo..." : "Tạo bài kiểm tra"}
-          </button>
+            {loading ? "Đang tạo bài kiểm tra..." : "Tạo bài kiểm tra"}
+          </Button>
         </div>
       </form>
     </div>
