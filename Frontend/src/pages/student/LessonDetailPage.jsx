@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-import LessonDetailCard from "../components/LessonDetailCard";
+import LessonDetailCard from "../../components/LessonDetailCard";
 
 import { Link, useParams } from "react-router-dom";
 
-import { ROUTE_PATH } from "../constants/routePath";
+import { ROUTE_PATH } from "../../constants/routePath";
 
-import lessonService from "../services/lessonService";
+import lessonService from "../../services/lessonService";
 
 function LessonDetailPage() {
   const { lessonId } = useParams();
@@ -29,7 +29,7 @@ function LessonDetailPage() {
 
     const fetchAllLessons = async () => {
       try {
-        const response = await lessonService.getAllLessons();
+        const response = await lessonService.getLessonsByCourse(courseId);
         setGetAllLessons(response.data.filter((item) => item._id !== lessonId));
       } catch (error) {
         console.error("Error fetching lessons:", error);

@@ -1,6 +1,15 @@
 import React from "react";
 
+import userService from "../services/userService";
+
 function CourseDetailCard({ course }) {
+
+  const currentUser = userService.getCurrentUser();
+
+  if (!course) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="flex gap-10 items-start">
       {/* Cột trái - Hình ảnh */}
@@ -24,7 +33,10 @@ function CourseDetailCard({ course }) {
           <h1 className="text-3xl font-bold text-custom-blue">
             {course.title}
           </h1>
-          <span className="text-gray-500"> Mã khóa học: {course.code}</span>
+
+          {currentUser && currentUser.role !== "student" && (
+            <span className="text-gray-500"> Mã khóa học: {course.code}</span>
+          )}
         </div>
         <div
           className="prose prose-red max-w-full text-gray-700"

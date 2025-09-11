@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { toast } from "sonner";
 
 import { ROUTE_PATH } from "../constants/routePath";
 
@@ -40,7 +39,10 @@ const Header = () => {
         <div className="flex items-center space-x-2">
           <img src={logoHocCungEm} alt="Logo" className="h-8" />
           <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-custom-blue leading-tight">
-            BÌNH DÂN HỌC VỤ
+            BÌNH DÂN
+          </h1>
+          <h1 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+            SỐ
           </h1>
         </div>
 

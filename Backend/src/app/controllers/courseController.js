@@ -29,12 +29,10 @@ const CourseController = {
         .status(200)
         .json({ data: courses, message: "Lấy toàn bộ khóa học thành công" });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          message: error.message,
-          message: "Lỗi khi lấy toàn bộ khóa học",
-        });
+      res.status(500).json({
+        message: error.message,
+        message: "Lỗi khi lấy toàn bộ khóa học",
+      });
     }
   },
 
@@ -46,19 +44,15 @@ const CourseController = {
         instructor: instructorId,
         deleted: false,
       });
-      res
-        .status(200)
-        .json({
-          data: courses,
-          message: "Lấy khóa học theo giảng viên thành công",
-        });
+      res.status(200).json({
+        data: courses,
+        message: "Lấy khóa học theo giảng viên thành công",
+      });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          message: error.message,
-          message: "Lỗi khi lấy khóa học theo giảng viên",
-        });
+      res.status(500).json({
+        message: error.message,
+        message: "Lỗi khi lấy khóa học theo giảng viên",
+      });
     }
   },
 
@@ -66,10 +60,9 @@ const CourseController = {
   getCourseById: async (req, res) => {
     try {
       const courseId = req.params.courseId;
-      const course = await Course.findById(courseId).populate(
-        "instructor",
-        "name"
-      ); // Lấy thông tin giảng viên
+
+      // populate instructor details trừ password
+      const course = await Course.findById(courseId).populate("instructor", "-password");
       if (!course) {
         return res.status(404).json({ message: "Khóa học không tồn tại" });
       }
@@ -125,9 +118,9 @@ const CourseController = {
       // Sử dụng Promise.all để thực hiện các truy vấn song song
       const coursesBySubject = await Promise.all(
         subjects.map(async (subject) => {
-          const courses = await Course.find({ subject, deleted: false }).limit(
-            3
-          ).populate("instructor", "fullName");
+          const courses = await Course.find({ subject, deleted: false })
+            .limit(3)
+            .populate("instructor", "fullName");
           return { subject, courses };
         })
       );

@@ -47,7 +47,7 @@ export const  ROUTE_PATH = {
 
     // Student routes
     // STUDENT_COURSES: "/student/courses",
-    STUDENT_COURSE_DETAIL: "/student/courses/:courseId",
+    STUDENT_COURSE_DETAIL: "/hoc-sinh/khoa-hoc/:courseId/:courseName",
 
     STUDENT_LESSON_DETAIL: "/student/courses/:courseId/lessons/:lessonId",
 
