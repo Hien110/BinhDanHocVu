@@ -288,8 +288,8 @@ function ManageLessonListPage() {
                 className="border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300 flex justify-between items-center bg-white hover:bg-gray-50"
               >
                 <div>
-                  <h3 className="text-xl font-semibold mb-2 text-custom-orange">
-                    Bài học {index + 1}: {lesson.title}
+                  <h3 className="text-xl font-semibold mb-2 ">
+                    {lesson.title}
                   </h3>
                   <div className="text-gray-600 line-clamp-1 w-96">
                     {/* Tùy backend mà lesson.content là HTML hay mảng.
