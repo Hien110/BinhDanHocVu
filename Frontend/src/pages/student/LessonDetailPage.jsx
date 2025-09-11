@@ -53,7 +53,7 @@ function LessonDetailPage() {
 
       {/* Các bài học khác */}
       <div className="w-full md:w-1/4 border-t md:border-t-0 md:border-l border-gray-300 pt-6 md:pt-0 md:pl-6">
-        <h2 className="text-lg font-semibold text-yellow-600 mb-4 text-center border-b border-gray-200 pb-2">
+        <h2 className="text-lg font-semibold text-custom-blue mb-4 text-center border-b border-gray-200 pb-2">
           Các bài học khác
         </h2>
 
