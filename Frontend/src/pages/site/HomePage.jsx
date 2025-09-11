@@ -148,7 +148,7 @@ function HomePage() {
                           to={`${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
                             ":courseId",
                             course._id
-                          )}`}
+                          ).replace(":courseName", course.title.replace(/\s+/g, '-').toLowerCase())}`}
                           className="w-full text-center text-custom-blue font-medium border border-custom-blue hover:bg-blue-50 cursor-pointer rounded-lg px-2 py-1"
                         >
                           Xem chi tiết khóa học
