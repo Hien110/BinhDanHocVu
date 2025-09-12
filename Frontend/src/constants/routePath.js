@@ -2,7 +2,7 @@ export const  ROUTE_PATH = {
 
     //site routes
     HOME: "/",
-    COURSE: "/course",
+    COURSE: "/khoa-hoc",
     TEST_QUIZ_LIST: "/test-quiz-list",
     NEWS: "/news",
 
@@ -59,6 +59,8 @@ export const  ROUTE_PATH = {
     ADMIN_LECTURER_MANAGEMENT: "/quan-li/giang-vien",
     ADMIN_STUDENT_MANAGEMENT: "/quan-li/hoc-sinh",
     ADMIN_NEWS_MANAGEMENT: "/quan-li/tin-tuc",
-    ADMIN_SETTINGS: "/quan-li/cai-dat"
+    ADMIN_SETTINGS: "/quan-li/cai-dat",
 
+    // Binh dan so
+    BINDANSO: "/khoa-hoc/binh-dan-so",
 }

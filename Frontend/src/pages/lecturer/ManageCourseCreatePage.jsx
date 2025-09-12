@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { toast } from "sonner";
 
 import courseService from "../../services/courseService"; // service gọi API tạo khóa học
+import userService from "../../services/userService";
 import { uploadToCloudinary } from "../../services/uploadCloudinary";
 
 import { ROUTE_PATH } from "../../constants/routePath"; // import đường dẫn
@@ -18,6 +19,13 @@ function ManageCourseCreatePage() {
   const [subject, setSubject] = useState("");
   const [previewImage, setPreviewImage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const currentUser = userService.getCurrentUser();
+
+  const isAdmin = currentUser.role === "admin";
+  useEffect(() => {
+    if (isAdmin) setSubject("BinhDanSo");
+  }, [isAdmin]);
 
   const handleEditorChange = (value) => {
     setDescription(value);
@@ -78,10 +86,10 @@ function ManageCourseCreatePage() {
         title,
         subject,
         thumbnail: imageUrl,
-        description
+        description,
       };
 
-      const res = await courseService.createCourse(newCourse);  
+      const res = await courseService.createCourse(newCourse);
 
       if (res.success) {
         toast.success(res.message || "Tạo khóa học thành công");
@@ -123,27 +131,29 @@ function ManageCourseCreatePage() {
         </div>
 
         {/* Thuộc loại môn học nào */}
-        <div>
-          <label className="block text-gray-700 font-medium mb-2">
-            Loại môn học<span className="text-red-500">*</span>
-          </label>
-          <select
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            className="w-full border border-gray-300 rounded-xl p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow-sm"
-          >
-            <option value="">Chọn loại môn học</option>
-            <option value="Math">Toán học</option>
-            <option value="Literature">Ngữ văn</option>
-            <option value="English">Tiếng Anh</option>
-            <option value="CivicEducation">Giáo dục công dân</option>
-            <option value="HistoryAndGeography">Lịch sử và Địa Lý</option>
-            <option value="NaturalSciences">Khoa học tự nhiên</option>
-            <option value="Technology">Công nghệ</option>
-            <option value="InformationTechnology">Tin học</option>
-            <option value="Other">Khác</option>
-          </select>
-        </div>
+        {currentUser.role === "lecturer" && (
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">
+              Loại môn học<span className="text-red-500">*</span>
+            </label>
+            <select
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              className="w-full border border-gray-300 rounded-xl p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow-sm"
+            >
+              <option value="">Chọn loại môn học</option>
+              <option value="Math">Toán học</option>
+              <option value="Literature">Ngữ văn</option>
+              <option value="English">Tiếng Anh</option>
+              <option value="CivicEducation">Giáo dục công dân</option>
+              <option value="HistoryAndGeography">Lịch sử và Địa Lý</option>
+              <option value="NaturalSciences">Khoa học tự nhiên</option>
+              <option value="Technology">Công nghệ</option>
+              <option value="InformationTechnology">Tin học</option>
+              <option value="Other">Khác</option>
+            </select>
+          </div>
+        )}
 
         {/* Mô tả */}
         <div>

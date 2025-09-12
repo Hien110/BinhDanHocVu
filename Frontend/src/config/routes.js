@@ -5,6 +5,9 @@ import { ROUTE_PATH } from "../constants/routePath";
 import studentLayout from "../layouts/student-layout";
 import lecturerLayout from "../layouts/lecturer-layout";
 import adminLayout from "../layouts/admin-layout";
+import userService from "../services/userService";
+
+const currentUser = userService.getCurrentUser();
 
 // Authentication pages
 const LoginPage = React.lazy(() => import("../pages/LoginPage"));
@@ -15,7 +18,7 @@ const AuthCallbackPage = React.lazy(() => import("../pages/AuthCallbackPage"));
 
 // Site pages
 const HomePage = React.lazy(() => import("../pages/site/HomePage"));
-const CoursePage = React.lazy(() => import("../pages/CoursePage"));
+const CoursePage = React.lazy(() => import("../pages/site/CoursePage"));
 const TestQuizListPage = React.lazy(() => import("../pages/TestQuizListPage"));
 const NewsPage = React.lazy(() => import("../pages/NewsPage"));
 
@@ -69,6 +72,9 @@ const AdminStudentManagementPage = React.lazy(() => import("../pages/Admin/Admin
 const AdminNewsManagementPage = React.lazy(() => import("../pages/Admin/AdminManageNewsPage"));
 const AdminSettingPage = React.lazy(() => import("../pages/Admin/AdminSettingPage"));
 
+// Binh dan so
+const BinhDanSoPage = React.lazy(() => import("../pages/site/BinhDanSoPage"));
+
 const AppRoutes = [
 
   // Authentication routes
@@ -93,27 +99,27 @@ const AppRoutes = [
   { path: ROUTE_PATH.LECTURER_STUDENTS, page: ManageStudentPage, layout: lecturerLayout },
 
   // Question Bank
-  { path: ROUTE_PATH.LECTURER_QUESTION_BANK, page: ManageQuestionBankPage, layout: lecturerLayout  },
-  { path: ROUTE_PATH.LECTURER_QUESTION_BANK_DETAIL, page: ManageQuestionBankDetailPage, layout: lecturerLayout  },
+  { path: ROUTE_PATH.LECTURER_QUESTION_BANK, page: ManageQuestionBankPage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
+  { path: ROUTE_PATH.LECTURER_QUESTION_BANK_DETAIL, page: ManageQuestionBankDetailPage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
 
   //Courses
-  { path: ROUTE_PATH.LECTURER_COURSES, page: ManageCoursesListPage, layout: lecturerLayout  },
-  { path: ROUTE_PATH.LECTURER_CREATE_COURSE, page: ManageCourseCreatePage, layout: lecturerLayout  },
-  { path: ROUTE_PATH.LECTURER_COURSE_DETAIL, page: ManageCourseDetailPage, layout: lecturerLayout  },
+  { path: ROUTE_PATH.LECTURER_COURSES, page: ManageCoursesListPage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_CREATE_COURSE, page: ManageCourseCreatePage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_COURSE_DETAIL, page: ManageCourseDetailPage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
 
   //Lesson
-  { path: ROUTE_PATH.LECTURER_LESSON_LIST, page: ManageLessonListPage, layout: lecturerLayout  },
-  { path: ROUTE_PATH.LECTURER_LESSON_DETAIL, page: ManageLessonDetailPage, layout: lecturerLayout  },
+  { path: ROUTE_PATH.LECTURER_LESSON_LIST, page: ManageLessonListPage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
+  { path: ROUTE_PATH.LECTURER_LESSON_DETAIL, page: ManageLessonDetailPage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
 
   //Quiz
-  { path: ROUTE_PATH.LECTURER_QUIZ, page: ManageQuizPage, layout: lecturerLayout  },
-  { path: ROUTE_PATH.LECTURER_QUIZ_LIST, page: ManageQuizListPage, layout: lecturerLayout  },
-  { path: ROUTE_PATH.LECTURER_QUIZ_CREATE, page: ManageQuizCreatePage, layout: lecturerLayout  },
-  { path: ROUTE_PATH.LECTURER_QUIZ_DETAIL, page: ManageQuizDetailPage, layout: lecturerLayout  },
+  { path: ROUTE_PATH.LECTURER_QUIZ, page: ManageQuizPage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
+  { path: ROUTE_PATH.LECTURER_QUIZ_LIST, page: ManageQuizListPage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
+  { path: ROUTE_PATH.LECTURER_QUIZ_CREATE, page: ManageQuizCreatePage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
+  { path: ROUTE_PATH.LECTURER_QUIZ_DETAIL, page: ManageQuizDetailPage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
 
-  { path: ROUTE_PATH.LECTURER_QUIZ_RESULT, page: ManageQuizResultPage, layout: lecturerLayout  },
-  { path: ROUTE_PATH.LECTURER_QUIZ_RESULT_LIST, page: ManageQuizResultCoursePage, layout: lecturerLayout  },
-  { path: ROUTE_PATH.LECTURER_QUIZ_RESULT_DETAIL, page: ManageQuizResultDetailPage, layout: lecturerLayout  },
+  { path: ROUTE_PATH.LECTURER_QUIZ_RESULT, page: ManageQuizResultPage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
+  { path: ROUTE_PATH.LECTURER_QUIZ_RESULT_LIST, page: ManageQuizResultCoursePage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
+  { path: ROUTE_PATH.LECTURER_QUIZ_RESULT_DETAIL, page: ManageQuizResultDetailPage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
 
   { path: ROUTE_PATH.LECTURER_NEWS, page: ManageNewsPage, layout: lecturerLayout  },
 
@@ -132,6 +138,8 @@ const AppRoutes = [
   { path: ROUTE_PATH.ADMIN_NEWS_MANAGEMENT, page: AdminNewsManagementPage, layout: adminLayout },
   { path: ROUTE_PATH.ADMIN_SETTINGS, page: AdminSettingPage, layout: adminLayout },
 
+  // Binh dan so
+  { path: ROUTE_PATH.BINDANSO, page: BinhDanSoPage, layout: studentLayout },
 ];
 
 export default AppRoutes;

@@ -12,7 +12,7 @@ function CourseCard({ course }) {
       window.location.href = ROUTE_PATH.LOGIN;
       return;
     }
-    if (user.role === "lecturer") {
+    if (user.role === "lecturer" || user.role === "admin") {
       // Redirect to the course detail page
       window.location.href = `${ROUTE_PATH.LECTURER_COURSE_DETAIL.replace(
         ":courseId",

@@ -144,6 +144,24 @@ const courseService = {
       };
     }
   },
+
+  // Lấy khóa học Bình dân số
+  getBinhDanSoCourses: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/subject/binh-dan-so`);
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message || "Lỗi khi lấy khóa học Bình dân số",
+      };
+    }
+  },
 };
 
 export default courseService;

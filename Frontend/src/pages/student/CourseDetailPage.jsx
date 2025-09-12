@@ -128,8 +128,12 @@ function CourseDetailPage() {
       navigate(ROUTE_PATH.LOGIN);
       return;
     }
-
-    const courseCode = e.target.courseCode.value.trim();
+    let courseCode = "";
+    if (course.subject === "BinhDanSo") {
+      courseCode = course.code;
+    } else {
+      courseCode = e.target.courseCode.value.trim();
+    }
     if (!courseCode) {
       toast.error("Vui lòng nhập mã khóa học");
       return;
@@ -204,20 +208,22 @@ function CourseDetailPage() {
                   }}
                   className="mt-4 flex gap-2"
                 >
-                  <input
-                    type="text"
-                    name="courseCode"
-                    placeholder="Nhập mã khóa học"
-                    className="flex-1 rounded-xl border border-gray-300 px-4 py-2 
+                  {course.subject !== "BinhDanSo" && (
+                    <input
+                      type="text"
+                      name="courseCode"
+                      placeholder="Nhập mã khóa học"
+                      className="flex-1 rounded-xl border border-gray-300 px-4 py-2 
              focus:outline-none focus:ring-2 focus:ring-custom-blue/30 
              focus:border-custom-blue"
-                  />
+                    />
+                  )}
 
                   <button
                     type="submit"
                     className="cursor-pointer rounded-xl bg-custom-blue hover:bg-custom-hover-blue text-white px-5 py-2 font-medium hover:shadow-md transition duration-400"
                   >
-                    Tham gia
+                    Tham gia {course.subject === "BinhDanSo" ? "miễn phí" : ""}
                   </button>
                 </form>
               </div>
