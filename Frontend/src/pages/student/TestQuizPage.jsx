@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import QuizService from "../services/quizService";
-import quizResultService from "../services/quizResultService";
-import userService from "../services/userService";
-import questionBankService from "../services/questionBankService";
+import QuizService from "../../services/quizService";
+import quizResultService from "../../services/quizResultService";
+import userService from "../../services/userService";
+import questionBankService from "../../services/questionBankService";
 
 import { toast } from "sonner";
 
-import { ROUTE_PATH } from "../constants/routePath";
+import { ROUTE_PATH } from "../../constants/routePath";
 
 function TestQuizPage() {
   (function () {
@@ -232,137 +232,141 @@ function TestQuizPage() {
     );
 
   return (
-   <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
-  {/* Sidebar */}
-  <div className="w-full md:w-1/5 md:border-r bg-white shadow-sm">
-    <div className="p-4 border border-gray-100 shadow-md rounded-lg bg-white md:fixed md:w-[calc(20%-2px)]">
-      {/* Thông tin người làm */}
-      <p className="mb-3 text-gray-700">
-        Người làm:{" "}
-        <span className="font-semibold text-red-600">
-          {user?.name || "Ẩn danh"}
-        </span>
-      </p>
-      <div className="text-md font-semibold text-red-500 mb-3">
-        Thời gian làm bài: {formatTime(timeLeft)}
-      </div>
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
+      {/* Sidebar */}
+      <div className="w-full md:w-1/5 md:border-r bg-white shadow-sm">
+        <div className="p-4 border border-gray-100 shadow-md rounded-lg bg-white md:fixed md:w-[calc(20%-2px)]">
+          {/* Thông tin người làm */}
+          <p className="mb-3 text-gray-700">
+            Người làm:{" "}
+            <span className="font-semibold text-custom-blue">
+              {user?.name || "Ẩn danh"}
+            </span>
+          </p>
+          <div className="text-md mb-3 text-gray-700">
+            Thời gian làm bài:{" "}
+            <span className="text-custom-blue font-semibold">
+              {formatTime(timeLeft)}
+            </span>
+          </div>
 
-      {/* Danh sách câu hỏi */}
-      <h2 className="font-bold text-lg mb-4 text-gray-500">Danh sách câu hỏi</h2>
-      <div className="grid grid-cols-5 gap-2">
-        {questionQuiz.map((q, idx) => {
-          const answered = answers[q?._id]?.length > 0;
-          return (
-            <div
-              key={q._id}
-              className={`w-10 h-10 flex items-center justify-center rounded-lg cursor-pointer font-semibold transition-all duration-200
+          {/* Danh sách câu hỏi */}
+          <h2 className="font-semibold text-lg mb-4">Danh sách câu hỏi</h2>
+          <div className="grid grid-cols-5 gap-2">
+            {questionQuiz.map((q, idx) => {
+              const answered = answers[q?._id]?.length > 0;
+              return (
+                <div
+                  key={q._id}
+                  className={`w-10 h-10 flex items-center justify-center rounded-lg cursor-pointer font-semibold transition-all duration-200
                 ${
                   answered
-                    ? "bg-green-500 text-white hover:bg-green-600"
+                    ? "bg-custom-blue text-white hover:bg-custom-hover-blue"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }
               `}
-              onClick={() => {
-                const element = document.getElementById(`question-${idx}`);
-                if (element) {
-                  const top =
-                    element.getBoundingClientRect().top + window.scrollY - 90;
-                  window.scrollTo({ top, behavior: "smooth" });
-                }
-              }}
-            >
-              {idx + 1}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Thống kê */}
-      <div className="mt-4 text-sm text-gray-600">
-        Đã trả lời:{" "}
-        <span className="font-medium text-blue-600">
-          {Object.keys(answers).length}
-        </span>
-        /{quiz.totalQuestions} câu
-      </div>
-
-      {/* Nút nộp bài */}
-      <div className="mt-6">
-        <button
-          onClick={() => {
-            if (!confirm("Bạn có chắc muốn nộp bài không?")) return;
-            handleSubmitQuiz();
-          }}
-          className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-red-500 hover:bg-red-600 shadow-md transition-all duration-300"
-        >
-          Nộp bài
-        </button>
-      </div>
-    </div>
-  </div>
-
-  {/* Main Content */}
-  <div className="flex-1 p-6 mt-4 md:mt-0">
-    {/* Header */}
-    <div className="flex justify-between items-center mb-6 border-b pb-3">
-      <h1 className="text-2xl font-bold text-yellow-600 max-w-2xl">
-        {quiz.title}
-      </h1>
-    </div>
-
-    {/* Danh sách câu hỏi */}
-    <div className="space-y-6">
-      {questionQuiz.map((q, idx) => {
-        const opts = q?.options || [];
-        const correctCount = opts.filter((o) => o.isCorrect).length;
-        const isMultiple = correctCount > 1;
-
-        return (
-          <div
-            key={q._id}
-            id={`question-${idx}`}
-            className="bg-white border border-gray-200 rounded-lg p-5 shadow hover:shadow-md transition-all duration-200"
-          >
-            <p className="font-semibold text-lg text-gray-800 mb-4">
-              Câu {idx + 1}: {q?.question}
-            </p>
-
-            <ul className="space-y-3">
-              {opts.map((opt, i) => (
-                <li
-                  key={i}
-                  className="p-2 rounded hover:bg-gray-50 transition-all duration-150"
+                  onClick={() => {
+                    const element = document.getElementById(`question-${idx}`);
+                    if (element) {
+                      const top =
+                        element.getBoundingClientRect().top +
+                        window.scrollY -
+                        90;
+                      window.scrollTo({ top, behavior: "smooth" });
+                    }
+                  }}
                 >
-                  <label className="flex items-center gap-3 cursor-pointer select-none">
-                    {isMultiple ? (
-                      <input
-                        type="checkbox"
-                        onChange={() => handleSelectOption(q?._id, i, true)}
-                        className="w-4 h-4 accent-blue-600 cursor-pointer"
-                      />
-                    ) : (
-                      <input
-                        type="radio"
-                        name={`question-${q?._id}`}
-                        onChange={() => handleSelectOption(q?._id, i, false)}
-                        className="w-4 h-4 accent-blue-600 cursor-pointer"
-                      />
-                    )}
-                    <span className="text-gray-700">
-                      <span className="font-medium">{alphabet[i]}.</span>{" "}
-                      {opt.text}
-                    </span>
-                  </label>
-                </li>
-              ))}
-            </ul>
+                  {idx + 1}
+                </div>
+              );
+            })}
           </div>
-        );
-      })}
-    </div>
-  </div>
-</div>
 
+          {/* Thống kê */}
+          <div className="mt-4 text-sm text-gray-600">
+            Đã trả lời:{" "}
+            <span className="font-medium text-blue-600">
+              {Object.keys(answers).length}
+            </span>
+            /{quiz.totalQuestions} câu
+          </div>
+
+          {/* Nút nộp bài */}
+          <div className="mt-6">
+            <button
+              onClick={() => {
+                if (!confirm("Bạn có chắc muốn nộp bài không?")) return;
+                handleSubmitQuiz();
+              }}
+              className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-custom-blue hover:bg-custom-hover-blue shadow-md transition-all duration-300"
+            >
+              Nộp bài
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 p-6 mt-4 md:mt-0">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6 border-b pb-3  width-full text-gray-800 text-center justify-center items-center">
+          <h1 className="flex text-2xl font-bold">{quiz.title}</h1>
+        </div>
+
+        {/* Danh sách câu hỏi */}
+        <div className="space-y-6">
+          {questionQuiz.map((q, idx) => {
+            const opts = q?.options || [];
+            const correctCount = opts.filter((o) => o.isCorrect).length;
+            const isMultiple = correctCount > 1;
+
+            return (
+              <div
+                key={q._id}
+                id={`question-${idx}`}
+                className="bg-white border border-gray-200 rounded-lg p-5 shadow hover:shadow-md transition-all duration-200"
+              >
+                <p className="font-semibold text-lg text-gray-800 mb-4">
+                  Câu {idx + 1}: {q?.question}
+                </p>
+
+                <ul className="space-y-3">
+                  {opts.map((opt, i) => (
+                    <li
+                      key={i}
+                      className="p-2 rounded hover:bg-gray-50 transition-all duration-150"
+                    >
+                      <label className="flex items-center gap-3 cursor-pointer select-none">
+                        {isMultiple ? (
+                          <input
+                            type="checkbox"
+                            onChange={() => handleSelectOption(q?._id, i, true)}
+                            className="w-4 h-4 accent-blue-600 cursor-pointer"
+                          />
+                        ) : (
+                          <input
+                            type="radio"
+                            name={`question-${q?._id}`}
+                            onChange={() =>
+                              handleSelectOption(q?._id, i, false)
+                            }
+                            className="w-4 h-4 accent-blue-600 cursor-pointer"
+                          />
+                        )}
+                        <span className="text-gray-700">
+                          <span className="font-medium">{alphabet[i]}.</span>{" "}
+                          {opt.text}
+                        </span>
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }
 

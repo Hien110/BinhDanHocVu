@@ -2,7 +2,7 @@ export const  ROUTE_PATH = {
 
     //site routes
     HOME: "/",
-    COURSE: "/course",
+    COURSE: "/khoa-hoc",
     TEST_QUIZ_LIST: "/test-quiz-list",
     NEWS: "/news",
 
@@ -49,16 +49,18 @@ export const  ROUTE_PATH = {
     // STUDENT_COURSES: "/student/courses",
     STUDENT_COURSE_DETAIL: "/hoc-sinh/khoa-hoc/:courseId/:courseName",
 
-    STUDENT_LESSON_DETAIL: "/student/courses/:courseId/lessons/:lessonId",
+    STUDENT_LESSON_DETAIL: "/hoc-sinh/khoa-hoc/:courseId/:courseName/lessons/:lessonId",
 
-    STUDENT_QUIZ_TEST: "/student/quiz/:quizId/test",
-    STUDENT_QUIZ_RESULT: "/student/quiz/:quizResultId/result",
+    STUDENT_QUIZ_TEST: "/hoc-sinh/kiem-tra/:quizId/:quizName",
+    STUDENT_QUIZ_RESULT: "/hoc-sinh/kiem-tra/:quizResultId/ket-qua-kiem-tra",
 
     // Admin routes
     ADMIN_STATISTICS: "/quan-li/thong-ke",
     ADMIN_LECTURER_MANAGEMENT: "/quan-li/giang-vien",
     ADMIN_STUDENT_MANAGEMENT: "/quan-li/hoc-sinh",
     ADMIN_NEWS_MANAGEMENT: "/quan-li/tin-tuc",
-    ADMIN_SETTINGS: "/quan-li/cai-dat"
+    ADMIN_SETTINGS: "/quan-li/cai-dat",
 
+    // Binh dan so
+    BINDANSO: "/khoa-hoc/binh-dan-so",
 }

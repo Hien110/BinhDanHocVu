@@ -12,7 +12,11 @@ const classroomService = {
           Authorization: `Bearer ${userService.getToken()}`,
         },
       });
-      return response.data;
+      return {
+        success: true,
+        message: response.data.message,
+        data: response.data,
+      };
     } catch (error) {
       console.error("Error joining classroom:", error);
       throw error;

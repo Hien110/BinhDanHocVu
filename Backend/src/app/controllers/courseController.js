@@ -24,15 +24,38 @@ const CourseController = {
   // Lấy toàn bộ khóa học
   getAllCourses: async (req, res) => {
     try {
-      const courses = await Course.find({ deleted: false });
-      res
-        .status(200)
-        .json({ data: courses, message: "Lấy toàn bộ khóa học thành công" });
-    } catch (error) {
-      res.status(500).json({
-        message: error.message,
-        message: "Lỗi khi lấy toàn bộ khóa học",
+      // Lấy danh sách tất cả các subject
+      const subjects = await Course.distinct("subject", {
+        deleted: false,
+        subject: { $ne: "BinhDanSo" },
       });
+
+      // Sử dụng Promise.all để thực hiện các truy vấn song song
+      const coursesBySubject = await Promise.all(
+        subjects.map(async (subject) => {
+          const courses = await Course.find({ subject, deleted: false })
+            .populate("instructor", "fullName")
+            .lean();
+          return { subject, courses };
+        })
+      );
+
+      // Chuyển đổi mảng kết quả thành một object với subject làm key
+      const coursesBySubjectObject = coursesBySubject.reduce(
+        (acc, { subject, courses }) => {
+          acc[subject] = courses;
+          return acc;
+        },
+        {}
+      );
+
+      res.status(200).json({
+        data: coursesBySubjectObject,
+        message: "Lấy khóa học theo môn học thành công",
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Lỗi khi lấy khóa học theo môn học" });
     }
   },
 
@@ -62,7 +85,10 @@ const CourseController = {
       const courseId = req.params.courseId;
 
       // populate instructor details trừ password
-      const course = await Course.findById(courseId).populate("instructor", "-password");
+      const course = await Course.findById(courseId).populate(
+        "instructor",
+        "-password"
+      );
       if (!course) {
         return res.status(404).json({ message: "Khóa học không tồn tại" });
       }
@@ -113,13 +139,15 @@ const CourseController = {
   getTop3CoursesBySubject: async (req, res) => {
     try {
       // Lấy danh sách tất cả các subject
-      const subjects = await Course.distinct("subject");
+      const subjects = await Course.distinct("subject", {
+        deleted: false,
+      });
 
       // Sử dụng Promise.all để thực hiện các truy vấn song song
       const coursesBySubject = await Promise.all(
         subjects.map(async (subject) => {
           const courses = await Course.find({ subject, deleted: false })
-            .limit(3)
+            .limit(4)
             .populate("instructor", "fullName");
           return { subject, courses };
         })
@@ -141,6 +169,22 @@ const CourseController = {
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Lỗi khi lấy khóa học theo môn học" });
+    }
+  },
+
+  // Lấy khóa học Bình dân số
+  getBinhDanSoCourses: async (req, res) => {
+    try {
+      const courses = await Course.find({ subject: "BinhDanSo", deleted: false })
+        .populate("instructor", "fullName")
+        .lean();
+      res.status(200).json({
+        data: courses,
+        message: "Lấy khóa học Bình dân số thành công",
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Lỗi khi lấy khóa học Bình dân số" });
     }
   },
 };
