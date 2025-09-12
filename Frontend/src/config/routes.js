@@ -59,8 +59,8 @@ const CourseDetailPage = React.lazy(() => import("../pages/student/CourseDetailP
 
 const LessonDetailPage = React.lazy(() => import("../pages/student/LessonDetailPage"));
 
-const TestQuizPage = React.lazy(() => import("../pages/TestQuizPage"));
-const TestQuizResultPage = React.lazy(() => import("../pages/TestQuizResultPage"));
+const TestQuizPage = React.lazy(() => import("../pages/student/TestQuizPage"));
+const TestQuizResultPage = React.lazy(() => import("../pages/student/TestQuizResultPage"));
 
 // Admin pages
 const AdminStatisticsPage = React.lazy(() => import("../pages/Admin/AdminStatisticsPage"));

@@ -26,7 +26,7 @@ const Login = () => {
       const result = await userService.login(email, password);
 
       if (result.success) {
-        toast.success("Đăng nhập thành công!");
+        // toast.success("Đăng nhập thành công!");
         navigate("/");
       } else {
         toast.error(result.message); // Hiển thị lỗi ở góc phải trên

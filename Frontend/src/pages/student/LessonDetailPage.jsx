@@ -8,6 +8,14 @@ import { ROUTE_PATH } from "../../constants/routePath";
 
 import lessonService from "../../services/lessonService";
 
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Typography from "@mui/material/Typography";
+
+function handleClick(event) {
+  event.preventDefault();
+  console.info("Bạn vừa click vào breadcrumb.");
+}
+
 function LessonDetailPage() {
   const { lessonId } = useParams();
   const { courseId } = useParams();
@@ -21,6 +29,8 @@ function LessonDetailPage() {
       try {
         setLesson(null); // reset trước khi load mới
         const response = await lessonService.getLessonById(lessonId);
+        console.log("Fetched lesson:", response.data);
+
         setLesson(response.data);
       } catch (error) {
         console.error("Error fetching lesson:", error);
@@ -45,9 +55,50 @@ function LessonDetailPage() {
   }
 
   return (
-    <div className="w-full flex flex-col md:flex-row px-4 md:px-10 py-6 gap-8">
+    <div className="w-full flex flex-col md:flex-row px-4 md:px-10 py-6 gap-8 min-h-screen">
       {/* Nội dung bài học */}
       <div className="w-full md:w-3/4">
+        <div role="presentation" onClick={handleClick} className="mb-4">
+          <Breadcrumbs
+            aria-label="breadcrumb"
+            separator="›"
+            sx={{
+              fontSize: "16px",
+              fontWeight: 500,
+              padding: "8px 16px",
+              backgroundColor: "#f5f5f5",
+              borderRadius: "8px",
+              "& .MuiLink-root": {
+                color: "#1976d2",
+                textDecoration: "none",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+              },
+              "& .MuiTypography-root": {
+                color: "#333",
+                fontWeight: 600,
+              },
+            }}
+          >
+            <Link underline="hover" to="/">
+              Trang chủ
+            </Link>
+            <Link
+              underline="hover"
+              to={`${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
+                ":courseId",
+                courseId
+              ).replace(
+                ":courseName",
+                lesson?.course?.title.replace(/\s+/g, "-").toLowerCase()
+              )}`}
+            >
+              Khóa học
+            </Link>
+            <Typography>Chi tiết bài học</Typography>
+          </Breadcrumbs>
+        </div>
         <LessonDetailCard lesson={lesson} />
       </div>
 
@@ -68,7 +119,7 @@ function LessonDetailPage() {
                   ":courseId",
                   courseId
                 ).replace(":lessonId", item._id)}
-                className="block p-3 text-yellow-600 hover:text-yellow-700 hover:underline line-clamp-2"
+                className="block p-3 hover:underline line-clamp-2"
               >
                 {item.title}
               </Link>

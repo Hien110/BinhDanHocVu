@@ -23,6 +23,8 @@ function CourseDetailPage() {
 
   const [getAllCourses, setGetAllCourses] = useState([]);
 
+  const [activeTab, setActiveTab] = useState("gioithieu");
+
   const user = userService.getCurrentUser();
 
   const navigate = useNavigate();
@@ -77,7 +79,9 @@ function CourseDetailPage() {
     window.location.href = ROUTE_PATH.STUDENT_LESSON_DETAIL.replace(
       ":courseId",
       courseId
-    ).replace(":lessonId", lessonId);
+    )
+      .replace(":lessonId", lessonId)
+      .replace(":courseName", course.title.replace(/\s+/g, "-").toLowerCase());
   };
 
   //xử lí vào làm bài
@@ -107,6 +111,9 @@ function CourseDetailPage() {
       window.location.href = ROUTE_PATH.STUDENT_QUIZ_TEST.replace(
         ":quizId",
         quizId
+      ).replace(
+        ":quizName",
+        quizTest.data.title.replace(/\s+/g, "-").toLowerCase()
       );
     } catch (error) {
       toast.error("Lỗi khi kiểm tra bài quiz");
@@ -137,7 +144,7 @@ function CourseDetailPage() {
       toast.success("Tham gia khóa học thành công");
       setCheckJoinCourse(true);
       // Reload lại trang để hiển thị nội dung khóa học
-      window.location.reload();
+      // window.location.reload();
     } else {
       toast.error(res.message || "Tham gia khóa học thất bại");
     }
@@ -151,73 +158,119 @@ function CourseDetailPage() {
     <div className="min-h-screen pt-6 px-4 sm:px-6 lg:px-10 flex flex-col lg:flex-row gap-6">
       {/* Nội dung chính */}
       {checkJoinCourse === false ? (
-        <div className="w-full lg:w-3/4 border-gray-300 lg:border-r lg:pr-6">
-          {/* Ô nhập mã khóa học và đăng kí khóa học */}
-          <div className="flex flex-col items-center justify-center border border-gray-300 rounded-lg p-6 mb-6 bg-custom-blue/10">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-              Tham gia khóa học
-            </h2>
-            <p className="text-gray-600 mb-4 text-center">
-              Vui lòng nhập mã khóa học để tham gia khóa học này.
-            </p>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleJoinCourse(e);
-              }}
-              className="w-full max-w-md"
-            >
-              <input
-                type="text"
-                name="courseCode"
-                placeholder="Nhập mã khóa học"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-custom-blue"
-              />
-              <button
-                type="submit"
-                className="w-full bg-custom-blue text-white font-medium py-2 rounded-lg hover:bg-custom-hover-blue cursor-pointer transition duration-300"
-              >
-                Tham gia ngay
-              </button>
-            </form>
-          </div>
-          <div className="bg-white w-full p-6 rounded-lg shadow-md">
-            {/* Thông tin khóa học */}
-            <div className="pb-6 mb-10 border-b border-gray-300">
-              <div className="flex flex-col md:flex-row gap-10 items-start">
-                {/* Cột trái - Hình ảnh */}
-                <div className="w-full md:w-1/3 h-auto rounded-2xl overflow-hidden shadow-lg">
-                  {course.thumbnail ? (
-                    <img
-                      src={course.thumbnail}
-                      alt={course.title}
-                      className="w-full h-auto object-cover"
+        <div className="w-full lg:w-3/4 lg:border-r lg:pr-8 border-gray-100">
+          {/* Header + Thông tin khóa học */}
+          <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-6 mb-6">
+            <div className="flex flex-col xl:flex-row gap-6 border-b border-gray-100 pb-6 mb-6">
+              {/* Thumbnail */}
+              <div className="w-full xl:w-1/3">
+                {course.thumbnail ? (
+                  <img
+                    src={course.thumbnail}
+                    alt={course.title}
+                    className="rounded-2xl w-full h-56 object-cover shadow-sm"
+                  />
+                ) : (
+                  <div className="w-full h-56 flex items-center justify-center bg-gray-100 rounded-2xl text-gray-400">
+                    Không có ảnh
+                  </div>
+                )}
+              </div>
+
+              {/* Title + Meta */}
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold text-gray-900">
+                  {course.title}
+                </h1>
+                <div className="mt-2 flex items-center text-sm text-gray-500">
+                  <svg className="mr-2 w-4 h-4" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M16 2v3M8 2v3M3 9h18M4 5h16a1 1 0 011 1v13a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1z"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
                     />
-                  ) : (
-                    <div className="w-full h-80 bg-gray-100 flex items-center justify-center rounded-xl text-gray-400 text-lg font-semibold">
-                      Không có ảnh đại diện
-                    </div>
-                  )}
+                  </svg>
+                  {course?.createdAt
+                    ? new Date(course.createdAt).toLocaleDateString()
+                    : "N/A"}
                 </div>
 
-                {/* Cột phải - Thông tin */}
-                <div className="flex flex-col space-y-6 w-full md:w-2/3">
-                  <div className="flex flex-col space-y-2">
-                    <h1 className="text-3xl font-bold text-custom-blue">
-                      {course.title}
-                    </h1>
-                  </div>
-                  <div
-                    className="prose prose-red max-w-full text-gray-700"
-                    dangerouslySetInnerHTML={{
-                      __html: course.description || "<p>Không có mô tả</p>",
-                    }}
+                {/* Form tham gia */}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleJoinCourse(e);
+                  }}
+                  className="mt-4 flex gap-2"
+                >
+                  <input
+                    type="text"
+                    name="courseCode"
+                    placeholder="Nhập mã khóa học"
+                    className="flex-1 rounded-xl border border-gray-300 px-4 py-2 
+             focus:outline-none focus:ring-2 focus:ring-custom-blue/30 
+             focus:border-custom-blue"
                   />
-                </div>
+
+                  <button
+                    type="submit"
+                    className="cursor-pointer rounded-xl bg-custom-blue hover:bg-custom-hover-blue text-white px-5 py-2 font-medium hover:shadow-md transition duration-400"
+                  >
+                    Tham gia
+                  </button>
+                </form>
               </div>
             </div>
 
-            {/* Kết thúc ô nhập mã và đăng kí khóa học */}
+            {/* Tabs: Giới thiệu / Nội dung */}
+            <div>
+              <div className="flex border-b border-gray-200 mb-4">
+                <button
+                  className={`px-4 py-2 font-medium cursor-pointer ${
+                    activeTab === "gioithieu"
+                      ? "text-custom-blue border-b-2 border-custom-blue"
+                      : "text-gray-500"
+                  }`}
+                  onClick={() => setActiveTab("gioithieu")}
+                >
+                  Giới thiệu
+                </button>
+                <button
+                  className={`px-4 py-2 font-medium cursor-pointer ${
+                    activeTab === "noidung"
+                      ? "text-custom-blue border-b-2 border-custom-blue"
+                      : "text-gray-500"
+                  }`}
+                  onClick={() => setActiveTab("noidung")}
+                >
+                  Nội dung khóa học
+                </button>
+              </div>
+
+              {activeTab === "gioithieu" && (
+                <div
+                  className="prose max-w-none text-gray-700"
+                  dangerouslySetInnerHTML={{
+                    __html: course.description || "<p>Không có mô tả</p>",
+                  }}
+                />
+              )}
+
+              {activeTab === "noidung" && (
+                <div className="space-y-2">
+                  <div className="text-sm text-gray-700">
+                    Tổng số bài học: {lessons.length} bài
+                  </div>
+                  {lessons.map((lesson) => (
+                    <div key={lesson._id} className="flex items-center gap-2">
+                      <span className="w-2 h-2 bg-custom-blue rounded-full"></span>
+                      <span className="text-gray-700">{lesson.title}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ) : (
@@ -231,7 +284,7 @@ function CourseDetailPage() {
 
           {/* Danh sách bài học */}
           <section className="mb-12 border-b border-gray-300 pb-6">
-            <h2 className="text-xl sm:text-2xl font-semibold text-custom-blue mb-6 border-b border-gray-300 pb-2">
+            <h2 className="text-xl sm:text-2xl font-semibold  mb-6 border-b border-gray-300 pb-2">
               Danh sách bài học
             </h2>
 
@@ -245,14 +298,7 @@ function CourseDetailPage() {
                     className="border border-gray-200 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-white hover:bg-gray-50"
                   >
                     <div className="">
-                      <h3 className="text-lg">
-                        {lesson.title}
-                      </h3>
-                      {/* <div className="text-gray-600 line-clamp-1">
-                        <div
-                          dangerouslySetInnerHTML={{ __html: lesson.content }}
-                        />
-                      </div> */}
+                      <h3 className="text-lg">{lesson.title}</h3>
                     </div>
                     <div>
                       <button
@@ -270,7 +316,7 @@ function CourseDetailPage() {
 
           {/* Danh sách quiz */}
           <section className="mb-12 border-b border-gray-300 pb-6">
-            <h2 className="text-xl sm:text-2xl font-semibold text-custom-blue mb-6 border-b border-gray-300 pb-2">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-6 border-b border-gray-300 pb-2">
               Danh sách bài kiểm tra
             </h2>
 
@@ -284,9 +330,7 @@ function CourseDetailPage() {
                     className="border border-gray-200 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-row sm:flex-row sm:justify-between sm:items-center gap-4 bg-white hover:bg-gray-50"
                   >
                     <div className="">
-                      <h3 className="text-lg max-w-md">
-                        {quiz.title}
-                      </h3>
+                      <h3 className="text-lg max-w-md">{quiz.title}</h3>
                     </div>
 
                     <div className="text-gray-600">

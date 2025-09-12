@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
-import quizResultService from "../services/quizResultService";
-import { ROUTE_PATH } from "../constants/routePath";
+import quizResultService from "../../services/quizResultService";
+import { ROUTE_PATH } from "../../constants/routePath";
 
 import {
   CheckCircle,
@@ -52,7 +52,7 @@ function TestQuizResultPage() {
   return (
     <div className="max-w-5xl mx-auto my-3 p-8 bg-white shadow-lg rounded-2xl border border-gray-200 min-h-screen">
       {/* Tiêu đề */}
-      <h1 className="text-3xl font-bold text-center text-red-600 mb-8">
+      <h1 className="text-3xl font-bold text-center text-custom-blue mb-8">
         Kết quả bài kiểm tra
       </h1>
 
@@ -153,7 +153,7 @@ function TestQuizResultPage() {
         {linkFrom === "quizHistory" ? (
           <Link
             to={ROUTE_PATH.USER_PROFILE}
-            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-100 transition-colors duration-400 font-medium shadow"
+            className="px-5 py-3 bg-white border border-custom-blue text-custom-blue rounded-lg hover:bg-custom-hover-blue2 transition-colors duration-400 font-medium shadow"
           >
             ⬅ Quay lại trang cá nhân
           </Link>
@@ -162,8 +162,8 @@ function TestQuizResultPage() {
             to={ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
               ":courseId",
               result.course?._id
-            )}
-            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-100 transition-colors duration-400 font-medium shadow"
+            ).replace(":courseName", result.course?.title.replace(/\s+/g, "-").toLowerCase())}
+            className="px-5 py-3 bg-white border border-custom-blue text-custom-blue rounded-lg hover:bg-custom-hover-blue2 transition-colors duration-400 font-medium shadow"
           >
             ⬅ Quay lại bài học
           </Link>
@@ -173,7 +173,7 @@ function TestQuizResultPage() {
               ":courseId",
               result.course?._id
             ).replace(":quizId", result.quiz?._id)}
-            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-100 transition-colors duration-400 font-medium shadow"
+            className="px-5 py-3 bg-white border border-custom-blue text-custom-blue rounded-lg hover:bg-custom-hover-blue2 transition-colors duration-400 font-medium shadow"
           >
             ⬅ Quay lại
           </Link>
@@ -183,7 +183,7 @@ function TestQuizResultPage() {
               ":studentId",
               result.student?._id
             )}
-            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-100 transition-colors duration-400 font-medium shadow"
+            className="px-5 py-3 bg-white border border-custom-blue text-custom-blue rounded-lg hover:bg-custom-hover-blue2 transition-colors duration-400 font-medium shadow"
           >
             ⬅ Quay lại
           </Link>
