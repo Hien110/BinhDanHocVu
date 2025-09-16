@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 
-import { uploadToCloudinary } from "../services/uploadCloudinary";
-import userService from "../services/userService";
-import quizResultService from "../services/quizResultService";
+import { uploadToCloudinary } from "../../services/uploadCloudinary";
+import userService from "../../services/userService";
+import quizResultService from "../../services/quizResultService";
 
 import { toast } from "sonner";
 
@@ -19,9 +19,10 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
-import QuizHistoryItem from "../components/QuizHistoryItem";
-import AverageScoreCard from "../components/AverageScoreCard";
-import ResultClassification from "../components/ResultClassification";
+import QuizHistoryItem from "../../components/QuizHistoryItem";
+import AverageScoreCard from "../../components/AverageScoreCard";
+import ResultClassification from "../../components/ResultClassification";
+import { Button } from "@mui/material";
 
 const UserProfile = () => {
   const user = userService.getCurrentUser();
@@ -118,6 +119,7 @@ const UserProfile = () => {
       return;
     }
     try {
+      setLoading(true);
       const response = await userService.changePassword(password, newPassword);
       if (response.success) {
         toast.success(response.message);
@@ -127,6 +129,8 @@ const UserProfile = () => {
       }
     } catch (error) {
       toast.error("Đổi mật khẩu thất bại. Vui lòng thử lại.", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -149,19 +153,23 @@ const UserProfile = () => {
               />
             </div>
             <div className="text-center mt-4 p-4">
-              <h2 className="text-xl font-bold text-black">{user.name}</h2>
-              { user.role === "student" && <p className="text-gray-600">Sinh viên</p>}
-              { user.role === "lecturer" && <p className="text-gray-600">Giảng viên</p>}
+              <h2 className="text-xl font-bold text-black">{user.fullName}</h2>
+              {user.role === "student" && (
+                <p className="text-gray-600">Sinh viên</p>
+              )}
+              {user.role === "lecturer" && (
+                <p className="text-gray-600">Giảng viên</p>
+              )}
               <div className="mt-4 space-x-3 flex justify-center">
                 <button
                   onClick={() => setShowUpdateModal(true)}
-                  className="px-5 bg-white border border-yellow-500 text-yellow-500 py-2 text-[12px] rounded hover:bg-yellow-100 transition-colors duration-300 hover:cursor-pointer"
+                  className="px-5 bg-white border border-custom-blue text-custom-blue py-2 text-[12px] rounded hover:bg-custom-hover-blue2 transition-colors duration-300 hover:cursor-pointer"
                 >
                   Cập nhật hồ sơ
                 </button>
                 <button
                   onClick={() => setShowPasswordModal(true)}
-                  className="px-5 bg-white border border-yellow-500 text-yellow-500 py-2 text-[12px] rounded hover:bg-yellow-100 transition-colors duration-300 hover:cursor-pointer"
+                  className="px-5 bg-white border border-custom-blue text-custom-blue py-2 text-[12px] rounded hover:bg-custom-hover-blue2 transition-colors duration-300 hover:cursor-pointer"
                 >
                   Đổi mật khẩu
                 </button>
@@ -236,7 +244,7 @@ const UserProfile = () => {
               ))}
             </div>
           </div>
-            <ResultClassification quizResults={quizResults} />
+          <ResultClassification quizResults={quizResults} />
         </div>
       </div>
 
@@ -378,7 +386,7 @@ const UserProfile = () => {
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="text-xl font-bold text-red-500 mb-4">
+              <h2 className="text-lg font-bold text-custom-blue mb-4">
                 Thay đổi mật khẩu
               </h2>
               <form className="space-y-4" onSubmit={handleChangePassword}>
@@ -449,26 +457,70 @@ const UserProfile = () => {
                   </div>
                 ) : null}
                 <div className="text-right space-x-2 flex justify-end">
-                  <button
+                  <Button
                     type="button"
-                    onClick={closeModals}
-                    className="px-4 py-1 bg-gray-300 rounded w-full hover:bg-gray-400 transition-colors cursor-pointer text-[14px]"
+                    variant="contained"
+                    disableElevation
+                    fullWidth
+                    disabled={loading}
+                    onClick={() => closeModals()}
+                    sx={{
+                      py: "8px",
+                      px: "16px",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      borderRadius: "6px",
+                      textTransform: "none",
+                      color: "white",
+                      bgcolor: "grey.600",
+                      transition:
+                        "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                      "&:hover": {
+                        bgcolor: "grey.700",
+                      },
+                      "&.Mui-disabled": {
+                        color: "white",
+                        bgcolor: "grey.400",
+                        cursor: "not-allowed",
+                        opacity: 1,
+                      },
+                    }}
                   >
                     Hủy
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="submit"
-                    disabled={!(checkLength && checkMatch)}
-                    className={`px-4 py-1 rounded w-full transition-colors cursor-pointer text-[14px]
-                        ${
-                          checkLength && checkMatch
-                            ? "bg-red-500 text-white hover:bg-red-600"
-                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        }
-                    `}
+                    variant="contained"
+                    loading={loading} // 👈 Thêm prop này
+                    disableElevation
+                    fullWidth
+                    disabled={loading} // 👈 tránh user bấm khi đang loading
+                    sx={{
+                      py: "8px",
+                      px: "16px",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      borderRadius: "6px",
+                      textTransform: "none",
+                      color: "white",
+                      bgcolor: !loading ? "#4A90E2" : "grey.400",
+                      transition:
+                        "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                      "&:hover": {
+                        bgcolor: !loading ? "#357ABD" : "grey.400",
+                      },
+                      "&.Mui-disabled": {
+                        color: "white",
+                        bgcolor: "grey.400",
+                        cursor: "not-allowed",
+                        opacity: 1,
+                      },
+                    }}
                   >
-                    Đổi mật khẩu
-                  </button>
+                    {loading
+                      ? "Đang chỉnh sửa bài học..."
+                      : "Chỉnh sửa bài học"}
+                  </Button>
                 </div>
               </form>
             </motion.div>

@@ -425,11 +425,13 @@ function CourseDetailPage() {
             )}
           </div>
           <h3 className="text-base sm:text-lg font-semibold text-custom-blue mb-2 text-center">
-            {course.instructor.fullName}
+            {course.instructor.role === "admin"
+              ? "Quản trị viên"
+              : course.instructor.fullName || course.instructor.email}
           </h3>
           {/* bio */}
           {course.instructor.bio && (
-            <p className="text-gray-600 mb-2 text-center">
+            <p className="text-gray-600 mb-2 text-center line-clamp-3">
               {course.instructor.bio}
             </p>
           )}
@@ -440,12 +442,14 @@ function CourseDetailPage() {
               {course.instructor.workplace}
             </p>
           )}
-          <div className="flex space-x-2">
-            <p className="text-gray-600">
-              <span className="font-medium">Email:</span>{" "}
-              {course.instructor.email}
-            </p>
-          </div>
+          {course.instructor.role !== "admin" && (
+            <div className="flex space-x-2">
+              <p className="text-gray-600">
+                <span className="font-medium">Email:</span>{" "}
+                {course.instructor.email}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

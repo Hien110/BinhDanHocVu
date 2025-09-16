@@ -51,7 +51,9 @@ function HomePage() {
       try {
         const response = await courseService.getTop3CoursesBySubject();
         const payload =
-          (response && response.data && response.data.data) || response?.data || {};
+          (response && response.data && response.data.data) ||
+          response?.data ||
+          {};
         setCourses(payload || {});
       } catch (e) {
         console.error(e);
@@ -69,7 +71,7 @@ function HomePage() {
     if (keys.length === 0) return [];
 
     return keys.sort((a, b) => {
-      const pa = SUBJECT_PRIORITY[a] ?? 100;    // mặc định 100 cho môn lạ
+      const pa = SUBJECT_PRIORITY[a] ?? 100; // mặc định 100 cho môn lạ
       const pb = SUBJECT_PRIORITY[b] ?? 100;
 
       if (pa !== pb) return pa - pb;
@@ -112,8 +114,9 @@ function HomePage() {
               Học tập miễn phí cho mọi người
             </h1>
             <p className="text-lg mb-8 opacity-90">
-              Bình Dân Học Vụ mang đến cơ hội học tập chất lượng cao hoàn toàn miễn phí.
-              Tham gia ngay để khám phá hàng trăm khóa học từ các giáo viên tâm huyết.
+              Bình Dân Học Vụ mang đến cơ hội học tập chất lượng cao hoàn toàn
+              miễn phí. Tham gia ngay để khám phá hàng trăm khóa học từ các giáo
+              viên tâm huyết.
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               <a
@@ -186,12 +189,14 @@ function HomePage() {
                           {course.title}
                         </h4>
 
-                        <div className="mb-4 text-sm">
-                          <span className="text-gray-500">Giáo viên: </span>
-                          <span className="font-medium text-gray-800">
-                            {course?.instructor?.fullName || "N/A"}
-                          </span>
-                        </div>
+                        {course.subject !== "BinhDanSo" && (
+                          <div className="mb-4 text-sm">
+                            <span className="text-gray-500">Giáo viên: </span>
+                            <span className="font-medium text-gray-800">
+                              {course?.instructor?.fullName || "N/A"}
+                            </span>
+                          </div>
+                        )}
 
                         <div className="mb-4 flex flex-row items-center text-sm">
                           <CalendarMonthIcon
@@ -200,7 +205,9 @@ function HomePage() {
                           />
                           <span className="font-medium text-gray-800">
                             {course?.createdAt
-                              ? new Date(course.createdAt).toLocaleDateString("vi-VN")
+                              ? new Date(course.createdAt).toLocaleDateString(
+                                  "vi-VN"
+                                )
                               : "N/A"}
                           </span>
                         </div>

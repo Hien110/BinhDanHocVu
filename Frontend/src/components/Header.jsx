@@ -67,14 +67,6 @@ const Header = () => {
             </li>
             <li>
               <Link
-                // to={ROUTE_PATH.TEST_QUIZ_LIST}
-                className="text-black font-medium hover:text-custom-blue transition-colors"
-              >
-                Giáo viên
-              </Link>
-            </li>
-            <li>
-              <Link
                 to={ROUTE_PATH.BINDANSO}
                 className="text-black font-medium hover:text-custom-blue transition-colors"
               >
@@ -108,7 +100,7 @@ const Header = () => {
                         <span className="font-normal">Xin chào,</span>
                         <br />
                         <span className="text-custom-blue font-semibold text-base sm:text-lg">
-                          {userData.name || userData.email}
+                          {userData.fullName || userData.email}
                         </span>
                       </div>
                     </div>

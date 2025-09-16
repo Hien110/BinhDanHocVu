@@ -15,7 +15,7 @@ export const  ROUTE_PATH = {
     AUTH_CALLBACK: "/signin/callback",
 
     // User management routes
-    USER_PROFILE: "/user/profile",
+    USER_PROFILE: "/ca-nhan/ho-so",
 
     // Lecturer routes
     LECTURER_STATISTICS: "/lecturer/statistics",
