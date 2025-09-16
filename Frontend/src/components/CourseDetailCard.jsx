@@ -12,12 +12,12 @@ function CourseDetailCard({ course }) {
   return (
     <div className="grid gap-8 md:grid-cols-[320px_1fr] items-start">
       {/* Cột trái - Hình ảnh (cố định) */}
-      <div className="flex-none rounded-2xl overflow-hidden shadow-lg md:w-[320px] aspect-[4/3]">
+      <div className="flex-none rounded-2xl overflow-hidden shadow-lg md:w-[320px]">
         {course.thumbnail ? (
           <img
             src={course.thumbnail}
             alt={course.title}
-            className="w-full"
+            className="w-full "
           />
         ) : (
           <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-lg font-semibold">

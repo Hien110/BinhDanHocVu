@@ -23,7 +23,7 @@ const TestQuizListPage = React.lazy(() => import("../pages/TestQuizListPage"));
 const NewsPage = React.lazy(() => import("../pages/NewsPage"));
 
 // user management pages
-const UserProfilePage = React.lazy(() => import("../pages/UserProfilePage"));
+const UserProfilePage = React.lazy(() => import("../pages/student/UserProfilePage"));
 
 // lecturer pages
 const StatisticsPage = React.lazy(() => import("../pages/StatisticsPage"));
