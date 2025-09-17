@@ -17,4 +17,7 @@ router.get("/personal-classrooms", authenticateToken, ClassroomController.getReg
 // Rời khỏi lớp học
 router.delete("/leave/:classroomId", authenticateToken, ClassroomController.leaveCourse);
 
+// Lấy danh sách học sinh trong một khóa học (dành cho giảng viên)
+router.get("/course/:courseId/students", authenticateToken, authorize("lecturer"), ClassroomController.getStudentsInCourse);
+
 module.exports = router;

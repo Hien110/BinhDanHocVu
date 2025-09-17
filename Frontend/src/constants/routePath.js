@@ -40,8 +40,10 @@ export const  ROUTE_PATH = {
     LECTURER_QUIZ_DETAIL: "/giang-vien/khoa-hoc/:courseName/bai-kiem-tra/:courseId/:quizId",
 
     LECTURER_QUIZ_RESULT: "/giang-vien/result-bai-kiem-tra",
-    LECTURER_QUIZ_RESULT_LIST: "/giang-vien/result-bai-kiem-tra/:courseId/danh-sach",
-    LECTURER_QUIZ_RESULT_DETAIL: "/giang-vien/result-bai-kiem-tra/:courseId/:quizId",
+    LECTURER_QUIZ_RESULT_LIST: "/giang-vien/khoa-hoc/:courseName/ket-qua-bai-kiem-tra/:courseId/danh-sach",
+    LECTURER_QUIZ_RESULT_DETAIL: "/giang-vien/khoa-hoc/:courseName/result-bai-kiem-tra/:courseId/:quizId",
+
+    LECTURER_CLASSROOMS: "/giang-vien/khoa-hoc/:courseId/:courseName/lop-hoc",
 
     LECTURER_NEWS: "/lecturer/news",
 

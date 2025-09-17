@@ -705,21 +705,69 @@ function ManageQuestionBankDetailPage() {
                 }}
               >
                 {/* Buttons */}
-                <div className="text-right space-x-2 flex justify-end">
-                  <button
+                <div className="text-right gap-4 flex justify-end">
+                  <Button
                     type="button"
-                    onClick={handleCloseModal}
-                    className="px-4 bg-gray-300 rounded hover:bg-gray-400 transition-colors duration-300 cursor-pointer w-full text-[14px]"
+                    variant="contained"
+                    disableElevation
+                    fullWidth
+                    disabled={loading}
+                    onClick={() => handleCloseModal()}
+                    sx={{
+                      py: "8px",
+                      px: "16px",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      borderRadius: "6px",
+                      textTransform: "none",
+                      color: "white",
+                      bgcolor: "grey.600",
+                      transition:
+                        "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                      "&:hover": {
+                        bgcolor: "grey.700",
+                      },
+                      "&.Mui-disabled": {
+                        color: "white",
+                        bgcolor: "grey.400",
+                        cursor: "not-allowed",
+                        opacity: 1,
+                      },
+                    }}
                   >
                     Hủy
-                  </button>
-
-                  <button
+                  </Button>
+                  <Button
                     type="submit"
-                    className="px-4 py-2 bg-red-600 rounded hover:bg-red-700 text-white transition-colors duration-300 cursor-pointer w-full text-[14px]"
+                    variant="contained"
+                    loading={loading} // 👈 Thêm prop này
+                    disableElevation
+                    fullWidth
+                    disabled={loading} // 👈 tránh user bấm khi đang loading
+                    sx={{
+                      py: "8px",
+                      px: "16px",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      borderRadius: "6px",
+                      textTransform: "none",
+                      color: "white",
+                      bgcolor: !loading ? "#e43939" : "grey.400",
+                      transition:
+                        "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                      "&:hover": {
+                        bgcolor: !loading ? "#dd1c1cff" : "grey.400",
+                      },
+                      "&.Mui-disabled": {
+                        color: "white",
+                        bgcolor: "grey.400",
+                        cursor: "not-allowed",
+                        opacity: 1,
+                      },
+                    }}
                   >
-                    Xác nhận xóa
-                  </button>
+                    {loading ? "Đang xử lý..." : "Xác nhận xóa"}
+                  </Button>
                 </div>
               </form>
             </motion.div>
@@ -760,21 +808,69 @@ function ManageQuestionBankDetailPage() {
                 }}
               >
                 {/* Buttons */}
-                <div className="text-right space-x-2 flex justify-end">
-                  <button
+                <div className="text-right gap-4 flex justify-end">
+                  <Button
                     type="button"
-                    onClick={handleCloseModal}
-                    className="px-4 bg-gray-300 rounded hover:bg-gray-400 transition-colors duration-300 cursor-pointer w-full text-[14px]"
+                    variant="contained"
+                    disableElevation
+                    fullWidth
+                    disabled={loading}
+                    onClick={() => handleCloseModal()}
+                    sx={{
+                      py: "8px",
+                      px: "16px",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      borderRadius: "6px",
+                      textTransform: "none",
+                      color: "white",
+                      bgcolor: "grey.600",
+                      transition:
+                        "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                      "&:hover": {
+                        bgcolor: "grey.700",
+                      },
+                      "&.Mui-disabled": {
+                        color: "white",
+                        bgcolor: "grey.400",
+                        cursor: "not-allowed",
+                        opacity: 1,
+                      },
+                    }}
                   >
                     Hủy
-                  </button>
-
-                  <button
+                  </Button>
+                  <Button
                     type="submit"
-                    className="px-4 py-2 bg-red-600 rounded hover:bg-red-700 text-white transition-colors duration-300 cursor-pointer w-full text-[14px]"
+                    variant="contained"
+                    loading={loading} // 👈 Thêm prop này
+                    disableElevation
+                    fullWidth
+                    disabled={loading} // 👈 tránh user bấm khi đang loading
+                    sx={{
+                      py: "8px",
+                      px: "16px",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      borderRadius: "6px",
+                      textTransform: "none",
+                      color: "white",
+                      bgcolor: !loading ? "#e43939" : "grey.400",
+                      transition:
+                        "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                      "&:hover": {
+                        bgcolor: !loading ? "#dd1c1cff" : "grey.400",
+                      },
+                      "&.Mui-disabled": {
+                        color: "white",
+                        bgcolor: "grey.400",
+                        cursor: "not-allowed",
+                        opacity: 1,
+                      },
+                    }}
                   >
-                    Xác nhận xóa
-                  </button>
+                    {loading ? "Đang xử lý..." : "Xóa học viên"}
+                  </Button>
                 </div>
               </form>
             </motion.div>

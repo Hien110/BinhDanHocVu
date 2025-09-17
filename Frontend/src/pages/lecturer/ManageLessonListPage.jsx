@@ -36,7 +36,8 @@ function ManageLessonListPage() {
   const [showDeleteLessonModal, setShowDeleteLessonModal] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [loadingLesson, setLoadingLesson] = useState(false); // dùng cho tạo bài học
-
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   // ---------- Fetch ----------
   const fetchLessons = async () => {
@@ -63,13 +64,21 @@ function ManageLessonListPage() {
 
   // ---------- Delete ----------
   const handleDeleteLesson = async (lessonId) => {
-    const res = await lessonService.deleteLesson(lessonId);
-    if (res?.success) {
-      toast.success("Xóa bài học thành công");
-      fetchLessons();
-      setShowDeleteLessonModal(false);
-    } else {
+    try {
+      setLoading(true);
+      const res = await lessonService.deleteLesson(lessonId);
+      if (res?.success) {
+        toast.success("Xóa bài học thành công");
+        fetchLessons();
+        setShowDeleteLessonModal(false);
+      } else {
+        toast.error("Xóa bài học thất bại");
+      }
+    } catch (error) {
       toast.error("Xóa bài học thất bại");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -261,6 +270,9 @@ function ManageLessonListPage() {
     }
   };
 
+  const filteredLessons = lessons.filter((lesson) =>
+    lesson.title.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8 text-gray-800 border-b border-gray-200 pb-2">
@@ -277,12 +289,20 @@ function ManageLessonListPage() {
           <span className="font-bold">Tổng số bài học:</span> {lessons.length}{" "}
           bài học
         </div>
-
-        {lessons.length === 0 ? (
+        <div className="mb-6">
+          <input
+            type="text"
+            placeholder="Tìm kiếm bài học theo tên..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full sm:w-120 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+          />
+        </div>
+        {filteredLessons.length === 0 ? (
           <p className="text-gray-500 italic">Chưa có bài học nào</p>
         ) : (
           <ul className="space-y-6">
-            {lessons.map((lesson, index) => (
+            {filteredLessons.map((lesson, index) => (
               <li
                 key={index}
                 className="border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300 flex justify-between items-center bg-white hover:bg-gray-50"
@@ -304,7 +324,7 @@ function ManageLessonListPage() {
                 <div className="">
                   <button
                     onClick={() => handleViewLesson(lesson._id)}
-                    className="cursor-pointer text-custom-orange border border-custom-orange px-3 py-1 text-sm rounded-lg hover:bg-custom-hover-orange2 font-medium transition duration-300"
+                    className="cursor-pointer text-custom-blue border border-custom-blue px-3 py-1 text-sm rounded-lg hover:bg-custom-hover-blue2 font-medium transition duration-300"
                   >
                     Xem chi tiết
                   </button>
@@ -625,21 +645,69 @@ function ManageLessonListPage() {
                   handleDeleteLesson(selectedLesson?._id);
                 }}
               >
-                <div className="text-right space-x-2 flex justify-end">
-                  <button
+                <div className="text-right gap-4 flex justify-end">
+                  <Button
                     type="button"
-                    onClick={closeModals}
-                    className="px-4 bg-gray-300 rounded hover:bg-gray-400 transition-colors duration-300 cursor-pointer w-full text-[14px]"
+                    variant="contained"
+                    disableElevation
+                    fullWidth
+                    disabled={loading}
+                    onClick={() => closeModals()}
+                    sx={{
+                      py: "8px",
+                      px: "16px",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      borderRadius: "6px",
+                      textTransform: "none",
+                      color: "white",
+                      bgcolor: "grey.600",
+                      transition:
+                        "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                      "&:hover": {
+                        bgcolor: "grey.700",
+                      },
+                      "&.Mui-disabled": {
+                        color: "white",
+                        bgcolor: "grey.400",
+                        cursor: "not-allowed",
+                        opacity: 1,
+                      },
+                    }}
                   >
                     Hủy
-                  </button>
-
-                  <button
+                  </Button>
+                  <Button
                     type="submit"
-                    className="px-4 py-2 bg-red-600 rounded hover:bg-red-700 text-white transition-colors duration-300 cursor-pointer w-full text-[14px]"
+                    variant="contained"
+                    loading={loading} // 👈 Thêm prop này
+                    disableElevation
+                    fullWidth
+                    disabled={loading} // 👈 tránh user bấm khi đang loading
+                    sx={{
+                      py: "8px",
+                      px: "16px",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      borderRadius: "6px",
+                      textTransform: "none",
+                      color: "white",
+                      bgcolor: !loading ? "#e43939" : "grey.400",
+                      transition:
+                        "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                      "&:hover": {
+                        bgcolor: !loading ? "#dd1c1cff" : "grey.400",
+                      },
+                      "&.Mui-disabled": {
+                        color: "white",
+                        bgcolor: "grey.400",
+                        cursor: "not-allowed",
+                        opacity: 1,
+                      },
+                    }}
                   >
-                    Xác nhận xóa
-                  </button>
+                    {loading ? "Đang xử lý..." : "Xóa bài học"}
+                  </Button>
                 </div>
               </form>
             </motion.div>
