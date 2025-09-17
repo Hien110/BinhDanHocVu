@@ -48,7 +48,7 @@ export default function QuizHistoryItemByCourse({ history }) {
         </h3>
         <p className="text-sm text-gray-500 flex items-center gap-1">
           <SchoolIcon fontSize="small" /> Sinh viên:{" "}
-          <span className="font-medium">{history.student?.name}</span>
+          <span className="font-medium">{history.student?.fullName}</span>
         </p>
         <p className="mt-2 text-sm flex items-center gap-1">
           <CheckCircleIcon fontSize="small" className="text-gray-500" />{" "}
@@ -92,10 +92,9 @@ export default function QuizHistoryItemByCourse({ history }) {
             history?._id
           )}
           state={{ linkFrom: "quizManager" }}
-          className="flex items-center text-sm gap-2 px-2 py-2 border border-yellow-500 text-yellow-600 rounded-lg font-medium hover:bg-yellow-100 transition-colors duration-300"
+          className="cursor-pointer text-custom-blue border border-custom-blue px-3 py-1 text-sm rounded-lg hover:bg-custom-hover-blue2 font-medium transition duration-300"
         >
           Xem chi tiết
-          <ArrowForwardIcon fontSize="small" />
         </Link>
       )}
     </div>

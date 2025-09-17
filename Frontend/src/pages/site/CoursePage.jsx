@@ -55,8 +55,6 @@ function CoursePage() {
       .toLowerCase()
       .trim();
 
-  const allSubjects = useMemo(() => Object.keys(courses || {}), [courses]);
-
   // Lọc theo search:
   // - Nếu khớp tên môn (EN key hoặc tên TV) -> giữ nguyên TẤT CẢ khóa của môn đó
   // - Nếu KHÔNG khớp tên môn -> lọc theo giáo viên trong từng khóa

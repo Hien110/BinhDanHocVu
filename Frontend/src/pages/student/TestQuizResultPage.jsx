@@ -61,7 +61,7 @@ function TestQuizResultPage() {
         <InfoItem
           icon={<User className="text-blue-500" />}
           label="Sinh viên"
-          value={result.student?.name}
+          value={result.student?.fullName}
         />
         <InfoItem
           icon={<Book className="text-purple-500" />}
@@ -131,12 +131,12 @@ function TestQuizResultPage() {
                       <span>{opt.text}</span>
                       {isCorrect && (
                         <span className="ml-2 text-green-700 font-semibold">
-                          (Đúng)
+                          (Đáp án đúng)
                         </span>
                       )}
                       {isSelected && !isCorrect && (
                         <span className="ml-2 text-red-700 font-semibold">
-                          (Bạn chọn)
+                          (Đáp án đã chọn)
                         </span>
                       )}
                     </div>

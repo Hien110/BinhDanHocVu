@@ -7,7 +7,7 @@ const QuizController = {
     getQuizzesByCourse: async (req, res) => {
         try {
             const { courseId } = req.params;
-            const quizzes = await Quiz.find({ course: courseId, deleted: false }).populate("questions.questionBankRef");
+            const quizzes = await Quiz.find({ course: courseId, deleted: false }).populate("questions.questionBankRef").populate("course");
             res.status(200).json({ data: quizzes, message: "Lấy danh sách bài kiểm tra thành công" });
         } catch (error) {
             res.status(500).json({ message: "Lấy danh sách bài kiểm tra thất bại" });

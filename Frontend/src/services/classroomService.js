@@ -82,6 +82,26 @@ const classroomService = {
       throw error;
     }
   },
+
+  // Lấy danh sách học sinh trong một khóa học (dành cho giảng viên)
+  getStudentsInCourse: async (courseId) => {
+    try {
+      const response = await axios.get(`${API_URL}/course/${courseId}/students`, {
+        headers: {
+          Authorization: `Bearer ${userService.getToken()}`,
+        },
+      });
+      return {
+        success: true,
+        message: response.data.message,
+        data: response.data.data,
+      };
+    } catch (error) {
+      console.error("Error fetching students in course:", error);
+      throw error;
+    }
+  },
+
 };
 
 export default classroomService;

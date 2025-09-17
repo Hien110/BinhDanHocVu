@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import { ROUTE_PATH } from "../constants/routePath";
+import { ROUTE_PATH } from "../../constants/routePath";
 
 import { useParams } from "react-router-dom";
 
-import QuizService from "../services/quizService";
+import QuizService from "../../services/quizService";
 
 function ManageQuizResultCoursePage() {
   const { courseId } = useParams();
@@ -20,6 +20,8 @@ function ManageQuizResultCoursePage() {
         setLoading(true);
         const result = await QuizService.getQuizzesByCourse(courseId);
         if (result.success) {
+          console.log(result.data);
+
           setQuizzes(result.data.slice().reverse());
         } else {
           console.error(result.message);
@@ -45,11 +47,15 @@ function ManageQuizResultCoursePage() {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8 text-gray-800 border-b border-gray-200 pb-2">
-        Kết quả bài kiểm tra
+        {quizzes[0]?.course?.title || "Khóa học không tồn tại"}
       </h1>
-      <div className="mb-4 text-red-400">
-        <span className="font-bold">Tổng số bài kiểm tra:</span> {quizzes.length}{" "}
-        bài kiểm tra
+
+      <h2 className="text-2xl font-semibold text-custom-blue mb-6 border-b border-gray-300 pb-2">
+        Danh sách bài kiểm tra
+      </h2>
+      <div className="mb-4 text-custom-blue">
+        <span className="font-bold">Tổng số bài kiểm tra:</span>{" "}
+        {quizzes.length} bài kiểm tra
       </div>
       <div className="mb-6">
         <input
@@ -73,42 +79,45 @@ function ManageQuizResultCoursePage() {
             >
               <div>
                 {/* Tiêu đề */}
-                <h2 className="text-xl font-semibold mb-2 text-yellow-600 max-w-xs truncate">
+                <h2 className="text-xl font-semibold mb-2 max-w-xs truncate">
                   {quiz.title}
                 </h2>
-
                 {/* Số câu hỏi */}
-                <p className="text-gray-600">
-                  <span className="font-medium">Số câu hỏi:</span>{" "}
-                  {quiz.totalQuestions}
-                </p>
-              </div>
-              {/* Loại Quiz (canh giữa) */}
-              <div className="">
                 <span className="font-medium text-gray-600">Loại đề:</span>{" "}
                 {quiz.typeQuiz === "manual" && "Thủ công"}
                 {quiz.typeQuiz === "excel" && "Excel"}
                 {quiz.typeQuiz === "random" && "Tự động"}
-
-                {/* Ngày tạo */}
-                {/* <p className="text-gray-600">
-                  <span className="font-medium">Ngày tạo:</span>{" "}
-                  {new Date(quiz.createdAt).toLocaleDateString("vi-VN")}
-                </p> */}
-
+              </div>
+              {/* Loại Quiz (canh giữa) */}
+              <div className="">
+                <p className="">
+                  <span className="font-medium text-gray-600">Số câu hỏi:</span>{" "}
+                  {quiz.totalQuestions} câu
+                </p>
                 {/* Thời gian làm bài */}
                 <p className="">
-                  <span className="font-medium text-gray-600">Thời gian làm bài:</span>{" "}
+                  <span className="font-medium text-gray-600">
+                    Thời gian làm bài:
+                  </span>{" "}
                   {quiz.timeLimit} phút
+                </p>
+                {/* Ngày tạo */}
+                <p className="">
+                  <span className="font-medium text-gray-600">Ngày tạo:</span>{" "}
+                  {new Date(quiz.createdAt).toLocaleDateString("vi-VN")}
                 </p>
               </div>
 
               {/* Nút hành động */}
               <div className="">
                 <button
-                  className="cursor-pointer text-yellow-600 border border-yellow-600 px-3 py-1 text-sm rounded-lg hover:bg-yellow-100 font-medium transition duration-300"
+                  className="cursor-pointer text-custom-blue border border-custom-blue px-3 py-1 text-sm rounded-lg hover:bg-custom-hover-blue2 font-medium transition duration-300"
                   onClick={() => {
-                    window.location.href = ROUTE_PATH.LECTURER_QUIZ_RESULT_DETAIL.replace(":courseId", courseId).replace(":quizId", quiz._id);
+                    window.location.href =
+                      ROUTE_PATH.LECTURER_QUIZ_RESULT_DETAIL.replace(
+                        ":courseId",
+                        courseId
+                      ).replace(":quizId", quiz._id).replace(":courseName", quiz.course.title.replace(/\s+/g, "-").toLowerCase());
                   }}
                 >
                   Xem các kết quả

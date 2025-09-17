@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import userService from "../services/userService";
-import quizResultService from "../services/quizResultService";
+import userService from "../../services/userService";
+import quizResultService from "../../services/quizResultService";
 
-import QuizHistoryItem from "../components/QuizHistoryItem";
-import AverageScoreCard from "../components/AverageScoreCard";
-import ResultClassification from "../components/ResultClassification";
+import QuizHistoryItem from "../../components/QuizHistoryItem";
+import AverageScoreCard from "../../components/AverageScoreCard";
+import ResultClassification from "../../components/ResultClassification";
 
 import { useParams } from "react-router-dom";
 

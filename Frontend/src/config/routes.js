@@ -29,7 +29,7 @@ const UserProfilePage = React.lazy(() => import("../pages/student/UserProfilePag
 const StatisticsPage = React.lazy(() => import("../pages/StatisticsPage"));
 
 const ManageStudentPage = React.lazy(() => import("../pages/ManageStudentPage"));
-const ManageStudentDetailPage = React.lazy(() => import("../pages/ManageStudentDetailPage"));
+const ManageStudentDetailPage = React.lazy(() => import("../pages/lecturer/ManageStudentDetailPage"));
 
 // Question Bank
 const ManageQuestionBankPage = React.lazy(() => import("../pages/ManageQuestionBankPage"));
@@ -52,10 +52,13 @@ const ManageQuizCreatePage = React.lazy(() => import("../pages/lecturer/ManageQu
 const ManageQuizDetailPage = React.lazy(() => import("../pages/lecturer/ManageQuizDetailPage"));
 
 const ManageQuizResultPage = React.lazy(() => import("../pages/ManageQuizResultPage"));
-const ManageQuizResultCoursePage = React.lazy(() => import("../pages/ManageQuizResultCoursePage"));
-const ManageQuizResultDetailPage = React.lazy(() => import("../pages/ManageQuizResultDetailPage"));
+const ManageQuizResultCoursePage = React.lazy(() => import("../pages/lecturer/ManageQuizResultCoursePage"));
+const ManageQuizResultDetailPage = React.lazy(() => import("../pages/lecturer/ManageQuizResultDetailPage"));
 
 const ManageNewsPage = React.lazy(() => import("../pages/ManageNewsPage"));
+
+//Classroom
+const ManageStudentsInCoursePage = React.lazy(() => import("../pages/lecturer/ManageStudentInCoursePage"));
 
 // Student pages
 const CourseDetailPage = React.lazy(() => import("../pages/student/CourseDetailPage"));
@@ -124,6 +127,9 @@ const AppRoutes = [
   { path: ROUTE_PATH.LECTURER_QUIZ_RESULT_DETAIL, page: ManageQuizResultDetailPage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout  },
 
   { path: ROUTE_PATH.LECTURER_NEWS, page: ManageNewsPage, layout: lecturerLayout  },
+
+  //Classroom
+  { path: ROUTE_PATH.LECTURER_CLASSROOMS, page: ManageStudentsInCoursePage, layout: currentUser?.role === 'admin' ? adminLayout : lecturerLayout },
 
   //Student routes
   { path: ROUTE_PATH.STUDENT_COURSE_DETAIL, page: CourseDetailPage, layout: studentLayout },

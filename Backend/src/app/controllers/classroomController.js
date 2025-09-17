@@ -129,7 +129,6 @@ const ClassRoomController = {
     }
   },
 
-  // Tính tổng số học sinh trong khóa học
   // This function is not used in the current implementation but can be useful for future features
   countStudentsInCourse: async (courseId) => {
     try {
@@ -140,6 +139,26 @@ const ClassRoomController = {
       throw error;
     }
   },
+
+  // Lấy danh sách học sinh trong một khóa học
+  getStudentsInCourse: async (req, res) => {
+    try {
+      const courseId = req.params.courseId;
+      const students = await Classroom.find({ course: courseId }).populate({
+        path: "student",
+        select: "fullName email avatar",
+      }).populate("course");
+      return res.status(200).json({
+        success: true,
+        data: students,
+        message: "Lấy danh sách học sinh thành công",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Lỗi server" });
+    }
+  },
+
 };
 
 module.exports = ClassRoomController;
