@@ -23,6 +23,8 @@ function ManageQuizDetailPage() {
       try {
         const result = await QuizService.getQuizById(quizId);
         if (result.success) {
+          console.log(result.data);
+
           setQuizDetail(result.data);
           setQuizQuestions(result.data.questions || []);
           setAttempts(result.data.attempts || 1);
@@ -95,7 +97,6 @@ function ManageQuizDetailPage() {
         totalQuestions: totalQuestions,
       };
       const res = await QuizService.updateQuiz(quizId, payload);
-      console.log(payload);
 
       if (res.success) {
         toast.success("Cập nhật bài kiểm tra thành công!");
@@ -116,26 +117,25 @@ function ManageQuizDetailPage() {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8 text-gray-800 border-b border-gray-200 pb-2">
-        Quản lý câu hỏi của bài kiểm tra
+        {quizDetail ? quizDetail.course.title : "Khóa học không tồn tại"}
       </h1>
       <div className="flex justify-between items-center mb-2">
-        <h2 className="text-2xl font-bold mb-4 text-yellow-600 max-w-md">
+        <h2 className="text-2xl font-bold mb-4 text-custom-blue max-w-md">
           Bài kiểm tra: {quizDetail?.title}
         </h2>
-
         {/* Số lần kiểm tra */}
-        <div className="flex items-center gap-2 mr-6">
-          <label className="block mb-2 font-semibold text-gray-700">
-            Số lần làm
-          </label>
-          <input
-            type="number"
-            defaultValue={quizDetail?.attempts || 1}
-            onChange={(e) => setAttempts(Number(e.target.value))}
-            className="w-16 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-            min={1}
-          />
-        </div>
+      </div>
+      <div className="flex items-center gap-2 mr-6 mb-6">
+        <label className="block mb-2 font-semibold text-gray-700">
+          Số lần làm
+        </label>
+        <input
+          type="number"
+          defaultValue={quizDetail?.attempts || 1}
+          onChange={(e) => setAttempts(Number(e.target.value))}
+          className="w-16 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-blue transition mr-6"
+          min={1}
+        />
 
         {/* Thời gian kiểm tra */}
         <div className="flex items-center gap-2">
@@ -146,7 +146,7 @@ function ManageQuizDetailPage() {
             type="number"
             defaultValue={quizDetail?.timeLimit || 1}
             onChange={(e) => setDuration(Number(e.target.value))}
-            className="w-16 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 transition"
+            className="w-16 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-blue transition"
             min={1}
           />
         </div>
@@ -200,6 +200,11 @@ function ManageQuizDetailPage() {
           <h3 className="text-xl font-bold mt-8 mb-4">
             Thêm câu hỏi từ ngân hàng
           </h3>
+          {availableQuestions.length === 0 && (
+            <p className="text-gray-500 italic">
+              Không còn câu hỏi nào để thêm.
+            </p>
+          )}
           <ul className="space-y-4">
             {availableQuestions.map((q) => (
               <li
@@ -243,73 +248,73 @@ function ManageQuizDetailPage() {
 
       <div className="flex gap-4 mt-4">
         <Button
-            type="button"
-            variant="contained"
-            disableElevation
-            fullWidth
-            disabled={loading}
-            onClick={() =>
-              (window.location.href = ROUTE_PATH.LECTURER_QUIZ_LIST.replace(
-                ":courseId",
-                courseId
-              ))
-            }
-            sx={{
-              py: "8px",
-              px: "16px",
-              fontSize: "0.875rem",
-              fontWeight: "500",
-              borderRadius: "6px",
-              textTransform: "none",
+          type="button"
+          variant="contained"
+          disableElevation
+          fullWidth
+          disabled={loading}
+          onClick={() =>
+            (window.location.href = ROUTE_PATH.LECTURER_QUIZ_LIST.replace(
+              ":courseId",
+              courseId
+            ))
+          }
+          sx={{
+            py: "8px",
+            px: "16px",
+            fontSize: "0.875rem",
+            fontWeight: "500",
+            borderRadius: "6px",
+            textTransform: "none",
+            color: "white",
+            bgcolor: "grey.600",
+            transition:
+              "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+            "&:hover": {
+              bgcolor: "grey.700",
+            },
+            "&.Mui-disabled": {
               color: "white",
-              bgcolor: "grey.600",
-              transition:
-                "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
-              "&:hover": {
-                bgcolor: "grey.700",
-              },
-              "&.Mui-disabled": {
-                color: "white",
-                bgcolor: "grey.400",
-                cursor: "not-allowed",
-                opacity: 1,
-              },
-            }}
-          >
-            Quay lại
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            loading={loading} // 👈 Thêm prop này
-            disableElevation
-            fullWidth
-            onClick={handleSaveQuiz}
-            disabled={loading} // 👈 tránh user bấm khi đang loading
-            sx={{
-              py: "8px",
-              px: "16px",
-              fontSize: "0.875rem",
-              fontWeight: "500",
-              borderRadius: "6px",
-              textTransform: "none",
+              bgcolor: "grey.400",
+              cursor: "not-allowed",
+              opacity: 1,
+            },
+          }}
+        >
+          Quay lại
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          loading={loading} // 👈 Thêm prop này
+          disableElevation
+          fullWidth
+          onClick={handleSaveQuiz}
+          disabled={loading} // 👈 tránh user bấm khi đang loading
+          sx={{
+            py: "8px",
+            px: "16px",
+            fontSize: "0.875rem",
+            fontWeight: "500",
+            borderRadius: "6px",
+            textTransform: "none",
+            color: "white",
+            bgcolor: !loading ? "#4A90E2" : "grey.400",
+            transition:
+              "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+            "&:hover": {
+              bgcolor: !loading ? "#357ABD" : "grey.400",
+            },
+            "&.Mui-disabled": {
               color: "white",
-              bgcolor: !loading ? "#4A90E2" : "grey.400",
-              transition:
-                "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
-              "&:hover": {
-                bgcolor: !loading ? "#357ABD" : "grey.400",
-              },
-              "&.Mui-disabled": {
-                color: "white",
-                bgcolor: "grey.400",
-                cursor: "not-allowed",
-                opacity: 1,
-              },
-            }}
-          >
-            {loading ? "Đang lưu bài kiểm tra..." : "Lưu bài kiểm tra"}
-          </Button>
+              bgcolor: "grey.400",
+              cursor: "not-allowed",
+              opacity: 1,
+            },
+          }}
+        >
+          {loading ? "Đang lưu bài kiểm tra..." : "Lưu bài kiểm tra"}
+        </Button>
       </div>
     </div>
   );

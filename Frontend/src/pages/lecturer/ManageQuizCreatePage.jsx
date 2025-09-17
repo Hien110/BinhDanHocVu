@@ -283,6 +283,7 @@ function ManageQuizCreatePage() {
                 onChange={(e) => setRandomCount(Number(e.target.value))}
                 className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-blue transition"
                 min={1}
+                max={questionBank.length}
               />
               <p className="text-sm text-red-500">
                 Đề sẽ được random khi sinh viên bắt đầu làm bài

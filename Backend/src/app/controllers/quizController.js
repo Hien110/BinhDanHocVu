@@ -49,7 +49,7 @@ const QuizController = {
     getQuizById: async (req, res) => {
         try {
             const { quizId } = req.params;
-            const quiz = await Quiz.findById(quizId).populate("questions");
+            const quiz = await Quiz.findById(quizId).populate("questions").populate("course");
             if (!quiz) {
                 return res.status(404).json({ message: "Bài kiểm tra không tồn tại" });
             }
