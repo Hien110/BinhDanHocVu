@@ -50,7 +50,7 @@ function BinhDanSoPage() {
     if (!q) return courses;
     return courses.filter((c) => {
       const byTitle = normalize(c?.title).includes(q);
-      return byTitle ;
+      return byTitle;
     });
   }, [courses, searchTerm]);
 
@@ -93,11 +93,11 @@ function BinhDanSoPage() {
                       className="group-hover:scale-105 transition-transform duration-500 rounded-xl w-full aspect-[3/2] object-cover"
                     />
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-800 mb-3">
+                      <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-1">
                         {course.title}
                       </h3>
 
-                      <div className="mb-4 flex flex-row items-center text-sm">
+                      <div className="mb-2 flex flex-row items-center text-sm">
                         <CalendarMonthIcon
                           fontSize="small"
                           className="text-gray-500 mr-1 w-4 h-4"
@@ -110,7 +110,12 @@ function BinhDanSoPage() {
                             : "N/A"}
                         </span>
                       </div>
-
+                      <div className="mb-2 flex flex-row items-center text-sm">
+                        <i className="fa-solid fa-eye text-gray-500 mr-1 w-4 h-4"></i>
+                        <span className="font-medium text-gray-800">
+                          {course?.totalParticipants || 0} học viên
+                        </span>
+                      </div>
                       <div className="flex justify-between items-center w-full">
                         <Link
                           to={`${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(

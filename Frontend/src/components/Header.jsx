@@ -107,7 +107,7 @@ const Header = () => {
                   </MenuItem>
                 </div>
 
-                {userData.role === "student" && (
+                {userData.role !== "admin" && (
                   <>
                     <div className="py-1">
                       <MenuItem>
@@ -124,7 +124,7 @@ const Header = () => {
                     <div className="py-1">
                       <MenuItem>
                         <Link
-                          to={ROUTE_PATH.USER_PROFILE}
+                          to={ROUTE_PATH.MY_COURSES}
                           state={{ user: userData }}
                           className="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >

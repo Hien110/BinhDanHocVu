@@ -54,6 +54,8 @@ export const  ROUTE_PATH = {
     STUDENT_QUIZ_TEST: "/hoc-sinh/kiem-tra/:quizId/:quizName",
     STUDENT_QUIZ_RESULT: "/hoc-sinh/kiem-tra/:quizResultId/ket-qua-kiem-tra",
 
+    MY_COURSES: "/khoa-hoc-cua-toi",
+
     // Admin routes
     ADMIN_STATISTICS: "/quan-li/thong-ke",
     ADMIN_LECTURER_MANAGEMENT: "/quan-li/giang-vien",
