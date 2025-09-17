@@ -26,7 +26,7 @@ const NewsPage = React.lazy(() => import("../pages/NewsPage"));
 const UserProfilePage = React.lazy(() => import("../pages/student/UserProfilePage"));
 
 // lecturer pages
-const StatisticsPage = React.lazy(() => import("../pages/StatisticsPage"));
+const ManageStaticPage = React.lazy(() => import("../pages/lecturer/ManageStaticPage"));
 
 const ManageStudentPage = React.lazy(() => import("../pages/ManageStudentPage"));
 const ManageStudentDetailPage = React.lazy(() => import("../pages/lecturer/ManageStudentDetailPage"));
@@ -80,6 +80,7 @@ const AdminSettingPage = React.lazy(() => import("../pages/Admin/AdminSettingPag
 // Binh dan so
 const BinhDanSoPage = React.lazy(() => import("../pages/site/BinhDanSoPage"));
 
+
 const AppRoutes = [
 
   // Authentication routes
@@ -100,7 +101,7 @@ const AppRoutes = [
   { path: ROUTE_PATH.LECTURER_STUDENT_DETAIL, page: ManageStudentDetailPage, layout: lecturerLayout },
 
   // lecturer routes
-  { path: ROUTE_PATH.LECTURER_STATISTICS, page: StatisticsPage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_STATISTICS, page: ManageStaticPage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_STUDENTS, page: ManageStudentPage, layout: lecturerLayout },
 
   // Question Bank

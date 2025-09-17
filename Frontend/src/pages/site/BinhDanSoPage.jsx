@@ -58,6 +58,10 @@ function BinhDanSoPage() {
     <div className="min-h-screen">
       <main className="container mx-auto px-4 py-8">
         {/* Ô tìm kiếm theo tên khóa học */}
+
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Khóa học Bình dân số
+        </h2>
         <div className="mb-8">
           <input
             type="text"
@@ -67,10 +71,6 @@ function BinhDanSoPage() {
             className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Khóa học Bình dân số
-        </h2>
 
         <section className="py-8 bg-white">
           <div className="container mx-auto px-4">

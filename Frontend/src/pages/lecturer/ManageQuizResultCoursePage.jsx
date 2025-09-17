@@ -20,8 +20,6 @@ function ManageQuizResultCoursePage() {
         setLoading(true);
         const result = await QuizService.getQuizzesByCourse(courseId);
         if (result.success) {
-          console.log(result.data);
-
           setQuizzes(result.data.slice().reverse());
         } else {
           console.error(result.message);

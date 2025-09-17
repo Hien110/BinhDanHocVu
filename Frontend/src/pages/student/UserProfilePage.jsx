@@ -264,7 +264,7 @@ const UserProfile = () => {
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="text-xl font-bold text-red-500 mb-4">
+              <h2 className="text-xl font-bold text-custom-blue mb-4">
                 Cập nhật hồ sơ
               </h2>
               <form className="space-y-4" onSubmit={handleSubmit}>
@@ -334,35 +334,71 @@ const UserProfile = () => {
                 </div>
 
                 {/* Buttons */}
-                <div className="text-right space-x-2 flex justify-end">
-                  <button
+                <div className="text-right gap-4 flex justify-end">
+                  <Button
                     type="button"
-                    onClick={closeModals}
-                    className="px-4 bg-gray-300 rounded hover:bg-gray-400 transition-colors duration-300 cursor-pointer w-full text-[14px]"
-                  >
-                    Hủy
-                  </button>
-                  <LoadingButton
-                    type="submit"
-                    loading={loading}
-                    variant="outlined"
+                    variant="contained"
+                    disableElevation
                     fullWidth
+                    disabled={loading}
+                    onClick={() => closeModals()}
                     sx={{
-                      // fontFamily: "Noto_Serif",
-                      fontSize: "14px",
-                      paddingX: 4,
+                      py: "8px",
+                      px: "16px",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      borderRadius: "6px",
                       textTransform: "none",
-                      borderRadius: "4px",
-                      backgroundColor: red[500],
-                      border: "none",
-                      color: "#FFF",
+                      color: "white",
+                      bgcolor: "grey.600",
+                      transition:
+                        "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
                       "&:hover": {
-                        backgroundColor: red[600],
+                        bgcolor: "grey.700",
+                      },
+                      "&.Mui-disabled": {
+                        color: "white",
+                        bgcolor: "grey.400",
+                        cursor: "not-allowed",
+                        opacity: 1,
                       },
                     }}
                   >
-                    Lưu
-                  </LoadingButton>
+                    Hủy
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    loading={loading} // 👈 Thêm prop này
+                    disableElevation
+                    fullWidth
+                    disabled={loading} // 👈 tránh user bấm khi đang loading
+                    sx={{
+                      py: "8px",
+                      px: "16px",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      borderRadius: "6px",
+                      textTransform: "none",
+                      color: "white",
+                      bgcolor: !loading ? "#4A90E2" : "grey.400",
+                      transition:
+                        "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                      "&:hover": {
+                        bgcolor: !loading ? "#357ABD" : "grey.400",
+                      },
+                      "&.Mui-disabled": {
+                        color: "white",
+                        bgcolor: "grey.400",
+                        cursor: "not-allowed",
+                        opacity: 1,
+                      },
+                    }}
+                  >
+                    {loading
+                      ? "Đang chỉnh sửa bài học..."
+                      : "Chỉnh sửa bài học"}
+                  </Button>
                 </div>
               </form>
             </motion.div>
@@ -456,7 +492,7 @@ const UserProfile = () => {
                     Mật khẩu phải từ 6 đến 20 ký tự
                   </div>
                 ) : null}
-                <div className="text-right space-x-2 flex justify-end">
+                <div className="text-right gap-4 flex justify-end">
                   <Button
                     type="button"
                     variant="contained"

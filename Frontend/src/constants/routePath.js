@@ -17,8 +17,6 @@ export const  ROUTE_PATH = {
     // User management routes
     USER_PROFILE: "/ca-nhan/ho-so",
 
-    // Lecturer routes
-    LECTURER_STATISTICS: "/lecturer/statistics",
 
     LECTURER_COURSES: "/giang-vien/khoa-hoc",
     LECTURER_CREATE_COURSE: "/giang-vien/khoa-hoc/tao-khoa-hoc",
@@ -34,11 +32,13 @@ export const  ROUTE_PATH = {
     LECTURER_QUESTION_BANK: "/giang-vien/question-bank",
     LECTURER_QUESTION_BANK_DETAIL: "/giang-vien/khoa-hoc/:courseName/ngan-hang-cau-hoi/:courseId",
 
+    // bài kiểm tra
     LECTURER_QUIZ: "/giang-vien/bai-kiem-tra",
     LECTURER_QUIZ_LIST: "/giang-vien/khoa-hoc/:courseName/bai-kiem-tra/:courseId/danh-sach-bai-kiem-tra",
     LECTURER_QUIZ_CREATE: "/giang-vien/khoa-hoc/:courseName/bai-kiem-tra/:courseId/tao-bai-kiem-tra",
     LECTURER_QUIZ_DETAIL: "/giang-vien/khoa-hoc/:courseName/bai-kiem-tra/:courseId/:quizId",
 
+    // Kết quả bài kiểm tra
     LECTURER_QUIZ_RESULT: "/giang-vien/result-bai-kiem-tra",
     LECTURER_QUIZ_RESULT_LIST: "/giang-vien/khoa-hoc/:courseName/ket-qua-bai-kiem-tra/:courseId/danh-sach",
     LECTURER_QUIZ_RESULT_DETAIL: "/giang-vien/khoa-hoc/:courseName/result-bai-kiem-tra/:courseId/:quizId",
@@ -46,6 +46,9 @@ export const  ROUTE_PATH = {
     LECTURER_CLASSROOMS: "/giang-vien/khoa-hoc/:courseId/:courseName/lop-hoc",
 
     LECTURER_NEWS: "/lecturer/news",
+
+    // Thống kế của giảng viên
+    LECTURER_STATISTICS: "/giang-vien/thong-ke",
 
     // Student routes
     // STUDENT_COURSES: "/student/courses",
