@@ -21,8 +21,6 @@ function CourseDetailPage() {
   const [quizzes, setQuizzes] = useState([]);
   const [checkJoinCourse, setCheckJoinCourse] = useState(false);
 
-  const [getAllCourses, setGetAllCourses] = useState([]);
-
   const [activeTab, setActiveTab] = useState("gioithieu");
 
   const user = userService.getCurrentUser();
@@ -40,11 +38,6 @@ function CourseDetailPage() {
     const fetchLessons = async () => {
       const res = await lessonService.getLessonsByCourse(courseId);
       if (res.success) setLessons(res.data);
-    };
-
-    const fetchAllCourses = async () => {
-      const res = await courseService.getAllCourses();
-      if (res.success) setGetAllCourses(res.data);
     };
 
     const fetchQuizzes = async () => {
@@ -67,7 +60,6 @@ function CourseDetailPage() {
       }
     };
 
-    fetchAllCourses();
     fetchCourse();
     fetchLessons();
     fetchQuizzes();
@@ -98,6 +90,11 @@ function CourseDetailPage() {
         QuizService.getQuizById(quizId),
       ]);
 
+      if (user.role !== "student") {
+        toast.error("Chỉ có học sinh mới có thể làm bài kiểm tra.");
+        return;
+      }
+
       if (!existingQuizResult?.success || !quizTest?.success) {
         toast.error("Không thể tải dữ liệu bài quiz");
         return;
@@ -107,6 +104,7 @@ function CourseDetailPage() {
         toast.error("Bạn đã hết số lượt kiểm tra bài này.");
         return;
       }
+
 
       window.location.href = ROUTE_PATH.STUDENT_QUIZ_TEST.replace(
         ":quizId",
@@ -161,7 +159,7 @@ function CourseDetailPage() {
   return (
     <div className="min-h-screen pt-6 px-4 sm:px-6 lg:px-10 flex flex-col lg:flex-row gap-6">
       {/* Nội dung chính */}
-      {checkJoinCourse === false ? (
+      {checkJoinCourse === false && user.role !== "admin" ? (
         <div className="w-full lg:w-3/4 lg:border-r lg:pr-8 border-gray-100">
           {/* Header + Thông tin khóa học */}
           <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-6 mb-6">

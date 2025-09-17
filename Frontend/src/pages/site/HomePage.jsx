@@ -160,7 +160,7 @@ function HomePage() {
           ) : (
             sortedSubjects.map((subject) => (
               <div key={subject} className="mb-8">
-                <div className="flex justify-between items-center mb-4">
+                <div className="flex justify-between items-center mb-2">
                   <h3 className="text-2xl font-bold text-gray-800">
                     {SUBJECT_MAPPING[subject] || subject}
                   </h3>
@@ -185,20 +185,26 @@ function HomePage() {
                         className="group-hover:scale-105 transition-transform duration-500 rounded-xl w-full aspect-[3/2] object-cover"
                       />
                       <div className="p-6">
-                        <h4 className="text-xl font-bold text-gray-800 mb-3">
+                        <h4 className="text-xl font-bold text-gray-800 mb-2 line-clamp-1">
                           {course.title}
                         </h4>
 
-                        {course.subject !== "BinhDanSo" && (
-                          <div className="mb-4 text-sm">
+                        {course.subject !== "BinhDanSo" ? (
+                          <div className="mb-2 text-sm">
                             <span className="text-gray-500">Giáo viên: </span>
                             <span className="font-medium text-gray-800">
                               {course?.instructor?.fullName || "N/A"}
                             </span>
                           </div>
+                        ) : (
+                          <div className="mb-2 text-sm">
+                            <span className="font-medium text-gray-700">
+                              Bình dân số
+                            </span>
+                          </div>
                         )}
 
-                        <div className="mb-4 flex flex-row items-center text-sm">
+                        <div className="mb-2 flex flex-row items-center text-sm">
                           <CalendarMonthIcon
                             fontSize="small"
                             className="text-gray-500 mr-1 w-4 h-4"
@@ -209,6 +215,12 @@ function HomePage() {
                                   "vi-VN"
                                 )
                               : "N/A"}
+                          </span>
+                        </div>
+                        <div className="mb-2 flex flex-row items-center text-sm">
+                          <i className="fa-solid fa-eye text-gray-500 mr-2 ml-1 w-4 h-4"></i>
+                          <span className="font-medium text-gray-800">
+                            {course?.totalParticipants || 0} học viên
                           </span>
                         </div>
 

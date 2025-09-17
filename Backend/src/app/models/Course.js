@@ -7,6 +7,7 @@ const courseSchema = new mongoose.Schema({
   code: { type: String, required: true },
   instructor: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   subject: { type: String, required: true },
+  totalParticipants: { type: Number, default: 0 },
   deleted: { type: Boolean, default: false }
 }, { timestamps: true });
 

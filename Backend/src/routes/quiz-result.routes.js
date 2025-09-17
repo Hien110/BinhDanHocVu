@@ -6,7 +6,7 @@ const authenticateToken = require("../app/middlewares/authMiddleware");
 const { authorize } = require("../app/middlewares/authorize");
 
 // Tạo kết quả quiz
-router.post('/', authenticateToken, authorize('student'), quizResultController.create);
+router.post('/', authenticateToken, authorize('student', 'lecturer'), quizResultController.create);
 
 // Lấy kết quả quizResult theo Id
 router.get('/quizReult/:quizResultId', authenticateToken, quizResultController.getQuizResultById);

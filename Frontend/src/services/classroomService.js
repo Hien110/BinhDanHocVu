@@ -45,6 +45,43 @@ const classroomService = {
       };
     }
   },
+
+  // Lấy danh sách lớp học của người dùng
+  getUserClassRooms: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/personal-classrooms`, {
+        headers: {
+          Authorization: `Bearer ${userService.getToken()}`,
+        },
+      });
+      return {
+        success: true,
+        message: response.data.message,
+        data: response.data.data,
+      };
+    } catch (error) {
+      console.error("Error fetching user classrooms:", error);
+      throw error;
+    }
+  },
+
+  // Rời khỏi lớp học
+  leaveClassRoom: async (classRoomId) => {
+    try {
+      const response = await axios.delete(`${API_URL}/leave/${classRoomId}`, {
+        headers: {
+          Authorization: `Bearer ${userService.getToken()}`,
+        },
+      });
+      return {
+        success: true,
+        message: response.data.message,
+      };
+    } catch (error) {
+      console.error("Error leaving classroom:", error);
+      throw error;
+    }
+  },
 };
 
 export default classroomService;

@@ -13,6 +13,7 @@ function ManageCoursesListPage() {
     const fetchCourses = async () => {
       const result = await courseService.getCoursesByInstructor();
       if (result.success) {
+          console.log(result.data);
         setCourses(result.data);
       } else {
         console.error(result.message);

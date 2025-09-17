@@ -65,6 +65,8 @@ const LessonDetailPage = React.lazy(() => import("../pages/student/LessonDetailP
 const TestQuizPage = React.lazy(() => import("../pages/student/TestQuizPage"));
 const TestQuizResultPage = React.lazy(() => import("../pages/student/TestQuizResultPage"));
 
+const MyCoursePage = React.lazy(() => import("../pages/student/MyCoursePage"));
+
 // Admin pages
 const AdminStatisticsPage = React.lazy(() => import("../pages/Admin/AdminStatisticsPage"));
 const AdminLecturerManagementPage = React.lazy(() => import("../pages/Admin/AdminManageLecturerPage"));
@@ -130,6 +132,8 @@ const AppRoutes = [
 
   { path: ROUTE_PATH.STUDENT_QUIZ_TEST, page: TestQuizPage },
   { path: ROUTE_PATH.STUDENT_QUIZ_RESULT, page: TestQuizResultPage, layout: studentLayout },
+
+  { path: ROUTE_PATH.MY_COURSES, page: MyCoursePage, layout: studentLayout },
 
   //Admin routes
   { path: ROUTE_PATH.ADMIN_STATISTICS, page: AdminStatisticsPage, layout: adminLayout },
