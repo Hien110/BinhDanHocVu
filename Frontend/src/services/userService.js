@@ -238,6 +238,54 @@ const userService = {
       };
     }
   },
-};
 
+  // Lấy tất cả giảng viên
+  getAllLecturers: async () => {
+    try {
+      const token = userService.getToken();
+      const response = await axios.get(`${API_URL}/lecturers`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        success: true,
+        data: response.data.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message ||
+          "Lấy danh sách giảng viên thất bại. Vui lòng thử lại.",
+      };
+    }
+  },
+
+  // Phê duyệt giảng viên
+  approveLecturer: async (lecturerId) => {
+    try {
+      const token = userService.getToken();
+      const response = await axios.put(
+        `${API_URL}/lecturers/approve`,
+        {
+          lecturerId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message ||
+          "Phê duyệt giảng viên thất bại. Vui lòng thử lại.",
+      };
+    }
+  },
+};
 export default userService;

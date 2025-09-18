@@ -314,6 +314,41 @@ class UserController {
       return res.status(500).json({ message: "Đã xảy ra lỗi" });
     }
   }
+
+  //Lấy tất cả tài khoản giảng viên
+  async getAllLecturers(req, res) {
+    try {
+      const lecturers = await User.find(
+        { role: "lecturer" },
+        "-password -otp -otpExpires"
+      );
+      return res.status(200).json({ message: "Lấy danh sách giảng viên thành công", data: lecturers });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    }
+  }
+
+  // Phê duyệt giảng viên
+  async approveLecturer(req, res) {
+    try {
+      const { lecturerId } = req.body;
+      const lecturer = await User.findById(lecturerId);
+      if (!lecturer) {
+        return res.status(404).json({ message: "Người dùng không tồn tại" });
+      }
+
+      lecturer.approved = true;
+      await lecturer.save();
+
+      return res
+        .status(200)
+        .json({ message: "Phê duyệt giảng viên thành công" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    }
+  }
 }
 
 module.exports = new UserController();

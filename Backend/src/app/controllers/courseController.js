@@ -62,11 +62,11 @@ const CourseController = {
   // Lấy khóa học theo người tạo
   getCoursesByInstructor: async (req, res) => {
     try {
-      const instructorId = req.user.userId; // Lấy ID người dùng từ token
+      const instructorId = req.params.instructorId; 
       const courses = await Course.find({
         instructor: instructorId,
         deleted: false,
-      });
+      }).populate("instructor", "fullName");
       res.status(200).json({
         data: courses,
         message: "Lấy khóa học theo giảng viên thành công",

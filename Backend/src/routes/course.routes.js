@@ -9,7 +9,7 @@ const { authorize } = require("../app/middlewares/authorize");
 router.post("/create", authenticateToken, authorize("lecturer", "admin"), CourseController.createCourse);
 
 // Lấy khóa học theo người tạo
-router.get("/instructor", authenticateToken, CourseController.getCoursesByInstructor);
+router.get("/instructor/:instructorId", authenticateToken, CourseController.getCoursesByInstructor);
 
 // Lấy khóa học theo ID
 router.get("/:courseId", CourseController.getCourseById);

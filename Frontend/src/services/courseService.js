@@ -26,9 +26,9 @@ const courseService = {
   },
 
   // Lấy khóa học theo người tạo
-  getCoursesByInstructor: async () => {
+  getCoursesByInstructor: async (instructorId) => {
     try {
-      const response = await axios.get(`${API_URL}/instructor`, {
+      const response = await axios.get(`${API_URL}/instructor/${instructorId}`, {
         headers: {
           Authorization: `Bearer ${userService.getToken()}`,
         },

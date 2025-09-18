@@ -29,7 +29,7 @@ const UserProfilePage = React.lazy(() => import("../pages/student/UserProfilePag
 // lecturer pages
 const ManageStaticPage = React.lazy(() => import("../pages/lecturer/ManageStaticPage"));
 const ManageStudentPage = React.lazy(() => import("../pages/ManageStudentPage"));
-const ManageStudentDetailPage = React.lazy(() => import("../pages/lecturer/ManageStudentDetailPage"));
+const ManageStudentDetailPage = React.lazy(() => import("../pages/admin/ManageStudentDetailPage"));
 
 // Question Bank
 const ManageQuestionBankPage = React.lazy(() => import("../pages/ManageQuestionBankPage"));
@@ -68,10 +68,13 @@ const MyCoursePage = React.lazy(() => import("../pages/student/MyCoursePage"));
 
 // Admin pages
 const AdminStatisticsPage = React.lazy(() => import("../pages/Admin/AdminStatisticsPage"));
-const AdminLecturerManagementPage = React.lazy(() => import("../pages/Admin/AdminManageLecturerPage"));
 const AdminStudentManagementPage = React.lazy(() => import("../pages/Admin/AdminManageStudentPage"));
 const AdminNewsManagementPage = React.lazy(() => import("../pages/Admin/AdminManageNewsPage"));
 const AdminSettingPage = React.lazy(() => import("../pages/Admin/AdminSettingPage"));
+
+//Quản lí giảng viên
+const AdminLecturerManagementPage = React.lazy(() => import("../pages/Admin/AdminManageLecturerPage"));
+const AdminManageLecturerDetail = React.lazy(() => import("../pages/admin/AdminManageLecturerDetail"));
 
 // Binh dan so
 const BinhDanSoPage = React.lazy(() => import("../pages/site/BinhDanSoPage"));
@@ -92,7 +95,7 @@ const AppRoutes = [
 
   // User management routes
   { path: ROUTE_PATH.USER_PROFILE, page: UserProfilePage, layout: studentLayout },
-  { path: ROUTE_PATH.LECTURER_STUDENT_DETAIL, page: ManageStudentDetailPage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_STUDENT_DETAIL, page: ManageStudentDetailPage, layout: RoleLayoutSwitcher },
 
   // Lecturer routes
   { path: ROUTE_PATH.LECTURER_STATISTICS, page: ManageStaticPage, layout: lecturerLayout },
@@ -135,11 +138,14 @@ const AppRoutes = [
 
   // Admin routes
   { path: ROUTE_PATH.ADMIN_STATISTICS, page: AdminStatisticsPage, layout: adminLayout },
-  { path: ROUTE_PATH.ADMIN_LECTURER_MANAGEMENT, page: AdminLecturerManagementPage, layout: adminLayout },
   { path: ROUTE_PATH.ADMIN_STUDENT_MANAGEMENT, page: AdminStudentManagementPage, layout: adminLayout },
   { path: ROUTE_PATH.ADMIN_NEWS_MANAGEMENT, page: AdminNewsManagementPage, layout: adminLayout },
   { path: ROUTE_PATH.ADMIN_SETTINGS, page: AdminSettingPage, layout: adminLayout },
-
+  
+  //Quản lí giảng viên
+  { path: ROUTE_PATH.ADMIN_LECTURER_MANAGEMENT, page: AdminLecturerManagementPage, layout: adminLayout },
+  { path: ROUTE_PATH.ADMIN_LECTURER_DETAIL, page: AdminManageLecturerDetail, layout: adminLayout },
+  
   // Binh dan so
   { path: ROUTE_PATH.BINDANSO, page: BinhDanSoPage, layout: studentLayout },
 ];

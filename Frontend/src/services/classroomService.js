@@ -47,9 +47,9 @@ const classroomService = {
   },
 
   // Lấy danh sách lớp học của người dùng
-  getUserClassRooms: async () => {
+  getUserClassRooms: async (userId) => {
     try {
-      const response = await axios.get(`${API_URL}/personal-classrooms`, {
+      const response = await axios.get(`${API_URL}/personal-classrooms/${userId}`, {
         headers: {
           Authorization: `Bearer ${userService.getToken()}`,
         },
