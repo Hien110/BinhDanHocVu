@@ -81,7 +81,7 @@ const ClassRoomController = {
   // Lấy danh sách khóa học đã đăng ký của người dùng
   getRegisteredCourses: async (req, res) => {
     try {
-      const userId = req.user.userId; // Lấy ID người dùng từ token
+      const userId = req.params.userId; // Lấy ID người dùng từ token
       const registeredCourses = await Classroom.find({
         student: userId,
       }).populate({

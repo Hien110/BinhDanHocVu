@@ -17,6 +17,7 @@ import { Users, BookOpen, ListChecks, BarChart3 } from "lucide-react";
 import quizService from "../../services/quizService";
 import lessonService from "../../services/lessonService";
 import courseService from "../../services/courseService";
+import userService from "../../services/userService";
 
 // Màu sắc dùng cho biểu đồ (gần với Tailwind)
 const COLORS = [
@@ -35,6 +36,7 @@ export default function ManageStaticPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const instructorId = userService.getCurrentUser()?._id;
   // Tổng quan
   const totals = useMemo(() => {
     const courses = perCourseStats.length;
@@ -73,7 +75,7 @@ export default function ManageStaticPage() {
       try {
         setLoading(true);
         setError("");
-        const resCourses = await courseService.getCoursesByInstructor();
+        const resCourses = await courseService.getCoursesByInstructor(instructorId);
         if (!resCourses?.success)
           throw new Error(resCourses?.message || "Không thể tải khóa học");
 

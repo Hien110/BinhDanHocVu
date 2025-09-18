@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import classroomService from "../../services/classroomService";
+import userService from "../../services/userService";
 
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Link } from "react-router-dom";
@@ -17,9 +18,11 @@ function MyCoursePage() {
   const [showModalLeave, setShowModalLeave] = useState(false);
   const [courseToLeave, setCourseToLeave] = useState(null);
 
+  const user = userService.getCurrentUser();
+
   useEffect(() => {
     const fetchCourses = async () => {
-      const response = await classroomService.getUserClassRooms();
+      const response = await classroomService.getUserClassRooms(user._id);
       if (response.success) {
         console.log(response.data);
 

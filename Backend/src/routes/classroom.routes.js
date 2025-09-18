@@ -12,7 +12,7 @@ router.post("/join", authenticateToken, authorize("student", 'lecturer'), Classr
 router.get("/check/:courseId", authenticateToken, ClassroomController.checkRegistered);
 
 // Lấy danh sách lớp học của người dùng
-router.get("/personal-classrooms", authenticateToken, ClassroomController.getRegisteredCourses);
+router.get("/personal-classrooms/:userId", authenticateToken, ClassroomController.getRegisteredCourses);
 
 // Rời khỏi lớp học
 router.delete("/leave/:classroomId", authenticateToken, ClassroomController.leaveCourse);

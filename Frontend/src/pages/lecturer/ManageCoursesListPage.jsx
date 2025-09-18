@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import courseService from "../../services/courseService";
+import userService from "../../services/userService";
 import { ROUTE_PATH } from "../../constants/routePath";
 
 
@@ -8,10 +9,10 @@ import CourseCard from "../../components/CourseCard"; // Giả sử bạn có m�
 
 function ManageCoursesListPage() {
   const [courses, setCourses] = useState([]);
-
+  const instructorId = userService.getCurrentUser()?._id;
   useEffect(() => {
     const fetchCourses = async () => {
-      const result = await courseService.getCoursesByInstructor();
+      const result = await courseService.getCoursesByInstructor(instructorId);
       if (result.success) {
         setCourses(result.data);
       } else {

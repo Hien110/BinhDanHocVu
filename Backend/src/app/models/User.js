@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
     workplace: { type: String }, // Nơi làm việc
     bio: { type: String }, // Thông tin giới thiệu bản thân
     status: { type: String, enum: ['active', 'locked', 'non-active'], default: 'non-active' },
+    approved: { type: Boolean, default: false }, // Duyệt tài khoản giảng viên
     gender: { type: Boolean }, // true: nam, false: nữ
     otp: { type: String },
     otpExpires: { type: Date },

@@ -27,7 +27,7 @@ export const  ROUTE_PATH = {
     LECTURER_LESSON_DETAIL: "/giang-vien/khoa-hoc/:courseId/lessons/:lessonId",
 
     LECTURER_STUDENTS: "/giang-vien/khoa-hoc/:courseId/sinh-vien",
-    LECTURER_STUDENT_DETAIL: "/giang-vien/khoa-hoc/:courseId/sinh-vien/:studentId",
+    LECTURER_STUDENT_DETAIL: "/quan-li/hoc-sinh/:studentId",
 
     LECTURER_QUESTION_BANK: "/giang-vien/question-bank",
     LECTURER_QUESTION_BANK_DETAIL: "/giang-vien/khoa-hoc/:courseName/ngan-hang-cau-hoi/:courseId",
@@ -63,10 +63,13 @@ export const  ROUTE_PATH = {
 
     // Admin routes
     ADMIN_STATISTICS: "/quan-li/thong-ke",
-    ADMIN_LECTURER_MANAGEMENT: "/quan-li/giang-vien",
     ADMIN_STUDENT_MANAGEMENT: "/quan-li/hoc-sinh",
     ADMIN_NEWS_MANAGEMENT: "/quan-li/tin-tuc",
     ADMIN_SETTINGS: "/quan-li/cai-dat",
+    
+    //Quản lí giảng viên
+    ADMIN_LECTURER_MANAGEMENT: "/quan-li/giang-vien",
+    ADMIN_LECTURER_DETAIL: "/quan-li/giang-vien/:lecturerId",
 
     // Binh dan so
     BINDANSO: "/khoa-hoc/binh-dan-so",
