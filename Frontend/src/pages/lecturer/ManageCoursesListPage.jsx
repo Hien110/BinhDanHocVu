@@ -24,7 +24,7 @@ function ManageCoursesListPage() {
 
   return (
     <div className="">
-      <div className="max-w-screen-xl mx-auto">
+      <div className="max-w-screen mx-auto">
         <h1 className="text-3xl font-bold mb-8 text-gray-800 border-b border-gray-200 pb-2">
           Danh sách môn học
         </h1>

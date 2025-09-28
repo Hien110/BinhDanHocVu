@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-import { ROUTE_PATH } from "../constants/routePath";
+import { ROUTE_PATH } from "../../constants/routePath";
 
-import userService from "../services/userService";
+import userService from "../../services/userService";
 
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 
-import logoHocCungEm from "../assets/logoHocCungEm.png";
+import logoHocCungEm from "../../assets/logoHocCungEm.png";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -134,7 +134,7 @@ const Login = () => {
 
             <div className="mt-6 grid grid-cols-2 gap-3">
               <a
-                href="https://political-theory-learning.onrender.com/api/auth/google"
+                href="http://localhost:3000/auth/google"
                 className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 <i className="fab fa-google text-custom-blue mr-2 mt-1" />{" "}

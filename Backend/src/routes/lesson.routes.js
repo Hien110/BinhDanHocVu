@@ -7,7 +7,7 @@ const { authorize } = require("../app/middlewares/authorize");
 const LessonController = require('../app/controllers/lessonController');
 
 // Tạo bài học
-router.post('/:courseId/lessons', authenticateToken, authorize("lecturer"), LessonController.createLesson);
+router.post('/:courseId/lessons', authenticateToken, authorize("lecturer", "admin"), LessonController.createLesson);
 
 // Lấy toàn bộ bài học theo khóa học
 router.get('/:courseId/lessons', LessonController.getLessonsByCourse);

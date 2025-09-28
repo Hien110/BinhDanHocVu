@@ -11,8 +11,8 @@ import RoleLayoutSwitcher from "../layouts/RoleLayoutSwitcher"; // <-- THÊM
 // ❌ BỎ: const currentUser = userService.getCurrentUser();
 
 // Authentication pages
-const LoginPage = React.lazy(() => import("../pages/LoginPage"));
-const RegisterPage = React.lazy(() => import("../pages/RegisterPage"));
+const LoginPage = React.lazy(() => import("../pages/authenticate/LoginPage"));
+const RegisterPage = React.lazy(() => import("../pages/authenticate/RegisterPage"));
 const VerifyPage = React.lazy(() => import("../pages/VerifyPage"));
 const ForgotPassword = React.lazy(() => import("../pages/ForgotPassword"));
 const AuthCallbackPage = React.lazy(() => import("../pages/AuthCallbackPage"));
