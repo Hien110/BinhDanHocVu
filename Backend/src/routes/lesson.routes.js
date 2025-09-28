@@ -16,10 +16,10 @@ router.get('/:courseId/lessons', LessonController.getLessonsByCourse);
 router.get('/:lessonId', LessonController.getLessonById);
 
 // Xóa bài học
-router.delete('/deleted/:lessonId', authenticateToken, authorize("lecturer"), LessonController.deleteLesson);
+router.delete('/deleted/:lessonId', authenticateToken, authorize("lecturer", "admin"), LessonController.deleteLesson);
 
 // Cập nhật bài học
-router.put('/update/:lessonId', authenticateToken, authorize("lecturer"), LessonController.updateLesson);
+router.put('/update/:lessonId', authenticateToken, authorize("lecturer", "admin"), LessonController.updateLesson);
 
 // Lấy tất cả bài học
 router.get('/', LessonController.getAllLessons);

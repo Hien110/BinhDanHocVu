@@ -29,4 +29,10 @@ router.get("/subject/top3", CourseController.getTop3CoursesBySubject);
 // Lấy khóa học Bình dân số
 router.get("/subject/binh-dan-so", CourseController.getBinhDanSoCourses);
 
+// Lấy khóa học Giảng dạy
+router.get("/subject/teaching", CourseController.getTeachingCourses);
+
+// Đếm số người xem khóa học
+router.put("/views/:courseId", CourseController.incrementCourseViews);
+
 module.exports = router;
