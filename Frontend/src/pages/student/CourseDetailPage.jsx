@@ -32,6 +32,8 @@ function CourseDetailPage() {
       const res = await courseService.getCourseById(courseId);
       if (res.success) {
         setCourse(res.data);
+        // Tăng số lượt xem khóa học
+        await courseService.incrementCourseViews(courseId);
       }
     };
 

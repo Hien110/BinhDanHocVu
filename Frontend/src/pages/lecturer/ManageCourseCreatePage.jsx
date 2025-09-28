@@ -172,7 +172,7 @@ function ManageCourseCreatePage() {
               <option value="Health">Ứng dụng y tế & an sinh xã hội số</option>
               <option value="Safety">An toàn thông tin & Phòng chống lừa đảo</option>
               <option value="Education">Ứng dụng học tập & giảng dạy số</option>
-              <option value="Technology">Thương mại & dịch vụ trực tuyến</option>
+              <option value="TechnologyAdmin">Thương mại & dịch vụ trực tuyến</option>
               <option value="DigitalLifeSkills">Kỹ năng sống số & Quảng bá văn hóa và thành tựu sản xuất</option>
               <option value="Other1">Khác</option>
             </select>

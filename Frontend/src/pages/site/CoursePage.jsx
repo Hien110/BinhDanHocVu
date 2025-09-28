@@ -2,11 +2,12 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import courseService from "../../services/courseService";
 import { ROUTE_PATH } from "../../constants/routePath";
-
 import { Link } from "react-router-dom";
 
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowForwardTwoToneIcon from "@mui/icons-material/ArrowForwardTwoTone";
+
+import SubjectSidebar from "../../components/SubjectSidebar";
 
 // Hiển thị tên môn học
 const SUBJECT_MAPPING = Object.freeze({
@@ -34,30 +35,42 @@ const SUBJECT_PRIORITY = Object.freeze({
   Other: 9999,
 });
 
-function CoursePage() {
-  const [courses, setCourses] = useState({});
+const normalize = (str = "") =>
+  str
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
+// Group mảng khóa học thành object theo subject (key là EN key như trong SUBJECT_MAPPING)
+const groupBySubject = (arr = []) =>
+  arr.reduce((acc, c) => {
+    // nếu BE trả subject là key hợp lệ thì giữ, ngược lại đẩy vào Other1
+    const key = c?.subject && SUBJECT_MAPPING[c.subject] ? c.subject : "Other1";
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(c);
+    return acc;
+  }, {});
+
+function BinhDanSoPage() {
+  // CHÚ Ý: cần object { subjectKey: Course[] } để khớp render hiện tại
+  const [courses, setCourses] = useState({}); // khởi tạo object, không để undefined/string
   const [selectedSubject, setSelectedSubject] = useState("ALL");
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchCourses = async () => {
-      const response = await courseService.getAllCourses();
-      setCourses(response?.data || {});
+      const res = await courseService.getTeachingCourses();
+      // BE đang trả { data: [...], message: "..." }
+      const arr = Array.isArray(res?.data) ? res.data : [];
+      const grouped = groupBySubject(arr);
+      setCourses(grouped);
     };
     fetchCourses();
   }, []);
 
-  const normalize = (str = "") =>
-    str
-      .toString()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .trim();
-
-  // Lọc theo search:
-  // - Nếu khớp tên môn (EN key hoặc tên TV) -> giữ nguyên TẤT CẢ khóa của môn đó
-  // - Nếu KHÔNG khớp tên môn -> lọc theo giáo viên trong từng khóa
+  // Lọc theo tìm kiếm
   const filteredBySearch = useMemo(() => {
     const q = normalize(searchTerm);
     if (!q) return courses;
@@ -73,11 +86,10 @@ function CoursePage() {
         continue;
       }
 
-      // Lọc theo giáo viên
       const filteredCourses = (courses[subject] || []).filter(
-        (c) => normalize(c?.instructor?.fullName || "").includes(q)
-        // Nếu muốn cho phép tìm theo tên khóa học, mở thêm điều kiện sau:
-        // || normalize(c?.title || "").includes(q)
+        (c) =>
+          normalize(c?.instructor?.fullName || "").includes(q) ||
+          normalize(c?.title || "").includes(q)
       );
 
       if (filteredCourses.length > 0) {
@@ -87,13 +99,11 @@ function CoursePage() {
     return result;
   }, [courses, searchTerm]);
 
+  // Danh sách subject hiển thị (sau search + filter sidebar)
   const visibleSubjects = useMemo(() => {
     let keys = Object.keys(filteredBySearch || {});
-    if (selectedSubject !== "ALL") {
-      keys = keys.filter((k) => k === selectedSubject);
-    }
+    if (selectedSubject !== "ALL") keys = keys.filter((k) => k === selectedSubject);
 
-    // sắp theo ưu tiên; nếu bằng nhau thì theo tên TV
     return keys.sort((a, b) => {
       const pa = SUBJECT_PRIORITY[a] ?? 100;
       const pb = SUBJECT_PRIORITY[b] ?? 100;
@@ -105,161 +115,139 @@ function CoursePage() {
     });
   }, [filteredBySearch, selectedSubject]);
 
+  // Dữ liệu sidebar dựa trên kết quả tìm kiếm hiện tại
+  const sidebarItems = useMemo(() => {
+    const allKeys = Object.keys(SUBJECT_MAPPING).sort((a, b) => {
+      const pa = SUBJECT_PRIORITY[a] ?? 100;
+      const pb = SUBJECT_PRIORITY[b] ?? 100;
+      if (pa !== pb) return pa - pb;
+      const nameA = SUBJECT_MAPPING[a] || a;
+      const nameB = SUBJECT_MAPPING[b] || b;
+      return nameA.localeCompare(nameB, "vi");
+    });
+
+    return allKeys.map((key) => {
+      const count = filteredBySearch?.[key]?.length || 0;
+      return {
+        key,
+        label: SUBJECT_MAPPING[key],
+        count,
+        disabled: count === 0 && selectedSubject !== key,
+      };
+    });
+  }, [filteredBySearch, selectedSubject]);
+
   return (
-    <div className="min-h-screen">
-      <main className="container mx-auto px-4 py-8">
-        {/* Filter buttons */}
-        <div className="overflow-x-auto mb-4 text-sm">
-          <div className="flex space-x-3 w-max">
-            <button
-              onClick={() => setSelectedSubject("ALL")}
-              className={`font-semibold py-2 px-4 rounded-lg border cursor-pointer whitespace-nowrap transition
-                ${
-                  selectedSubject === "ALL"
-                    ? "bg-custom-blue text-white border-custom-blue"
-                    : "bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
-                }`}
-            >
-              Tất cả
-            </button>
+    <div className="min-h-screen bg-gray-50">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header + Search */}
+        <div className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+            Các khóa học giảng dạy miễn phí
+          </h1>
 
-            {Object.keys(SUBJECT_MAPPING)
-              .sort((a, b) => {
-                const pa = SUBJECT_PRIORITY[a] ?? 100;
-                const pb = SUBJECT_PRIORITY[b] ?? 100;
-                if (pa !== pb) return pa - pb;
-                const nameA = SUBJECT_MAPPING[a] || a;
-                const nameB = SUBJECT_MAPPING[b] || b;
-                return nameA.localeCompare(nameB, "vi");
-              })
-              .map((key) => {
-                const isActive = selectedSubject === key;
-                const hasData = (courses?.[key]?.length || 0) > 0;
-
-                return (
-                  <button
-                    key={key}
-                    onClick={() => setSelectedSubject(key)}
-                    disabled={!hasData && selectedSubject !== key}
-                    className={`font-semibold py-1 px-2 rounded-lg border whitespace-nowrap transition cursor-pointer
-                      ${
-                        isActive
-                          ? "bg-custom-blue text-white border-custom-blue"
-                          : "bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
-                      }
-                      ${
-                        !hasData && !isActive
-                          ? "opacity-50 cursor-not-allowed"
-                          : ""
-                      }
-                    `}
-                    title={
-                      hasData
-                        ? SUBJECT_MAPPING[key]
-                        : `${SUBJECT_MAPPING[key]} (chưa có khóa học)`
-                    }
-                  >
-                    {SUBJECT_MAPPING[key]}
-                  </button>
-                );
-              })}
+          <div className="relative w-full ">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Tìm theo tên môn học, giáo viên hoặc tên khóa học…"
+              className="border border-gray-300 rounded-2xl px-4 py-2.5 pr-11 w-full bg-white shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition"
+            />
+            <i className="fa-solid fa-magnifying-glass absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
           </div>
         </div>
 
-        {/* Search box: môn học hoặc giáo viên */}
-        <div className="mb-8">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Tìm theo tên môn học hoặc giáo viên…"
-            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+        {/* Layout 2 cột */}
+        <div className="grid grid-cols-1 sm:grid-cols-[300px_minmax(0,1fr)] gap-6">
+          {/* Sidebar trái */}
+          <SubjectSidebar
+            items={sidebarItems}
+            selected={selectedSubject}
+            onSelect={(key) => setSelectedSubject(key)}
+            onClear={() => setSelectedSubject("ALL")}
           />
-        </div>
 
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Các khóa học phổ biến
-        </h2>
-
-        <section className="py-8 bg-white">
-          <div className="container mx-auto px-4">
+          {/* Nội dung phải */}
+          <section className="flex-1">
             {visibleSubjects.length === 0 ? (
-              <div className="text-center text-gray-600 py-10">
+              <div className="text-center text-gray-600 py-16 bg-white border border-gray-200 rounded-2xl">
                 Không tìm thấy khóa học phù hợp.
               </div>
             ) : (
               visibleSubjects.map((subject) => (
-                <div key={subject} className="mb-8">
-                  <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-2xl font-bold text-gray-800">
+                <div key={subject} className="mb-10">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                       {SUBJECT_MAPPING[subject] || subject}
                     </h2>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {(filteredBySearch?.[subject] || []).map((course) => (
                       <div
                         key={course._id}
-                        className="bg-white rounded-xl shadow-md overflow-hidden course-card transition duration-300 transform hover:translate-y-1"
+                        className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md"
                       >
-                        <img
-                          src={course.thumbnail}
-                          alt={course.title}
-                          className="group-hover:scale-105 transition-transform duration-500 rounded-xl w-full aspect-[3/2] object-cover"
-                        />
-                        <div className="p-6">
-                          <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-1">
+                        <div className="overflow-hidden">
+                          <img
+                            src={course.thumbnail}
+                            alt={course.title}
+                            className="w-full aspect-[3/2] object-cover transition-transform duration-500 hover:scale-[1.03]"
+                            loading="lazy"
+                          />
+                        </div>
+
+                        <div className="p-5">
+                          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 line-clamp-2 leading-snug">
                             {course.title}
                           </h3>
 
                           <div className="mb-2 text-sm">
                             <span className="text-gray-500">Giáo viên: </span>
-                            <span className="font-medium text-gray-800">
+                            <span className="font-medium text-gray-900">
                               {course?.instructor?.fullName || "N/A"}
                             </span>
                           </div>
 
-                          <div className="mb-2 flex flex-row items-center text-sm">
+                          <div className="mb-2 flex items-center text-sm">
                             <CalendarMonthIcon
                               fontSize="small"
-                              className="text-gray-500 mr-1 w-4 h-4"
+                              className="text-gray-500 mr-1 shrink-0 w-4 h-4"
                             />
-                            <span className="font-medium text-gray-800">
+                            <span className="font-medium text-gray-900">
                               {course?.createdAt
-                                ? new Date(course.createdAt).toLocaleDateString(
-                                    "vi-VN"
-                                  )
+                                ? new Date(course.createdAt).toLocaleDateString("vi-VN")
                                 : "N/A"}
                             </span>
                           </div>
-                          <div className="mb-2 flex flex-row items-center text-sm">
-                            <i className="fa-solid fa-eye text-gray-500 mr-2 ml-1 w-4 h-4"></i>
-                            <span className="font-medium text-gray-800">
-                              {course?.totalParticipants || 0} học viên
+
+                          <div className="mb-4 flex items-center text-sm">
+                            <i className="fa-solid fa-eye text-gray-500 mr-2 ml-1 w-4 h-4 shrink-0"></i>
+                            <span className="font-medium text-gray-900">
+                              {course?.viewCount || 0} lượt xem
                             </span>
                           </div>
-                          <div className="flex justify-between items-center w-full">
-                            <Link
-                              to={`${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
-                                ":courseId",
-                                course._id
-                              ).replace(
-                                ":courseName",
-                                course.title.replace(/\s+/g, "-").toLowerCase()
-                              )}`}
-                              className="relative w-full text-center text-custom-blue font-medium border border-custom-blue cursor-pointer rounded-lg px-4 py-2 overflow-hidden
-                              before:absolute before:left-0 before:top-0 before:h-full before:w-0 before:bg-blue-50 before:transition-all before:duration-300 before:z-0
-                              hover:before:w-full"
-                            >
-                              <span className="relative z-10 text-sm">
-                                Xem chi tiết{" "}
-                                <ArrowForwardTwoToneIcon
-                                  fontSize="inherit"
-                                  className="inline-block pb-0.5"
-                                />
-                              </span>
-                            </Link>
-                          </div>
+
+                          <Link
+                            to={`${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
+                              ":courseId",
+                              course._id
+                            ).replace(
+                              ":courseName",
+                              course.title.replace(/\s+/g, "-").toLowerCase()
+                            )}`}
+                            className="relative inline-flex items-center justify-center w-full rounded-xl border border-custom-blue text-custom-blue font-medium px-4 py-2.5 overflow-hidden transition
+                              before:absolute before:inset-0 before:w-0 before:bg-blue-50 before:transition-all before:duration-300 hover:before:w-full"
+                          >
+                            <span className="relative z-10 text-sm">
+                              Xem chi tiết{" "}
+                              <ArrowForwardTwoToneIcon
+                                fontSize="inherit"
+                                className="inline-block pb-0.5"
+                              />
+                            </span>
+                          </Link>
                         </div>
                       </div>
                     ))}
@@ -267,11 +255,11 @@ function CoursePage() {
                 </div>
               ))
             )}
-          </div>
-        </section>
+          </section>
+        </div>
       </main>
     </div>
   );
 }
 
-export default CoursePage;
+export default BinhDanSoPage;

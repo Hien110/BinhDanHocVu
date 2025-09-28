@@ -195,10 +195,10 @@ const CourseController = {
   getBinhDanSoCourses: async (req, res) => {
     try {
       const courses = await Course.find({
-        subject: "BinhDanSo",
+        type: "binhdanso",
         deleted: false,
       })
-        .populate("instructor", "fullName")
+        .populate("instructor", "fullName role")
         .lean();
       res.status(200).json({
         data: courses,
@@ -209,6 +209,48 @@ const CourseController = {
       res.status(500).json({ message: "Lỗi khi lấy khóa học Bình dân số" });
     }
   },
+
+  // Lấy khóa học Giảng dạy
+  getTeachingCourses: async (req, res) => {
+    try {
+      const courses = await Course.find({
+        type: "learning",
+        deleted: false,
+      })
+        .populate("instructor", "fullName role")
+        .lean();
+      res.status(200).json({
+        data: courses,
+        message: "Lấy khóa học Giảng dạy thành công",
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Lỗi khi lấy khóa học Giảng dạy" });
+    }
+  },
+
+  // Đếm số người xem khóa học
+  incrementCourseViews: async (req, res) => {
+    try {
+      const courseId = req.params.courseId;
+      const updatedCourse = await Course.findByIdAndUpdate(
+        courseId,
+        { $inc: { viewCount: 1 } },
+        { new: true }
+      );
+      if (!updatedCourse) {
+        return res.status(404).json({ message: "Khóa học không tồn tại" });
+      }
+      res.status(200).json({
+        data: updatedCourse,
+        message: "Đếm số người xem khóa học thành công",
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Lỗi khi đếm số người xem khóa học" });
+    }
+  },
+
 };
 
 module.exports = CourseController;
