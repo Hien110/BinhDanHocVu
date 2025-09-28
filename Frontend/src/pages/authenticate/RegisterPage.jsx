@@ -2,17 +2,17 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 
-import { ROUTE_PATH } from "../constants/routePath";
+import { ROUTE_PATH } from "../../constants/routePath";
 
-import userService from "../services/userService";
+import userService from "../../services/userService";
 
 import { toast } from "sonner";
 
 import { red } from "@mui/material/colors";
 
-import logoHocCungEm from "../assets/logoHocCungEm.png";
-import owlStudent from "../assets/owlStudent.png";
-import owlTeacher from "../assets/owlTeacher.png";
+import logoHocCungEm from "../../assets/logoHocCungEm.png";
+import owlStudent from "../../assets/owlStudent.png";
+import owlTeacher from "../../assets/owlTeacher.png";
 
 import { motion } from "framer-motion";
 
@@ -283,32 +283,9 @@ const Register = () => {
                     />
                   </div>
                 </div>
-                {/* Chọn trường học với select */}
-                <div>
-                  <label
-                    htmlFor="school"
-                    className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer"
-                  >
-                    Chọn trường học
-                  </label>
-
-                  <div className="relative">
-                    <i className="fa-solid fa-school absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                    <select
-                      id="workplace"
-                      name="workplace"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2 pl-10 border cursor-pointer"
-                      required
-                    >
-                      <option value="">Chọn trường học</option>
-                      <option value="school1">Trường 1</option>
-                      <option value="school2">Trường 2</option>
-                      <option value="school3">Trường 3</option>
-                    </select>
-                  </div>
-                </div>
 
                 {/* Giới thiệu bản thân */}
+                {role === "teacher" && (
                 <div>
                   <label
                     htmlFor="bio"
@@ -329,6 +306,7 @@ const Register = () => {
                     />
                   </div>
                 </div>
+                )}
 
                 <div>
                   <label

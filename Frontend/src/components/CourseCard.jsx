@@ -91,9 +91,15 @@ function CourseCard({ course, message }) {
           </div>
           <div className="mb-2 flex flex-row items-center text-sm">
             <i className="fa-solid fa-eye text-gray-500 mr-2 ml-1 w-4 h-4"></i>
-            <span className="font-medium text-gray-800">
-              {course?.totalParticipants || 0} học viên
-            </span>
+            {course.type === "learning" ? (
+              <span className="font-medium text-gray-800">
+                {course?.totalParticipants || 0} học viên
+              </span>
+            ) : (
+              <span className="font-medium text-gray-800">
+                {course?.viewCount || 0} lượt xem
+              </span>
+            )}
           </div>
           <div className="flex flex-col w-full">
             {!isAdmin && (
@@ -118,43 +124,71 @@ function CourseCard({ course, message }) {
                 </span>
               </Link>
             )}
-            {isAdmin && (
-              <div>
-                <Link
-                  to={`${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
-                    ":courseId",
-                    course._id
-                  ).replace(
-                    ":courseName",
-                    course.title.replace(/\s+/g, "-").toLowerCase()
-                  )}`}
-                  className="relative w-full text-center text-custom-blue font-medium border border-custom-blue cursor-pointer rounded-lg px-4 py-2 overflow-hidden
+            {isAdmin &&
+              (course.instructor?.role === "admin" ? (
+                <>
+                  <Link
+                    to={`${ROUTE_PATH.LECTURER_COURSE_DETAIL.replace(
+                      ":courseId",
+                      course._id
+                    ).replace(
+                      ":courseName",
+                      course.title.replace(/\s+/g, "-").toLowerCase()
+                    )}`}
+                    className="relative w-full text-center text-custom-blue font-medium border border-custom-blue cursor-pointer rounded-lg px-4 py-2 overflow-hidden
                               before:absolute before:left-0 before:top-0 before:h-full before:w-0 before:bg-blue-50 before:transition-all before:duration-300 before:z-0
                               hover:before:w-full mb-3 flex justify-center items-center"
-                >
-                  <span className="relative z-10 text-sm">
-                    Xem chi tiết{" "}
-                    <ArrowForwardTwoToneIcon
-                      fontSize="inherit"
-                      className="inline-block pb-0.5"
-                    />
-                  </span>
-                </Link>
-                {message === "CourseTaught" && (
-                  <button
-                    onClick={() => {
-                      setShowDeleteCourseModal(true);
-                      setSelectedCourse(course);
-                    }}
-                    className="relative w-full text-center text-red-500 font-medium border border-red-500 cursor-pointer rounded-lg px-4 py-2 overflow-hidden
+                  >
+                    <span className="relative z-10 text-sm">
+                      Xem chi tiết{" "}
+                      <ArrowForwardTwoToneIcon
+                        fontSize="inherit"
+                        className="inline-block pb-0.5"
+                      />
+                    </span>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <Link
+                      to={`${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
+                        ":courseId",
+                        course._id
+                      ).replace(
+                        ":courseName",
+                        course.title.replace(/\s+/g, "-").toLowerCase()
+                      )}`}
+                      className="relative w-full text-center text-custom-blue font-medium border border-custom-blue cursor-pointer rounded-lg px-4 py-2 overflow-hidden
+                              before:absolute before:left-0 before:top-0 before:h-full before:w-0 before:bg-blue-50 before:transition-all before:duration-300 before:z-0
+                              hover:before:w-full mb-3 flex justify-center items-center"
+                    >
+                      <span className="relative z-10 text-sm">
+                        Xem chi tiết{" "}
+                        <ArrowForwardTwoToneIcon
+                          fontSize="inherit"
+                          className="inline-block pb-0.5"
+                        />
+                      </span>
+                    </Link>
+                    {message === "CourseTaught" && (
+                      <button
+                        onClick={() => {
+                          setShowDeleteCourseModal(true);
+                          setSelectedCourse(course);
+                        }}
+                        className="relative w-full text-center text-red-500 font-medium border border-red-500 cursor-pointer rounded-lg px-4 py-2 overflow-hidden
              before:absolute before:left-0 before:top-0 before:h-full before:w-0 before:bg-red-50 before:transition-all before:duration-300 before:z-0
              hover:before:w-full"
-                  >
-                    <span className="relative z-10 text-sm">Xóa khóa học</span>
-                  </button>
-                )}
-              </div>
-            )}
+                      >
+                        <span className="relative z-10 text-sm">
+                          Xóa khóa học
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                </>
+              ))}
           </div>
         </div>
       </div>

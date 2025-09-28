@@ -84,6 +84,7 @@ function ManageCourseCreatePage() {
 
       const newCourse = {
         title,
+        type: isAdmin ? "binhdanso" : "learning",
         subject,
         thumbnail: imageUrl,
         description,
@@ -154,6 +155,29 @@ function ManageCourseCreatePage() {
             </select>
           </div>
         )}
+        {currentUser.role === "admin" && (
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">
+              Loại môn học<span className="text-red-500">*</span>
+            </label>
+            <select
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              className="w-full border border-gray-300 rounded-xl p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow-sm"
+            >
+              <option value="">Chọn loại bình dân số</option>
+              <option value="BasicDigitalSkills">Kỹ năng số cơ bản</option>
+              <option value="PublicServices">Dịch vụ công & hành chính số</option>
+              <option value="Finance">Tài chính – Ngân hàng số</option>
+              <option value="Health">Ứng dụng y tế & an sinh xã hội số</option>
+              <option value="Safety">An toàn thông tin & Phòng chống lừa đảo</option>
+              <option value="Education">Ứng dụng học tập & giảng dạy số</option>
+              <option value="Technology">Thương mại & dịch vụ trực tuyến</option>
+              <option value="DigitalLifeSkills">Kỹ năng sống số & Quảng bá văn hóa và thành tựu sản xuất</option>
+              <option value="Other1">Khác</option>
+            </select>
+          </div>
+        )}
 
         {/* Mô tả */}
         <div>
@@ -168,7 +192,7 @@ function ManageCourseCreatePage() {
         {/* Ảnh đại diện */}
         <div>
           <label className="block text-gray-700 font-medium mb-2">
-            Ảnh đại diện <span className="text-red-500">*</span>
+            Ảnh đại diện (Ưu tiên 16:9) <span className="text-red-500">*</span>
           </label>
           <div
             className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-custom-blue transition"

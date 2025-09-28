@@ -24,7 +24,7 @@ passport.use(
 
         const newUser = new User({
           email: profile.emails[0].value,
-          name: profile.displayName,
+          fullName: profile.displayName,
           avatar: profile.photos[0].value,
           role: "student",
           status: "active", 

@@ -1,104 +1,73 @@
+// services/uploadCloudinary.js
+import axios from "axios";
+
+const API_URL = "http://localhost:3000/uploads";
+
+// Hàm lấy chữ ký bảo mật từ BE
+const getSignature = async () => {
+  const res = await axios.get(`${API_URL}/cloudinary-signature`);
+  return res.data; // { timestamp, signature, apiKey, cloudName, folder }
+};
+
+// ===== 1) Upload 1 ảnh =====
 export const uploadToCloudinary = async (file) => {
-  if (!file) {
-    console.error("Không có file nào được chọn để upload.");
-    return null;
-  }
+  const { timestamp, signature, apiKey, cloudName, folder } = await getSignature();
 
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("upload_preset", "PoliticalTheory"); // ✅ Thay bằng preset thật của bạn
+  formData.append("api_key", apiKey);
+  formData.append("timestamp", timestamp);
+  formData.append("signature", signature);
+  formData.append("folder", folder);
 
-  try {
-    const response = await fetch(
-      "https://api.cloudinary.com/v1_1/doyjostnc/image/upload",
-      {
-        method: "POST",
-        body: formData,
-      }
+  const res = await axios.post(
+    `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+    formData
+  );
+  return res.data.secure_url;
+};
+
+// ===== 2) Upload nhiều ảnh =====
+export const uploadMultipleImagesToCloudinary = async (files = []) => {
+  if (!Array.isArray(files) || files.length === 0) return [];
+  const { timestamp, signature, apiKey, cloudName, folder } = await getSignature();
+
+  const uploads = files.map(async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("api_key", apiKey);
+    formData.append("timestamp", timestamp);
+    formData.append("signature", signature);
+    formData.append("folder", folder);
+    const res = await axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      formData
     );
-
-    if (!response.ok) {
-      throw new Error(`Lỗi HTTP: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    if (data.secure_url) {
-      return data.secure_url;
-    } else {
-      console.error("Upload thành công nhưng không có secure_url:", data);
-      return null;
-    }
-
-  } catch (error) {
-    console.error("Lỗi khi upload ảnh lên Cloudinary:", error);
-    return null;
-  }
-};
-
-// Upload nhiều ảnh lên cloudinary
-export const uploadMultipleImagesToCloudinary = async (files) => {
-  if (!files || files.length === 0) {
-    // console.error("Không có file nào được chọn để upload.");
-    return [];
-  }
-
-  const uploadPromises = files.map(file => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "PoliticalTheory");
-
-    return fetch("https://api.cloudinary.com/v1_1/doyjostnc/image/upload", {
-      method: "POST",
-      body: formData,
-    }).then(res => {
-      if (!res.ok) throw new Error(`Lỗi HTTP: ${res.status}`);
-      return res.json();
-    });
+    return res.data.secure_url;
   });
 
-  try {
-    const results = await Promise.all(uploadPromises);
-    // Lọc các kết quả có secure_url
-    return results
-      .filter(data => data.secure_url)
-      .map(data => data.secure_url);
-  } catch (error) {
-    console.error("Lỗi khi upload ảnh lên Cloudinary:", error);
-    return [];
-  }
+  return await Promise.all(uploads);
 };
-export const uploadMultipleFilesToCloudinary = async (files) => {
-  if (!files || files.length === 0) {
-    // console.error("Không có file nào được chọn để upload.");
-    return [];
-  }
 
-  const endpoint = "https://api.cloudinary.com/v1_1/doyjostnc/raw/upload";
-  const uploadPreset = "PoliticalTheory";
+// ===== 3) Upload nhiều file tài liệu (PDF, Word, PPTX) =====
+export const uploadMultipleFilesToCloudinary = async (files = []) => {
+  if (!Array.isArray(files) || files.length === 0) return [];
+  const { timestamp, signature, apiKey, cloudName, folder } = await getSignature();
 
-  const uploadPromises = files.map((file) => {
+  const uploads = files.map(async (file) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", uploadPreset);
-
-    return fetch(endpoint, {
-      method: "POST",
-      body: formData,
-    }).then((res) => {
-      if (!res.ok) throw new Error(`Lỗi HTTP: ${res.status}`);
-      return res.json();
-    });
+    formData.append("api_key", apiKey);
+    formData.append("timestamp", timestamp);
+    formData.append("signature", signature);
+    formData.append("folder", folder);
+    // 🟡 Lưu ý: sử dụng endpoint /raw để upload file không phải ảnh
+    const res = await axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,
+      formData
+    );
+    return res.data.secure_url;
   });
 
-  try {
-    const results = await Promise.all(uploadPromises);
-
-    return results
-      .filter((data) => data.secure_url)
-      .map((data) => data.secure_url);
-  } catch (error) {
-    console.error("Lỗi khi upload file lên Cloudinary:", error);
-    return [];
-  }
+  return await Promise.all(uploads);
 };

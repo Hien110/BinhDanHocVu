@@ -2,7 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const FRONTEND_URL = "https://political-theory-learning.vercel.app/"; // frontend URL của bạn
+const FRONTEND_URL = "http://localhost:5173"; // frontend URL của bạn
 // Bắt đầu xác thực với Google
 router.get(
   "/google",

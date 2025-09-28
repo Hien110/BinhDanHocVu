@@ -117,6 +117,8 @@ const courseService = {
         success: true,
         data: response.data.data,
         message: response.data.message,
+        total: response.data.length,
+        totalParticipants: response.data.totalParticipants || 0,
       };
     } catch (error) {
       return {

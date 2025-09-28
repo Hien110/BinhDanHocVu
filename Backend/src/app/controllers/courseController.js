@@ -5,18 +5,29 @@ const CourseController = {
   // Tạo khóa học
   createCourse: async (req, res) => {
     try {
-      const userId = req.user.userId; // Lấy ID người dùng từ token
+      const userId = req.user.userId;
       const code = generateOtp();
+
+      const { title, description, thumbnail, subject, type } = req.body;
+
       const newCourse = new Course({
-        ...req.body,
-        instructor: userId, // Gán người tạo khóa học
+        title,
+        description,
+        thumbnail, // link ảnh đã upload lên Cloudinary
+        subject,
+        type,
+        instructor: userId,
         code,
       });
+
       await newCourse.save();
-      res
-        .status(201)
-        .json({ data: newCourse, message: "Khóa học đã được tạo thành công" });
+
+      res.status(201).json({
+        data: newCourse,
+        message: "Khóa học đã được tạo thành công",
+      });
     } catch (error) {
+      console.error(error);
       res.status(500).json({ message: "Lỗi khi tạo khóa học" });
     }
   },
@@ -30,6 +41,12 @@ const CourseController = {
         subject: { $ne: "BinhDanSo" },
       });
 
+      const subjectLength = subjects.length;
+      //lấy tổng số participants
+      const totalParticipants = await Course.aggregate([
+        { $match: { deleted: false } },
+        { $group: { _id: null, total: { $sum: "$totalParticipants" } } },
+      ]);
       // Sử dụng Promise.all để thực hiện các truy vấn song song
       const coursesBySubject = await Promise.all(
         subjects.map(async (subject) => {
@@ -52,6 +69,8 @@ const CourseController = {
       res.status(200).json({
         data: coursesBySubjectObject,
         message: "Lấy khóa học theo môn học thành công",
+        length: subjectLength,
+        totalParticipants: totalParticipants[0]?.total || 0,
       });
     } catch (error) {
       console.error(error);
@@ -62,11 +81,11 @@ const CourseController = {
   // Lấy khóa học theo người tạo
   getCoursesByInstructor: async (req, res) => {
     try {
-      const instructorId = req.params.instructorId; 
+      const instructorId = req.params.instructorId;
       const courses = await Course.find({
         instructor: instructorId,
         deleted: false,
-      }).populate("instructor", "fullName");
+      }).populate("instructor", "-password");
       res.status(200).json({
         data: courses,
         message: "Lấy khóa học theo giảng viên thành công",
@@ -175,7 +194,10 @@ const CourseController = {
   // Lấy khóa học Bình dân số
   getBinhDanSoCourses: async (req, res) => {
     try {
-      const courses = await Course.find({ subject: "BinhDanSo", deleted: false })
+      const courses = await Course.find({
+        subject: "BinhDanSo",
+        deleted: false,
+      })
         .populate("instructor", "fullName")
         .lean();
       res.status(200).json({
