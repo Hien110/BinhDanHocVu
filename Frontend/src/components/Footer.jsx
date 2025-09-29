@@ -7,11 +7,11 @@ function Footer() {
       <div className="flex items-center">
         <img src={logoHocCungEm} alt="Logo" className="w-12" />
         <h1 className="text-lg sm:text-lg lg:text-lg font-bold text-custom-blue leading-tight">
-          Bình Dân Học Vụ
+          Bình Dân Số
         </h1>
       </div>
       <div className="text-center text-sm text-gray-600">
-        <p>&copy; 2025 Binh Dan Hoc Vu</p>
+        <p>&copy; 2025 Binh Dan So</p>
       </div>
       {/* điều khoản và chính sách bảo mật */}
       <div className="text-center text-sm text-gray-600 flex">
