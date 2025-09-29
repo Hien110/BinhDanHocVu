@@ -161,7 +161,7 @@ function CourseDetailPage() {
   return (
     <div className="min-h-screen pt-6 px-4 sm:px-6 lg:px-10 flex flex-col lg:flex-row gap-6">
       {/* Nội dung chính */}
-      {checkJoinCourse === false && user.role !== "admin" ? (
+      {checkJoinCourse === false && user.role !== "admin" && course.type === "learning" ? (
         <div className="w-full lg:w-3/4 lg:border-r lg:pr-8 border-gray-100">
           {/* Header + Thông tin khóa học */}
           <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-6 mb-6">
@@ -208,7 +208,6 @@ function CourseDetailPage() {
                   }}
                   className="mt-4 flex gap-2"
                 >
-                  {course.subject !== "BinhDanSo" && (
                     <input
                       type="text"
                       name="courseCode"
@@ -217,13 +216,12 @@ function CourseDetailPage() {
              focus:outline-none focus:ring-2 focus:ring-custom-blue/30 
              focus:border-custom-blue"
                     />
-                  )}
 
                   <button
                     type="submit"
                     className="cursor-pointer rounded-xl bg-custom-blue hover:bg-custom-hover-blue text-white px-5 py-2 font-medium hover:shadow-md transition duration-400"
                   >
-                    Tham gia {course.subject === "BinhDanSo" ? "miễn phí" : ""}
+                    Tham gia 
                   </button>
                 </form>
               </div>

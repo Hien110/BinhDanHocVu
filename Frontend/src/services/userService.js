@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/users"; // sẽ được proxy đến http://localhost:3000/api/users
+const API_URL = "https://binhdansobe-fpf2dghjbugaaqbk.southeastasia-01.azurewebsites.net/api/users"; // sẽ được proxy đến http://localhost:3000/api/users
 
 const userService = {
   // Đăng nhập người dùng
