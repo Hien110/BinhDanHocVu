@@ -8,9 +8,11 @@ import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 
 import logoHocCungEm from "../../assets/logoHocCungEm.png";
+import { Button } from "@mui/material";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const togglePassword = () => {
@@ -23,6 +25,7 @@ const Login = () => {
     const password = e.target.password.value;
 
     try {
+      setLoading(true);
       const result = await userService.login(email, password);
 
       if (result.success) {
@@ -33,6 +36,8 @@ const Login = () => {
       }
     } catch (error) {
       toast.error(error.message || "Đã xảy ra lỗi khi đăng nhập");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,12 +122,37 @@ const Login = () => {
               </div>
 
               <div>
-                <button
+                <Button
                   type="submit"
-                  className="cursor-pointer w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-blue bg-custom-blue hover:bg-custom-hover-blue transition-transform duration-200 ease-in-out hover:-translate-y-0.5"
+                  variant="contained"
+                  loading={loading} // 👈 Thêm prop này
+                  disableElevation
+                  fullWidth
+                  disabled={loading} // 👈 tránh user bấm khi đang loading
+                  sx={{
+                    py: "8px",
+                    px: "16px",
+                    fontSize: "0.875rem",
+                    fontWeight: "500",
+                    borderRadius: "6px",
+                    textTransform: "none",
+                    color: "white",
+                    bgcolor: !loading ? "#4A90E2" : "grey.400",
+                    transition:
+                      "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+                    "&:hover": {
+                      bgcolor: !loading ? "#357ABD" : "grey.400",
+                    },
+                    "&.Mui-disabled": {
+                      color: "white",
+                      bgcolor: "grey.400",
+                      cursor: "not-allowed",
+                      opacity: 1,
+                    },
+                  }}
                 >
-                  <i className="fas fa-sign-in-alt mr-2" /> ĐĂNG NHẬP
-                </button>
+                  {loading ? "Đang xử lý..." : "Đăng nhập"}
+                </Button>
               </div>
             </form>
 
