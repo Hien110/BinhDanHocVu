@@ -67,13 +67,13 @@ const TestQuizResultPage = React.lazy(() => import("../pages/student/TestQuizRes
 const MyCoursePage = React.lazy(() => import("../pages/student/MyCoursePage"));
 
 // Admin pages
-const AdminStatisticsPage = React.lazy(() => import("../pages/Admin/AdminStatisticsPage"));
-const AdminStudentManagementPage = React.lazy(() => import("../pages/Admin/AdminManageStudentPage"));
-const AdminNewsManagementPage = React.lazy(() => import("../pages/Admin/AdminManageNewsPage"));
-const AdminSettingPage = React.lazy(() => import("../pages/Admin/AdminSettingPage"));
+const AdminStatisticsPage = React.lazy(() => import("../pages/admin/AdminStatisticsPage"));
+const AdminStudentManagementPage = React.lazy(() => import("../pages/admin/AdminManageStudentPage"));
+const AdminNewsManagementPage = React.lazy(() => import("../pages/admin/AdminManageNewsPage"));
+const AdminSettingPage = React.lazy(() => import("../pages/admin/AdminSettingPage"));
 
 //Quản lí giảng viên
-const AdminLecturerManagementPage = React.lazy(() => import("../pages/Admin/AdminManageLecturerPage"));
+const AdminLecturerManagementPage = React.lazy(() => import("../pages/admin/AdminManageLecturerPage"));
 const AdminManageLecturerDetail = React.lazy(() => import("../pages/admin/AdminManageLecturerDetail"));
 
 // Binh dan so
