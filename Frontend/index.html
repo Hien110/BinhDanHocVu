@@ -1,32 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="vi">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logoHocCungEm.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Học Cùng Em</title>
+    <meta name="description" content="Nền tảng học tập Học Cùng Em – nội dung cập nhật, trải nghiệm mượt mà." />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#0ea5e9" />
+
+    <!-- Icons / PWA (tùy chọn nếu bạn có) -->
+    <link rel="icon" href="/logoHocCungEm.png" />
+    <link rel="apple-touch-icon" href="/logoHocCungEm.png" />
+    <!-- <link rel="manifest" href="/site.webmanifest" /> -->
+
+    <!-- Preconnect/DNS-prefetch cho CDN ngoại để giảm độ trễ -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+
+    <!-- Font Awesome (CDN) -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
 
+    <!-- Slick Carousel (nếu bạn dùng) -->
     <link
       rel="stylesheet"
-      type="text/css"
-      charset="UTF-8"
       href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
     <link
       rel="stylesheet"
-      type="text/css"
       href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap" rel="stylesheet"> -->
-    
-    <link rel="stylesheet" href="/src/index.css" />
-    <title>Vite + React</title>
+
+    <!-- ❗️Vite khuyến nghị import CSS trong main.jsx.
+         Nếu bạn vẫn muốn file global, để nguyên dòng dưới. -->
+    <!-- <link rel="stylesheet" href="/src/index.css" /> -->
+
+    <!-- Open Graph (chia sẻ MXH) -->
+    <meta property="og:title" content="Học Cùng Em" />
+    <meta property="og:description" content="Nền tảng học tập Học Cùng Em." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/logoHocCungEm.png" />
+    <meta property="og:url" content="/" />
   </head>
+
   <body>
+    <noscript>Ứng dụng cần bật JavaScript để chạy.</noscript>
     <div id="root"></div>
+
+    <!-- Vite entry -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
