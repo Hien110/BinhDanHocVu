@@ -27,45 +27,59 @@ function CourseDetailPage() {
 
   const navigate = useNavigate();
   useEffect(() => {
-    // Load course chi tiết
-    const fetchCourse = async () => {
-      const res = await courseService.getCourseById(courseId);
-      if (res.success) {
-        setCourse(res.data);
-        // Tăng số lượt xem khóa học
-        await courseService.incrementCourseViews(courseId);
+    let isAlive = true;
+
+    (async () => {
+      try {
+        // 1) Lấy thông tin khóa học trước để biết type
+        const courseRes = await courseService.getCourseById(courseId);
+        if (!courseRes?.success)
+          throw new Error(
+            courseRes?.message || "Không lấy được thông tin khóa học"
+          );
+        if (!isAlive) return;
+
+        setCourse(courseRes.data);
+
+        // Tăng lượt xem (không chặn luồng)
+        courseService.incrementCourseViews(courseId).catch(() => {});
+
+        // 2) Lấy lessons & quizzes song song
+        const [lessonRes, quizRes] = await Promise.all([
+          lessonService.getLessonsByCourse(courseId),
+          QuizService.getQuizzesByCourse(courseId),
+        ]);
+
+        if (isAlive && lessonRes?.success) setLessons(lessonRes.data);
+        if (isAlive && quizRes?.success) setQuizzes(quizRes.data);
+
+        // 3) Kiểm tra đăng ký lớp học
+        const courseType = courseRes?.data?.type;
+        console.log("Course Type:", courseType);
+
+        if (courseType === "learning") {
+          try {
+            const checkRes = await classRoomService.checkRegistered(courseId);
+            if (!isAlive) return;
+            // Nếu không có token hoặc lỗi -> coi như chưa đăng ký (false)
+            setCheckJoinCourse(
+              checkRes?.success ? !!checkRes.isRegistered : false
+            );
+          } catch {
+            if (isAlive) setCheckJoinCourse(false);
+          }
+        } else {
+          if (isAlive) setCheckJoinCourse(true);
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Đã xảy ra lỗi. Vui lòng thử lại sau.");
       }
+    })();
+
+    return () => {
+      isAlive = false;
     };
-
-    const fetchLessons = async () => {
-      const res = await lessonService.getLessonsByCourse(courseId);
-      if (res.success) setLessons(res.data);
-    };
-
-    const fetchQuizzes = async () => {
-      const res = await QuizService.getQuizzesByCourse(courseId);
-      if (res.success) setQuizzes(res.data);
-    };
-
-    const checkRegisterCourse = async () => {
-      if (!user) {
-        toast.error("Vui lòng đăng nhập để tiếp tục");
-        navigate(ROUTE_PATH.LOGIN);
-        return;
-      }
-
-      const res = await classRoomService.checkRegistered(courseId);
-      if (res.success) {
-        setCheckJoinCourse(res.isRegistered);
-      } else {
-        toast.error(res.message || "Lỗi khi kiểm tra đăng ký khóa học");
-      }
-    };
-
-    fetchCourse();
-    fetchLessons();
-    fetchQuizzes();
-    checkRegisterCourse();
   }, [courseId]);
 
   const handleViewLesson = (lessonId) => {
@@ -106,7 +120,6 @@ function CourseDetailPage() {
         toast.error("Bạn đã hết số lượt kiểm tra bài này.");
         return;
       }
-
 
       window.location.href = ROUTE_PATH.STUDENT_QUIZ_TEST.replace(
         ":quizId",
@@ -161,7 +174,9 @@ function CourseDetailPage() {
   return (
     <div className="min-h-screen pt-6 px-4 sm:px-6 lg:px-10 flex flex-col lg:flex-row gap-6">
       {/* Nội dung chính */}
-      {checkJoinCourse === false && user.role !== "admin" && course.type === "learning" ? (
+      {checkJoinCourse === false &&
+      user?.role !== "admin" &&
+      course.type === "learning" ? (
         <div className="w-full lg:w-3/4 lg:border-r lg:pr-8 border-gray-100">
           {/* Header + Thông tin khóa học */}
           <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-6 mb-6">
@@ -208,20 +223,20 @@ function CourseDetailPage() {
                   }}
                   className="mt-4 flex gap-2"
                 >
-                    <input
-                      type="text"
-                      name="courseCode"
-                      placeholder="Nhập mã khóa học"
-                      className="flex-1 rounded-xl border border-gray-300 px-4 py-2 
+                  <input
+                    type="text"
+                    name="courseCode"
+                    placeholder="Nhập mã khóa học"
+                    className="flex-1 rounded-xl border border-gray-300 px-4 py-2 
              focus:outline-none focus:ring-2 focus:ring-custom-blue/30 
              focus:border-custom-blue"
-                    />
+                  />
 
                   <button
                     type="submit"
                     className="cursor-pointer rounded-xl bg-custom-blue hover:bg-custom-hover-blue text-white px-5 py-2 font-medium hover:shadow-md transition duration-400"
                   >
-                    Tham gia 
+                    Tham gia
                   </button>
                 </form>
               </div>
