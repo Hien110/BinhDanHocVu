@@ -1,65 +1,65 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
+# .github/workflows/main_binhdansoBE.yml
 name: Build and deploy Node.js app to Azure Web App - binhdansoBE
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
+      id-token: write   # cần cho OIDC
+
+    env:
+      WORKING_DIR: Backend        # <— CHỈ deploy Backend (viết hoa đúng như repo)
+      NODE_VERSION: '22.x'
+      AZURE_WEBAPP_NAME: binhdansoBE
+      AZURE_SLOT_NAME: Production
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
+      - name: Use Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: npm install, build, and test
+      # Cài deps CHỈ cho Backend
+      - name: Install deps (Backend)
+        working-directory: ${{ env.WORKING_DIR }}
+        run: npm ci || npm install
+
+      # Nếu Backend có script build thì chạy, không có thì bỏ qua
+      - name: Build (if present)
+        working-directory: ${{ env.WORKING_DIR }}
         run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+          if [ -f package.json ] && cat package.json | jq -e '.scripts.build' > /dev/null; then
+            npm run build
+          fi
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: node-app
-          path: .
+      # Đóng gói duy nhất thư mục Backend thành artifact.zip
+      # (Nếu bạn muốn để Azure tự build khi deploy thì có thể
+      #  bỏ node_modules khỏi zip và bật SCM_DO_BUILD_DURING_DEPLOYMENT=1 trong App Settings)
+      - name: Create artifact
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          zip -r ../artifact.zip . -x "*.git*"
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: node-app
-      
-      - name: Login to Azure
+      # Đăng nhập Azure bằng OIDC – dùng đúng 3 secrets mà Deployment Center đã tạo
+      - name: Azure login (OIDC)
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_40BA65F91F2745E894E7CDED674998F9 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8B46B2249C3A4D6E86BF526B53A54976 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6B1031A1EC054EDB96E3D044EA20CA18 }}
 
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'binhdansoBE'
-          slot-name: 'Production'
-          package: .
-          
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          slot-name: ${{ env.AZURE_SLOT_NAME }}
+          package: artifact.zip     # <— gói zip của Backend
