@@ -4,7 +4,7 @@ import courseService from "../../services/courseService";
 import lessonService from "../../services/lessonService";
 import QuizService from "../../services/quizService";
 import quizResultService from "../../services/quizResultService";
-import classRoomService from "../../services/classRoomService";
+import classRoomService from "../../services/classroomService";
 
 import { Link, useParams, useNavigate } from "react-router-dom";
 import CourseDetailCard from "../../components/CourseDetailCard";
