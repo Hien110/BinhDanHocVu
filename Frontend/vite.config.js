@@ -15,7 +15,7 @@ export default defineConfig({
       //   changeOrigin: true,
       // },
       "/auth": {
-        target: "https://political-theory-learning.onrender.com",
+        target: "https://binhdansobe.azurewebsites.net",
         changeOrigin: true,
         secure: false,
       },
