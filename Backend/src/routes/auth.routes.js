@@ -1,15 +1,20 @@
 const express = require("express");
 const passport = require("passport");
-const router = express.Router();
 const jwt = require("jsonwebtoken");
-const FRONTEND_URL = "http://localhost:5173"; // frontend URL của bạn
-// Bắt đầu xác thực với Google
+const router = express.Router();
+
+const corsOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(",").map(o => o.trim())
+  : (() => { throw new Error("❌ Thiếu biến môi trường CORS_ORIGINS"); })();
+
+// 🟢 Bạn có thể chọn origin đầu tiên trong danh sách làm FRONTEND redirect
+const FRONTEND_URL = corsOrigins[0];
+
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-// Google gọi lại URL này sau khi xác thực xong
 router.get(
   "/google/callback",
   passport.authenticate("google", {
@@ -20,7 +25,6 @@ router.get(
     const user = req.user;
     const { password, otp, otpExpires, ...safeUser } = user._doc || user;
 
-    // Tạo token chứa userId và role
     const token = jwt.sign(
       {
         userId: user._id,
@@ -30,7 +34,7 @@ router.get(
       { expiresIn: "1d" }
     );
 
-    // Redirect về frontend kèm token & user info đã lọc
+    // Redirect về FE đầu tiên trong danh sách CORS_ORIGINS
     const redirectUrl = `${FRONTEND_URL}/signin/callback?token=${token}&user=${encodeURIComponent(
       JSON.stringify(safeUser)
     )}`;
