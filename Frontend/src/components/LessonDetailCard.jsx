@@ -311,7 +311,7 @@ function LessonDetailCard({ lesson }) {
           {displayTitle}
         </h2>
       </div>
-      {user?.role === "lecturer" && (
+      {user?.role === "lecturer" || user?.role === "admin" && (
         <button
           onClick={() => setShowEditModal(true)}
           className="cursor-pointer text-custom-orange border border-custom-orange px-4 py-2 rounded-lg text-sm transition duration-300 hover:bg-custom-hover-orange2 font-medium"

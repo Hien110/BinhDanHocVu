@@ -27,6 +27,7 @@ import {
 } from "../../services/uploadCloudinary";
 
 import { Button } from "@mui/material";
+import MyEditor from "../../components/MyEditor";
 
 function ManageLessonListPage() {
   const { courseId } = useParams();
@@ -433,15 +434,11 @@ function ManageLessonListPage() {
                       <label className="block mb-2 font-semibold">
                         Nội dung văn bản
                       </label>
-                      <textarea
-                        rows={5}
-                        value={b.value}
-                        onChange={(e) =>
-                          updateBlock(b.id, { value: e.target.value })
+                      <MyEditor
+                        content={b.value}
+                        onChangeContent={(data) =>
+                          updateBlock(b.id, { value: data })
                         }
-                        required
-                        className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-custom-blue transition"
-                        placeholder="Nhập đoạn văn bản..."
                       />
                     </div>
                   )}
