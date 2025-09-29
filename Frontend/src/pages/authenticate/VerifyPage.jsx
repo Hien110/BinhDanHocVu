@@ -4,15 +4,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { toast } from "sonner";
 
-import { ROUTE_PATH } from "../constants/routePath";
+import { ROUTE_PATH } from "../../constants/routePath";
 
-import userService from "../services/userService";
+import userService from "../../services/userService";
 
-import { LoadingButton } from "@mui/lab";
-import { red } from "@mui/material/colors";
+
 import { Button } from "@mui/material";
 
-import logoHocCungEm from "../assets/logoHocCungEm.png";
+import logoHocCungEm from "../../assets/logoHocCungEm.png";
 
 const Verify = () => {
   const inputsRef = useRef([]);
@@ -71,6 +70,11 @@ const Verify = () => {
   const canSubmit = useMemo(
     () => passwordValid && passwordsMatch && !loading,
     [passwordValid, passwordsMatch, loading]
+  );
+
+    const canSubmitRegister = useMemo(
+    () => !loading,
+    [loading]
   );
 
   const handleKeyDown = (e, index) => {
@@ -295,7 +299,7 @@ const Verify = () => {
                 type="submit"
                 fullWidth
                 disableElevation
-                disabled={!canSubmit}
+                disabled={!canSubmitRegister}
                 sx={{
                   textTransform: "none",
                   fontWeight: "bold",

@@ -2,7 +2,7 @@ import axios from "axios";
 
 import userService from "./userService";
 
-const API_URL = "http://localhost:3000/api/lessons";
+const API_URL = "https://binhdansobe-fpf2dghjbugaaqbk.southeastasia-01.azurewebsites.net/api/lessons";
 
 const lessonService = {
   // Tạo bài học

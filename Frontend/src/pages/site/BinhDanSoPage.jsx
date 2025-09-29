@@ -101,7 +101,8 @@ function BinhDanSoPage() {
   // Danh sách subject hiển thị (sau search + filter sidebar)
   const visibleSubjects = useMemo(() => {
     let keys = Object.keys(filteredBySearch || {});
-    if (selectedSubject !== "ALL") keys = keys.filter((k) => k === selectedSubject);
+    if (selectedSubject !== "ALL")
+      keys = keys.filter((k) => k === selectedSubject);
 
     return keys.sort((a, b) => {
       const pa = SUBJECT_PRIORITY[a] ?? 100;
@@ -186,7 +187,7 @@ function BinhDanSoPage() {
                     {(filteredBySearch?.[subject] || []).map((course) => (
                       <div
                         key={course._id}
-                        className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md"
+                        className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md h-full flex flex-col" // ✅ kéo card cao đều + bố cục cột
                       >
                         <div className="overflow-hidden">
                           <img
@@ -197,56 +198,56 @@ function BinhDanSoPage() {
                           />
                         </div>
 
-                        <div className="p-5">
-                          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 line-clamp-2 leading-snug">
+                        {/* Nội dung chiếm phần còn lại để đẩy cụm đáy xuống */}
+                        <div className="p-5 flex flex-col flex-1">
+                          {/* Title: luôn chiếm 2 dòng */}
+                          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 leading-snug line-clamp-2 min-h-[3.2rem] sm:min-h-[3.6rem]">
                             {course.title}
                           </h3>
 
-                          <div className="mb-2 text-sm">
-                            <span className="text-gray-500">Giáo viên: </span>
-                            <span className="font-medium text-gray-900">
-                              {course?.instructor?.fullName || "N/A"}
-                            </span>
-                          </div>
-
-                          <div className="mb-2 flex items-center text-sm">
-                            <CalendarMonthIcon
-                              fontSize="small"
-                              className="text-gray-500 mr-1 shrink-0 w-4 h-4"
-                            />
-                            <span className="font-medium text-gray-900">
-                              {course?.createdAt
-                                ? new Date(course.createdAt).toLocaleDateString("vi-VN")
-                                : "N/A"}
-                            </span>
-                          </div>
-
-                          <div className="mb-4 flex items-center text-sm">
-                            <i className="fa-solid fa-eye text-gray-500 mr-2 ml-1 w-4 h-4 shrink-0"></i>
-                            <span className="font-medium text-gray-900">
-                              {course?.viewCount || 0} lượt xem
-                            </span>
-                          </div>
-
-                          <Link
-                            to={`${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
-                              ":courseId",
-                              course._id
-                            ).replace(
-                              ":courseName",
-                              course.title.replace(/\s+/g, "-").toLowerCase()
-                            )}`}
-                            className="relative inline-flex items-center justify-center w-full rounded-xl border border-custom-blue text-custom-blue font-medium px-4 py-2.5 overflow-hidden transition
-                              before:absolute before:inset-0 before:w-0 before:bg-blue-50 before:transition-all before:duration-300 hover:before:w-full"
-                          >
-                            <span className="relative z-10 text-sm">
-                              Xem chi tiết{" "}
-                              <ArrowForwardTwoToneIcon
-                                fontSize="inherit"
-                                className="inline-block pb-0.5"
+                          {/* Cụm đáy: ngày / lượt xem / nút xem chi tiết */}
+                          <div className="mt-auto">
+                            <div className="mb-2 flex items-center text-sm">
+                              <CalendarMonthIcon
+                                fontSize="small"
+                                className="text-gray-500 mr-1 shrink-0 w-4 h-4"
                               />
-                            </span>
-                          </Link>
+                              <span className="font-medium text-gray-900">
+                                {course?.createdAt
+                                  ? new Date(
+                                      course.createdAt
+                                    ).toLocaleDateString("vi-VN")
+                                  : "N/A"}
+                              </span>
+                            </div>
+
+                            <div className="mb-4 flex items-center text-sm">
+                              <i className="fa-solid fa-eye text-gray-500 mr-2 ml-1 w-4 h-4 shrink-0" />
+                              <span className="font-medium text-gray-900">
+                                {course?.viewCount || 0} lượt xem
+                              </span>
+                            </div>
+
+                            <Link
+                              to={`${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
+                                ":courseId",
+                                course._id
+                              ).replace(
+                                ":courseName",
+                                course.title.replace(/\s+/g, "-").toLowerCase()
+                              )}`}
+                              className="relative inline-flex items-center justify-center w-full rounded-xl border border-custom-blue text-custom-blue font-medium px-4 py-2.5 overflow-hidden transition
+              before:absolute before:inset-0 before:w-0 before:bg-blue-50 before:transition-all before:duration-300 hover:before:w-full"
+                            >
+                              <span className="relative z-10 text-sm">
+                                Xem chi tiết{" "}
+                                <ArrowForwardTwoToneIcon
+                                  fontSize="inherit"
+                                  className="inline-block pb-0.5"
+                                />
+                              </span>
+                            </Link>
+                          </div>
                         </div>
                       </div>
                     ))}

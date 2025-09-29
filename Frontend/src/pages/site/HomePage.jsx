@@ -346,6 +346,7 @@ function CoursesGrid({ courses = [], subjectKey }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.35, delay: Math.min(idx * 0.06, 0.3) }}
+          className="h-full"
         >
           <CourseCard course={course} subjectKey={subjectKey} />
         </motion.div>
@@ -356,7 +357,7 @@ function CoursesGrid({ courses = [], subjectKey }) {
 
 function CourseCard({ course }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md group">
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md group h-full flex flex-col">
       <div className="overflow-hidden">
         <img
           src={course.thumbnail}
@@ -366,8 +367,10 @@ function CourseCard({ course }) {
         />
       </div>
 
-      <div className="p-5">
-        <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 line-clamp-2 leading-snug">
+      {/* Nội dung kéo giãn chiếm hết, để đáy card cố định */}
+      <div className="p-5 flex flex-col flex-1">
+        {/* TIÊU ĐỀ: line-clamp-2 + chiều cao tối thiểu tương ứng 2 dòng */}
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 leading-snug line-clamp-2 min-h-[3.25rem]">
           {course.title}
         </h3>
 
@@ -381,54 +384,55 @@ function CourseCard({ course }) {
           </div>
         )}
 
-        <div className="mb-2 flex items-center text-sm">
-          <CalendarMonthIcon
-            fontSize="small"
-            className="text-gray-500 mr-1 shrink-0 w-4 h-4"
-          />
-          <span className="font-medium text-gray-900">
-            {course?.createdAt
-              ? new Date(course.createdAt).toLocaleDateString("vi-VN")
-              : "N/A"}
-          </span>
-        </div>
-
-        {/* Hiển thị metric phù hợp từng loại */}
-        {course?.type === "binhdanso" ? (
-          <div className="mb-4 flex items-center text-sm">
-            <i className="fa-solid fa-eye text-gray-500 mr-2 ml-1 w-4 h-4 shrink-0" />
-            <span className="font-medium text-gray-900">
-              {course?.viewCount || 0} lượt xem
-            </span>
-          </div>
-        ) : (
-          <div className="mb-4 flex items-center text-sm">
-            <i className="fa-solid fa-user-group text-gray-500 mr-2 ml-1 w-4 h-4 shrink-0" />
-            <span className="font-medium text-gray-900">
-              {course?.totalParticipants || 0} học viên
-            </span>
-          </div>
-        )}
-
-        <Link
-          to={`${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
-            ":courseId",
-            course._id
-          ).replace(
-            ":courseName",
-            course.title.replace(/\s+/g, "-").toLowerCase()
-          )}`}
-          className="relative inline-flex items-center justify-center w-full rounded-xl border border-blue-600 text-blue-600 font-medium px-4 py-2.5 overflow-hidden transition
-            before:absolute before:inset-0 before:w-0 before:bg-blue-50 before:transition-all before:duration-300 hover:before:w-full"
-        >
-          <span className="relative z-10 text-sm">
-            Xem chi tiết{" "}
-            <ArrowForwardTwoToneIcon
-              fontSize="inherit"
-              className="inline-block pb-0.5"
+        {/* KHU VỰC ĐÁY: chứa metric + nút, luôn dồn xuống cuối card */}
+        <div className="mt-auto">
+          <div className="mb-2 flex items-center text-sm">
+            <CalendarMonthIcon
+              fontSize="small"
+              className="text-gray-500 mr-1 shrink-0 w-4 h-4"
             />
-          </span>
-        </Link>
+            <span className="font-medium text-gray-900">
+              {course?.createdAt
+                ? new Date(course.createdAt).toLocaleDateString("vi-VN")
+                : "N/A"}
+            </span>
+          </div>
+          {course?.type === "binhdanso" ? (
+            <div className="mb-4 flex items-center text-sm">
+              <i className="fa-solid fa-eye text-gray-500 mr-2 ml-1 w-4 h-4 shrink-0" />
+              <span className="font-medium text-gray-900">
+                {course?.viewCount || 0} lượt xem
+              </span>
+            </div>
+          ) : (
+            <div className="mb-4 flex items-center text-sm">
+              <i className="fa-solid fa-user-group text-gray-500 mr-2 ml-1 w-4 h-4 shrink-0" />
+              <span className="font-medium text-gray-900">
+                {course?.totalParticipants || 0} học viên
+              </span>
+            </div>
+          )}
+
+          <Link
+            to={`${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
+              ":courseId",
+              course._id
+            ).replace(
+              ":courseName",
+              course.title.replace(/\s+/g, "-").toLowerCase()
+            )}`}
+            className="relative inline-flex items-center justify-center w-full rounded-xl border border-blue-600 text-blue-600 font-medium px-4 py-2.5 overflow-hidden transition
+              before:absolute before:inset-0 before:w-0 before:bg-blue-50 before:transition-all before:duration-300 hover:before:w-full"
+          >
+            <span className="relative z-10 text-sm">
+              Xem chi tiết{" "}
+              <ArrowForwardTwoToneIcon
+                fontSize="inherit"
+                className="inline-block pb-0.5"
+              />
+            </span>
+          </Link>
+        </div>
       </div>
     </div>
   );

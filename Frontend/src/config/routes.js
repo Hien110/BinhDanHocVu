@@ -13,7 +13,7 @@ import RoleLayoutSwitcher from "../layouts/RoleLayoutSwitcher"; // <-- THÊM
 // Authentication pages
 const LoginPage = React.lazy(() => import("../pages/authenticate/LoginPage"));
 const RegisterPage = React.lazy(() => import("../pages/authenticate/RegisterPage"));
-const VerifyPage = React.lazy(() => import("../pages/VerifyPage"));
+const VerifyPage = React.lazy(() => import("../pages/authenticate/VerifyPage"));
 const ForgotPassword = React.lazy(() => import("../pages/ForgotPassword"));
 const AuthCallbackPage = React.lazy(() => import("../pages/AuthCallbackPage"));
 
