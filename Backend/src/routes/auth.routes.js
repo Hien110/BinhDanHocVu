@@ -3,11 +3,12 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 
-const corsOrigins = process.env.CORS_ORIGINS
-  ? process.env.CORS_ORIGINS.split(",").map(o => o.trim())
-  : (() => { throw new Error("❌ Thiếu biến môi trường CORS_ORIGINS"); })();
+if (!process.env.CORS_ORIGINS) {
+  throw new Error("❌ Thiếu biến môi trường CORS_ORIGINS. Vui lòng cấu hình trong .env");
+}
+const corsOrigins = process.env.CORS_ORIGINS.split(",").map(o => o.trim());
 
-// 🟢 Bạn có thể chọn origin đầu tiên trong danh sách làm FRONTEND redirect
+// Lấy origin đầu tiên trong danh sách để redirect
 const FRONTEND_URL = corsOrigins[0];
 
 router.get(
@@ -26,15 +27,11 @@ router.get(
     const { password, otp, otpExpires, ...safeUser } = user._doc || user;
 
     const token = jwt.sign(
-      {
-        userId: user._id,
-        role: user.role,
-      },
+      { userId: user._id, role: user.role },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1d" }
     );
 
-    // Redirect về FE đầu tiên trong danh sách CORS_ORIGINS
     const redirectUrl = `${FRONTEND_URL}/signin/callback?token=${token}&user=${encodeURIComponent(
       JSON.stringify(safeUser)
     )}`;
