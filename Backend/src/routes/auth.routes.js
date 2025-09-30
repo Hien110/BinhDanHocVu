@@ -1,21 +1,3 @@
-const express = require("express");
-const passport = require("passport");
-const jwt = require("jsonwebtoken");
-const router = express.Router();
-
-if (!process.env.CORS_ORIGINS) {
-  throw new Error("❌ Thiếu biến môi trường CORS_ORIGINS. Vui lòng cấu hình trong .env");
-}
-const corsOrigins = process.env.CORS_ORIGINS.split(",").map(o => o.trim());
-
-// Lấy origin đầu tiên trong danh sách để redirect
-const FRONTEND_URL = corsOrigins[0];
-
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
 router.get(
   "/google/callback",
   passport.authenticate("google", {
@@ -32,6 +14,14 @@ router.get(
       { expiresIn: "1d" }
     );
 
+    // Lấy origin từ request hiện tại
+    const currentOrigin = `${req.protocol}://${req.get("host")}`;
+
+    // Nếu currentOrigin có trong danh sách corsOrigins thì dùng nó, không thì fallback về corsOrigins[0]
+    const FRONTEND_URL = corsOrigins.includes(currentOrigin)
+      ? currentOrigin
+      : corsOrigins[0];
+
     const redirectUrl = `${FRONTEND_URL}/signin/callback?token=${token}&user=${encodeURIComponent(
       JSON.stringify(safeUser)
     )}`;
@@ -39,5 +29,3 @@ router.get(
     return res.redirect(redirectUrl);
   }
 );
-
-module.exports = router;
