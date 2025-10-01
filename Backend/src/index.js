@@ -34,7 +34,6 @@ app.set("trust proxy", 1);
    🔹 Cấu hình CORS từ ENV (chắc kèo)
 ============================== */
 const raw = process.env.CORS_ORIGINS || "";
-console.log("RAW CORS_ORIGINS:", JSON.stringify(raw));
 
 // Chuẩn hóa: bỏ nháy đầu/cuối nếu lỡ bọc, tách theo dấu phẩy/space/newline
 const allowedOrigins = raw
@@ -43,7 +42,6 @@ const allowedOrigins = raw
   .map((s) => s.trim())
   .filter(Boolean);
 
-console.log("Allowed origins parsed:", allowedOrigins);
 const allowSet = new Set(allowedOrigins);
 
 function isAllowed(origin) {
@@ -79,7 +77,7 @@ const corsOptions = {
 // Áp dụng CORS cho tất cả request
 app.use(cors(corsOptions));
 // Bảo đảm preflight OPTIONS luôn có header CORS hợp lệ
-app.options("*", cors(corsOptions));
+app.options(/.*/, cors(corsOptions)); // Express 5 + path-to-regexp v6: dùng RegExp thay vì "*"
 
 // Thêm Vary: Origin để CDN/proxy không cache sai theo Origin
 app.use((req, res, next) => {
