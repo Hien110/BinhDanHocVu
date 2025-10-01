@@ -56,6 +56,30 @@ function verifyState(token) {
  *  - Ta đọc Origin, tạo returnUrl = `${origin}/signin/callback` (hoặc nhận returnUrl cụ thể qua query nếu muốn).
  *  - Nhét returnUrl vào `state` (JWT) để callback dùng lại.
  */
+router.post("/google", (req, res, next) => {
+  // Cho phép client tùy chọn path callback: /signin/callback (mặc định)
+  // Nếu có ?returnPath=/foo/bar thì sẽ callback về `${origin}/foo/bar`
+  const origin = resolveRequestOrigin(req);
+  if (!origin) {
+    return res.status(400).json({ error: "Invalid or missing Origin for OAuth start." });
+  }
+
+  const returnPath = typeof req.query.returnPath === "string" && req.query.returnPath.startsWith("/")
+    ? req.query.returnPath
+    : "/signin/callback";
+
+  const returnUrl = `${origin}${returnPath}`;
+
+  const state = signState({ returnUrl });
+
+  // chuyển sang passport với scope + state
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    state,
+    session: false, // ta không dùng session của Passport
+  })(req, res, next);
+});
+
 router.get("/google", (req, res, next) => {
   // Cho phép client tùy chọn path callback: /signin/callback (mặc định)
   // Nếu có ?returnPath=/foo/bar thì sẽ callback về `${origin}/foo/bar`

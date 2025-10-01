@@ -1,7 +1,7 @@
 // services/uploadCloudinary.js
 import axios from "axios";
 
-const API_URL = "https://binhdansobe-fpf2dghjbugaaqbk.southeastasia-01.azurewebsites.net/uploads";
+const API_URL = "http://localhost:3000/uploads";
 
 // Hàm lấy chữ ký bảo mật từ BE
 const getSignature = async () => {

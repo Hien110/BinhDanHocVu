@@ -1,7 +1,7 @@
 import axios from "axios";
 import userService from "./userService";
 
-const API_URL = "https://binhdansobe-fpf2dghjbugaaqbk.southeastasia-01.azurewebsites.net/api/question-bank";
+const API_URL = "http://localhost:3000/api/question-bank";
 
 const questionBankService = {
   // lấy tất cả câu hỏi
