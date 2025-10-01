@@ -202,7 +202,7 @@ export default function HomePage() {
                 Khám phá Bình dân số
               </a>
               <a
-                href="#learning"
+                href="#bds"
                 className="px-8 py-3 border-2 border-white text-white font-bold rounded-lg text-center hover:bg-white/10 transition"
               >
                 Khoá học miễn phí
@@ -269,7 +269,6 @@ export default function HomePage() {
 
         <FAQ />
 
-        <NewsletterForm />
 
         <BottomCTA />
       </main>
@@ -545,11 +544,6 @@ function FeaturesGrid() {
       desc: "Hướng dẫn phòng chống lừa đảo, bảo mật tài khoản và dữ liệu.",
     },
     {
-      icon: <EmojiEventsIcon className="w-6 h-6" />,
-      title: "Chứng nhận hoàn thành",
-      desc: "Ghi nhận nỗ lực học tập, tạo động lực tiến bộ mỗi ngày.",
-    },
-    {
       icon: <SupportAgentIcon className="w-6 h-6" />,
       title: "Hỗ trợ tận tâm",
       desc: "Cộng đồng giáo viên và trợ giảng sẵn sàng giải đáp.",
@@ -594,7 +588,7 @@ function TeacherCTA() {
         </div>
         <div className="flex md:justify-end">
           <Link
-            to="/tro-thanh-giao-vien"
+            to= {ROUTE_PATH.REGISTER}
             className="inline-block bg-white text-indigo-700 font-semibold px-6 py-3 rounded-lg hover:bg-indigo-50 transition"
           >
             Đăng ký giảng dạy
@@ -657,10 +651,6 @@ function FAQ() {
       a: "Có. Hầu hết các khoá do cộng đồng đóng góp và được cung cấp miễn phí.",
     },
     {
-      q: "Mình có nhận chứng nhận hoàn thành không?",
-      a: "Một số khoá có chứng nhận khi bạn hoàn thành đầy đủ nội dung và bài kiểm tra.",
-    },
-    {
       q: "Không rành công nghệ thì có học được không?",
       a: "Hoàn toàn được. Các khoá BĐS thiết kế cho người mới bắt đầu, có hướng dẫn từng bước.",
     },
@@ -692,45 +682,6 @@ function FAQ() {
   );
 }
 
-function NewsletterForm() {
-  const onSubmit = (e) => {
-    e.preventDefault();
-    // TODO: hook real submission if needed
-    alert("Cảm ơn bạn đã đăng ký! (demo)");
-  };
-
-  return (
-    <section className="mt-12">
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 shadow-sm">
-        <h3 className="text-xl font-bold text-gray-900">
-          Nhận bản tin khoá học & sự kiện
-        </h3>
-        <p className="text-gray-700 mt-1">
-          Mỗi tháng một email: khoá mới, tài nguyên hay, và câu chuyện truyền
-          cảm hứng.
-        </p>
-        <form
-          onSubmit={onSubmit}
-          className="mt-4 grid sm:grid-cols-[1fr_auto] gap-3"
-        >
-          <input
-            type="email"
-            required
-            placeholder="Nhập email của bạn"
-            className="w-full rounded-xl border border-gray-300 px-4 py-2.5 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500"
-          />
-          <button
-            type="submit"
-            className="rounded-xl px-5 py-2.5 bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
-          >
-            Đăng ký
-          </button>
-        </form>
-      </div>
-    </section>
-  );
-}
-
 function BottomCTA() {
   return (
     <section className="mt-12 text-center">
@@ -742,7 +693,7 @@ function BottomCTA() {
           Chọn một khoá học phù hợp và khám phá tri thức ngay hôm nay.
         </p>
         <Link
-          to="/khoa-hoc"
+          to={ROUTE_PATH.BINDANSO}
           className="inline-block mt-4 rounded-xl px-6 py-3 bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition"
         >
           Xem tất cả khoá học

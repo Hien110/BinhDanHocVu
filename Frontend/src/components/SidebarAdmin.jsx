@@ -41,11 +41,11 @@ const navItems = [
     icon: <PeopleIcon />,
     path: ROUTE_PATH.ADMIN_STUDENT_MANAGEMENT,
   },
-  {
-    label: "Quản lý khóa học",
-    icon: <BookIcon />,
-    path: ROUTE_PATH.ADMIN_STUDENT_MANAGEMENT,
-  },
+  // {
+  //   label: "Quản lý khóa học",
+  //   icon: <BookIcon />,
+  //   path: ROUTE_PATH.ADMIN_STUDENT_MANAGEMENT,
+  // },
   {
     label: "Bình dân số",
     icon: <BookIcon />,

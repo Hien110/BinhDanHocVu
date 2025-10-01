@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import { ROUTE_PATH } from "../constants/routePath";
-
 import userService from "../services/userService";
 
 import PersonIcon from "@mui/icons-material/Person";
@@ -11,25 +10,27 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-
 import { Link } from "react-router-dom";
-
 import Button from "@mui/material/Button";
 
 import logoHocCungEm from "../assets/logoHocCungEm.png";
 
+const NAV_LINKS = [
+  { to: ROUTE_PATH.HOME, label: "Trang chủ" },
+  { to: ROUTE_PATH.COURSE, label: "Khóa học" },
+  { to: ROUTE_PATH.BINDANSO, label: "Bình dân số" },
+];
+
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Lấy user từ sessionStorage (nếu có)
   const userData = userService.getCurrentUser();
-  const toggleMenu = () => {
-    setMobileOpen(!mobileOpen);
-  };
+
+  const toggleMenu = () => setMobileOpen((s) => !s);
 
   const handleLogout = () => {
     userService.logout();
-    window.location.href = ROUTE_PATH.HOME; // Chuyển hướng về trang chủ
+    window.location.href = ROUTE_PATH.HOME;
   };
 
   return (
@@ -49,34 +50,20 @@ const Header = () => {
         {/* Desktop Menu */}
         <nav className="hidden md:block z-10">
           <ul className="flex items-center space-x-6 lg:space-x-10">
-            <li>
-              <Link
-                to={ROUTE_PATH.HOME}
-                className=" font-medium hover:text-custom-blue transition-colors"
-              >
-                Trang chủ
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={ROUTE_PATH.COURSE}
-                className="text-black font-medium hover:text-custom-blue transition-colors"
-              >
-                Khóa học
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={ROUTE_PATH.BINDANSO}
-                className="text-black font-medium hover:text-custom-blue transition-colors"
-              >
-                Bình dân số
-              </Link>
-            </li>
+            {NAV_LINKS.map(({ to, label }) => (
+              <li key={to}>
+                <Link
+                  to={to}
+                  className="text-black font-medium hover:text-custom-blue transition-colors"
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
 
-        {/* User menu (luôn hiển thị cả mobile & desktop) */}
+        {/* User menu (desktop & mobile) */}
         <div className="flex items-center space-x-2">
           {userData ? (
             <Menu as="div" className="relative inline-block text-left">
@@ -136,7 +123,7 @@ const Header = () => {
                   </>
                 )}
 
-                {userData.role == "lecturer" && (
+                {userData.role === "lecturer" && userData.approved === true && (
                   <div className="py-1">
                     <MenuItem>
                       <Link
@@ -146,6 +133,21 @@ const Header = () => {
                       >
                         <BookOutlinedIcon className="inline mr-2 group-hover:animate-slide-profile" />
                         <span>Quản lý giảng dạy</span>
+                      </Link>
+                    </MenuItem>
+                  </div>
+                )}
+
+                {userData.role === "lecturer" && userData.approved === false && (
+                  <div className="py-1">
+                    <MenuItem>
+                      <Link
+                        to={ROUTE_PATH.HOME}
+                        state={{ user: userData }}
+                        className="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <BookOutlinedIcon className="inline mr-2 group-hover:animate-slide-profile" />
+                        <span>Quản lý giảng dạy <span className="text-red-500">(Đang chờ duyệt)</span></span>
                       </Link>
                     </MenuItem>
                   </div>
@@ -164,6 +166,7 @@ const Header = () => {
                     </MenuItem>
                   </div>
                 )}
+
                 <div className="py-1">
                   <MenuItem>
                     <button
@@ -221,82 +224,63 @@ const Header = () => {
           <button
             onClick={toggleMenu}
             className="md:hidden text-white focus:outline-none"
+            aria-label="Toggle menu"
           >
-            <i className="fas fa-bars text-2xl" />
+            <i className="fas fa-bars text-2xl text-custom-blue" />
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer (same items as desktop) */}
       {mobileOpen && (
         <div className="md:hidden bg-white shadow-lg border-t border-gray-200">
           <ul className="flex flex-col">
-            <li>
-              <Link
-                to={ROUTE_PATH.HOME}
-                className="block px-4 py-3 border-b border-gray-100 hover:bg-gray-100 text-red-600 font-semibold"
-                onClick={toggleMenu}
-              >
-                Trang chủ
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={ROUTE_PATH.COURSE}
-                className="block px-4 py-3 border-b border-gray-100 hover:bg-gray-100 text-red-600 font-semibold"
-                onClick={toggleMenu}
-              >
-                Môn học
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={ROUTE_PATH.TEST_QUIZ_LIST}
-                className="block px-4 py-3 border-b border-gray-100 hover:bg-gray-100 text-red-600 font-semibold"
-                onClick={toggleMenu}
-              >
-                Ôn luyện
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={ROUTE_PATH.NEWS}
-                className="block px-4 py-3 border-b border-gray-100 hover:bg-gray-100 text-red-600 font-semibold"
-                onClick={toggleMenu}
-              >
-                Tin tức
-              </Link>
-            </li>
-            {userData && (
-              <li>
+            {NAV_LINKS.map(({ to, label }) => (
+              <li key={to}>
                 <Link
-                  to={ROUTE_PATH.USER_PROFILE}
-                  className="block px-4 py-3 hover:bg-gray-100 text-red-600 font-semibold"
+                  to={to}
+                  className="block px-4 py-3 border-b border-gray-100 hover:bg-gray-100 text-black font-medium hover:text-custom-blue transition-colors"
                   onClick={toggleMenu}
                 >
-                  Hồ sơ cá nhân
+                  {label}
                 </Link>
               </li>
-            )}
+            ))}
+
+            {/* Giữ phần đăng nhập/đăng xuất tương tự trước đây */}
             {userData ? (
               <li>
                 <button
-                  onClick={handleLogout}
+                  onClick={() => {
+                    toggleMenu();
+                    handleLogout();
+                  }}
                   className="w-full text-left px-4 py-3 hover:bg-gray-100 text-red-500 font-semibold cursor-pointer"
                 >
                   Đăng xuất
                 </button>
               </li>
             ) : (
-              <li>
-                <Link
-                  to="/login"
-                  className="block px-4 py-3 hover:bg-gray-100 text-red-600 font-semibold cursor-pointer"
-                  onClick={toggleMenu}
-                >
-                  Đăng nhập
-                </Link>
-              </li>
+              <>
+                <li>
+                  <Link
+                    to="/login"
+                    className="block px-4 py-3 hover:bg-gray-100 text-custom-blue font-semibold cursor-pointer"
+                    onClick={toggleMenu}
+                  >
+                    Đăng nhập
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/register"
+                    className="block px-4 py-3 hover:bg-gray-100 text-custom-blue font-semibold cursor-pointer"
+                    onClick={toggleMenu}
+                  >
+                    Đăng ký
+                  </Link>
+                </li>
+              </>
             )}
           </ul>
         </div>

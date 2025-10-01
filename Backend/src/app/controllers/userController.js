@@ -33,6 +33,7 @@ class UserController {
         bio: userData.bio || "",
         gender: userData.gender || "",
         workplace: userData.workplace || "",
+        role: userData.role || "student",
         otp,
         otpExpires,
         avatar: avatarDefault,
