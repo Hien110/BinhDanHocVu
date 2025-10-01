@@ -163,15 +163,13 @@ const Login = () => {
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <form method="POST" action="https://binhdansobe-fpf2dghjbugaaqbk.southeastasia-01.azurewebsites.net/auth/google">
-  <button
-    type="submit"
-    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-  >
-    <i className="fab fa-google text-custom-blue mr-2 mt-1"></i> Google
-  </button>
-</form>
-
+              <a
+                href="https://binhdansobe-fpf2dghjbugaaqbk.southeastasia-01.azurewebsites.net/auth/google"
+                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                <i className="fab fa-google text-custom-blue mr-2 mt-1" />{" "}
+                Google
+              </a>
               <a
                 href="#"
                 className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
