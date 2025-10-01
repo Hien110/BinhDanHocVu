@@ -167,7 +167,7 @@ const Verify = () => {
               <img
                 src={logoHocCungEm}
                 alt="Logo"
-                className="w-20 h-20 rounded-full"
+                className="w-20 rounded-full"
               />
             </div>
 

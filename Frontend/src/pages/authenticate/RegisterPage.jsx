@@ -114,7 +114,7 @@ const Register = () => {
                 <img
                   src={logoHocCungEm}
                   alt="Logo"
-                  className="w-20 h-20 rounded-full"
+                  className="w-20 rounded-full"
                 />
               </div>
               <h1 className="text-2xl font-bold text-custom-blue">Bạn là ai</h1>
@@ -126,11 +126,11 @@ const Register = () => {
                 <img
                   src={logoHocCungEm}
                   alt="Logo"
-                  className="w-20 h-20 rounded-full"
+                  className="w-20 rounded-full"
                 />
               </div>
               <h1 className="text-2xl font-bold text-custom-blue">
-                Đăng kí {role === "student" ? "học sinh" : "giáo viên"}
+                Đăng ký {role === "student" ? "học sinh" : "giáo viên"}
               </h1>
             </div>
           )}
@@ -403,11 +403,11 @@ const Register = () => {
                       borderRadius: "6px",
                       textTransform: "none",
                       color: "white",
-                      bgcolor: canSubmit ? red[500] : "grey.400",
+                      bgcolor: canSubmit ? "#4A90E2" : "grey.400",
                       transition:
                         "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
                       "&:hover": {
-                        bgcolor: canSubmit ? red[600] : "grey.400",
+                        bgcolor: canSubmit ? "#357ABD" : "grey.400",
                         transform: canSubmit ? "translateY(-2px)" : "none",
                       },
                       "&.Mui-disabled": {

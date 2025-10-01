@@ -190,17 +190,6 @@ const UserProfile = () => {
                   </div>
                 </div>
               </li>
-              {user.role === "student" && (
-                <li>
-                  <div className="flex items-center">
-                    <SchoolOutlinedIcon className="text-gray-600 mr-4" />
-                    <div>
-                      <p className="text-gray-800 text-[14px]">Khóa học</p>
-                      <p className="text-gray-600">K{user.yearOfAdmission}</p>
-                    </div>
-                  </div>
-                </li>
-              )}
               <li>
                 <div className="flex items-center">
                   <EmailOutlinedIcon className="text-gray-600 mr-4" />

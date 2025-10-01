@@ -57,7 +57,7 @@ const Login = () => {
               <img
                 src={logoHocCungEm}
                 alt="Logo"
-                className="w-20 h-20 rounded-full"
+                className="w-20 rounded-full"
               />
             </div>
             <h1 className="text-2xl font-bold text-custom-blue">Đăng nhập</h1>

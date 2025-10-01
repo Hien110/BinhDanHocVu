@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import { ROUTE_PATH } from "../constants/routePath";
+import { ROUTE_PATH } from "../../constants/routePath";
 
-import userService from "../services/userService";
+import userService from "../../services/userService";
 
 import { toast } from "sonner";
 
@@ -10,7 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@mui/material";
 
-import logoHocCungEm from "../assets/logoHocCungEm.png";
+import logoHocCungEm from "../../assets/logoHocCungEm.png";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
