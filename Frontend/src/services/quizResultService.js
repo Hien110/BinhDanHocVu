@@ -1,7 +1,7 @@
 import axios from "axios";
 import userService from "./userService";
 
-const API_URL = 'http://localhost:3000/api/quiz-results';
+const API_URL = 'https://binhdansobe-fpf2dghjbugaaqbk.southeastasia-01.azurewebsites.net/api/quiz-results';
 
 const quizResultService = {
     // Tạo kết quả quiz
