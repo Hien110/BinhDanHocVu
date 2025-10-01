@@ -2,7 +2,7 @@ export const  ROUTE_PATH = {
 
     //site routes
     HOME: "/",
-    COURSE: "/khoa-hoc",
+    COURSE: "/khoa-hoc/giang-day",
     TEST_QUIZ_LIST: "/test-quiz-list",
     NEWS: "/news",
 
